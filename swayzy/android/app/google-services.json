@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "928593099570",
+    "project_id": "swayzy-b0baf",
+    "storage_bucket": "swayzy-b0baf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928593099570:android:4ecdcc4eea8aeae4b1352b",
+        "android_client_info": {
+          "package_name": "com.DigiShrimps.app.swayzy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh6qLe9TlU9BoRcoIkIcGplZG5MstuAys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
