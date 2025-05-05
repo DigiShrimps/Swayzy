@@ -43,4 +43,10 @@ class AppTextStyles {
     fontSize: AppFontSizes.button,
     fontWeight: FontWeight.bold,
   );
+
+  static final TextStyle buttonAuth = _base.copyWith(
+    color: AppColors.secondaryText,
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+  );
 }

@@ -1,30 +1,55 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_text_styles.dart';
+import '../../constants/app_button_styles.dart';
+import '../../constants/app_spaces.dart';
 
-const String _titleText = "Profile";
-
-class Profile extends StatefulWidget {
+class Profile extends StatelessWidget{
   const Profile({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
-}
-
-class _ProfileState extends State<Profile> {
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(_titleText),
-        titleTextStyle: AppTextStyles.title,
-        backgroundColor: AppColors.secondaryBackground,
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-        ],
+    final user = FirebaseAuth.instance.currentUser;
+    final photoURL = user?.photoURL;
+
+    return SafeArea(
+      child: Scaffold(
+        body: user == null
+            ? const Center(child: Text('Не увійшли в акаунт'))
+            : Center(
+          child: Column(
+            spacing: AppSpacing.small,
+            children: [
+              const SizedBox(height: AppSpacing.small,),
+              CircleAvatar(
+                radius: 100,
+                backgroundImage: photoURL != null ? NetworkImage(photoURL) : null,
+                child: photoURL == null ? const Icon(Icons.account_circle_rounded) : null,
+              ),
+              const EditableUserDisplayName(),
+              ElevatedButton.icon(
+                style: AppButtonStyles.primary,
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushReplacementNamed('/auth');
+                },
+                label: const Text('Вийти'),
+                icon: const Icon(Icons.logout_rounded),
+              ),
+              ElevatedButton.icon(
+                style: AppButtonStyles.delete,
+                onPressed: () async {
+                  await user.delete();
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushReplacementNamed('/auth');
+                },
+                label: const Text('Видалити акаунт'),
+                icon: const Icon(Icons.delete_rounded),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

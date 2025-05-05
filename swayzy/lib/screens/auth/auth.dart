@@ -25,22 +25,25 @@ class Auth extends StatelessWidget {
             child: PopScope(
               canPop: false,
               child: SignInScreen(
+                resizeToAvoidBottomInset: true,
                 showAuthActionSwitch: false,
-                headerMaxExtent: 700,
+                headerMaxExtent: 600,
                 oauthButtonVariant: OAuthButtonVariant.icon_and_text,
                 providers: [
                   GoogleProvider(clientId: PrivateData.googleProviderClientId),
                 ],
                 headerBuilder: (context, constraints, shrinkOffset) {
-                  return Padding(
-                    padding: const EdgeInsets.all(20),
+                  return Center(
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset(
-                          AppImagesPaths.logo,
-                          width: constraints.maxWidth - 50,
-                          height: constraints.maxWidth - 50,
-                          fit: BoxFit.cover,
+                        AspectRatio(
+                          aspectRatio: 1.1,
+                          child: Image.asset(
+                            AppImagesPaths.logo,
+                            height: 300,
+                            width: 300,
+                          ),
                         ),
                         SizedBox(height: 20),
                         Text(
@@ -56,7 +59,15 @@ class Auth extends StatelessWidget {
             ),
           );
         }
-        return MainPage();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/',
+            (Route<dynamic> route) => false,
+          );
+        });
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
       },
     );
   }
