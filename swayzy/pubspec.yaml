@@ -25,6 +25,7 @@ dependencies:
   firebase_ui_oauth_google: ^1.4.1
   flutter_dotenv: ^5.0.2
   flutter_native_splash: ^2.4.6
+  settings_ui: ^2.0.2
 
 dev_dependencies:
   flutter_test:

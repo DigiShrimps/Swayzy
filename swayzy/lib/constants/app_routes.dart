@@ -7,6 +7,7 @@ import '../screens/chat/chat.dart';
 import '../screens/creation/creation.dart';
 import '../screens/explore/explore.dart';
 import '../screens/inner_browser/inner_browser.dart';
+import '../screens/notifications/models/app_notification.dart';
 import '../screens/notifications/notifications.dart';
 import '../screens/profile/profile.dart';
 import '../screens/settings/settings.dart';
@@ -42,7 +43,7 @@ class AppRoutes {
           case innerBrowser:
             return const InnerBrowser();
           case notifications:
-            return const Notifications();
+            return Notifications();
           case profile:
             return const Profile();
           case settings:

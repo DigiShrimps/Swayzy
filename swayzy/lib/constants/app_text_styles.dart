@@ -26,6 +26,18 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
   );
 
+  static final TextStyle setting = _base.copyWith(
+    color: AppColors.text,
+    fontSize: AppFontSizes.button,
+    fontWeight: FontWeight.normal,
+  );
+
+  static final TextStyle smallDescription = _base.copyWith(
+    color: AppColors.secondaryText,
+    fontSize: AppFontSizes.small,
+    fontWeight: FontWeight.bold,
+  );
+
   static final TextStyle error = _base.copyWith(
     color: AppColors.error,
     fontSize: AppFontSizes.small,

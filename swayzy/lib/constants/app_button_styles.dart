@@ -18,6 +18,12 @@ class AppButtonStyles{
     textStyle: WidgetStateProperty.all(AppTextStyles.buttonPrimary),
   );
 
+  static final ButtonStyle settings = _base.copyWith(
+    backgroundColor: WidgetStateProperty.all(AppColors.primaryBackground),
+    foregroundColor: WidgetStateProperty.all(AppColors.highlight),
+    textStyle: WidgetStateProperty.all(AppTextStyles.buttonSecondary),
+  );
+
   static final ButtonStyle secondary = _base.copyWith(
     backgroundColor: WidgetStateProperty.all(AppColors.primaryBackground),
     foregroundColor: WidgetStateProperty.all(AppColors.highlight),
