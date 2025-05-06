@@ -51,6 +51,7 @@ flutter:
 
   assets:
    - assets/images/
+   - assets/images/badges_mocks/
    - dotenv
 
 flutter_launcher_icons:

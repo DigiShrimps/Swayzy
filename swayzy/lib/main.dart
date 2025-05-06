@@ -86,8 +86,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const Creation(),
     const Explore(),
+    const Creation(),
     const Chat(),
     const Profile(),
   ];
@@ -110,12 +110,12 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline_rounded, size: 40),
-              label: ""
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.explore_outlined, size: 40),
             label: "",
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.add_circle_outline_rounded, size: 40),
+              label: ""
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.chat_outlined, size: 40),
