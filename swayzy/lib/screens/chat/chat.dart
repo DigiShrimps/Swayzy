@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:swayzy/screens/chat/widgets/message_card.dart';
 
+import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
+import 'mocks/customer_messages.mocks.dart';
+import 'mocks/performer_messages.mocks.dart';
 
 const String _titleText = "Chat";
+enum ViewMode { asCustomer, asPerformer }
 
 class Chat extends StatefulWidget {
   const Chat({super.key});
@@ -13,8 +18,12 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
+  ViewMode currentMode = ViewMode.asCustomer;
+
   @override
   Widget build(BuildContext context) {
+    final messages = currentMode == ViewMode.asCustomer ? customerMessages : performerMessages;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(_titleText),
@@ -24,7 +33,49 @@ class _ChatState extends State<Chat> {
       ),
       body: Column(
         children: [
-          Text("meow", style: AppTextStyles.body,)
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      currentMode = ViewMode.asCustomer;
+                    });
+                  },
+                  style: AppButtonStyles.chat,
+                  child: Text("Customer", style: AppTextStyles.buttonPrimary),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      currentMode = ViewMode.asPerformer;
+                    });
+                  },
+                  style: AppButtonStyles.chat,
+                  child: Text("Performer", style: AppTextStyles.buttonPrimary),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 5),
+          Expanded(
+            child: ListView.builder(
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final msg = messages[index];
+                return MessageCard(
+                  photoURL: msg.photoURL,
+                  userName: msg.userName,
+                  orderTitle: msg.orderTitle,
+                  lastMessageText: msg.lastMessageText,
+                  messageTime: msg.messageTime,
+                  isChecked: msg.isChecked,
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

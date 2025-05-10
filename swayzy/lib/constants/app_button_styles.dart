@@ -49,4 +49,9 @@ class AppButtonStyles{
       ),
     ),
   );
+
+  static final ButtonStyle chat = _base.copyWith(
+    backgroundColor: WidgetStateProperty.all(AppColors.secondaryBackground),
+    shape: WidgetStateProperty.all(RoundedRectangleBorder()),
+  );
 }
