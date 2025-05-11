@@ -58,15 +58,31 @@ class MyApp extends StatelessWidget {
           inputDecorationTheme: InputDecorationTheme(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: AppColors.highlight
+              )
             ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                  color: AppColors.highlight
+              )
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: AppColors.highlight
+              )
+            ),
+            labelStyle: AppTextStyles.form,
           ),
           iconButtonTheme: IconButtonThemeData(
-              style: ButtonStyle(
-                  foregroundColor: WidgetStateProperty.all(AppColors.text)
-              )
+            style: ButtonStyle(
+              foregroundColor: WidgetStateProperty.all(AppColors.text)
+            )
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
-              style: AppButtonStyles.secondary
+            style: AppButtonStyles.secondary
           )
       ),
       initialRoute: '/auth',

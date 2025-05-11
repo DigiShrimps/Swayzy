@@ -56,7 +56,11 @@ class Profile extends StatelessWidget{
                         backgroundImage: photoURL != null ? NetworkImage(photoURL) : null,
                         child: photoURL == null ? const Icon(Icons.account_circle_rounded) : null,
                       ),
-                      const EditableUserDisplayName(),
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.sizeOf(context).width - 100,
+                        child: const EditableUserDisplayName(),
+                      ),
                       GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,

@@ -27,6 +27,8 @@ dependencies:
   flutter_native_splash: ^2.4.6
   settings_ui: ^2.0.2
   url_launcher: ^6.3.1
+  image_picker: ^1.1.2
+  firebase_storage: ^12.4.5
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +55,7 @@ flutter:
   assets:
    - assets/images/
    - assets/images/badges_mocks/
+   - assets/images/categories_mocks/
    - dotenv
 
 flutter_launcher_icons:
