@@ -4,41 +4,45 @@ import 'package:swayzy/constants/app_spaces.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 
-class AdArguments{
-  late  String adTitle = 'Title'; //TODO додати фінал
-  late  String adCategory = 'Category';
-  late  String adReviewType = 'Positive';
-  late  String adDescription = 'Description';
-  late  String adCreatedTime = '12 5 13:30';
-  late  String adOwnerId = '123';
-  late  String adOwnerName = 'Vitaliy';
-  late  String adOwnerEmail = 'yatsiks69@gmail.com';
-  late  int adPrice = 10;
-  late  String adDuration = '1 day';
+class AdArguments {
+  final String adTitle;
+  final String adCategory;
+  final String adReviewType;
+  final String adDescription;
+  final String adCreatedTime;
+  final String adOwnerId;
+  final String adOwnerName;
+  final String adOwnerEmail;
+  final double adPrice;
+  final String adDuration;
 
-  AdArguments(this.adTitle,
-    this.adCategory,
-    this.adReviewType,
-    this.adDescription,
-    this.adCreatedTime,
-    this.adOwnerId,
-    this.adOwnerName,
-    this.adOwnerEmail,
-    this.adPrice,
-    this.adDuration,);
+  AdArguments({
+    required this.adTitle,
+    required this.adCategory,
+    required this.adReviewType,
+    required this.adDescription,
+    required this.adCreatedTime,
+    required this.adOwnerId,
+    required this.adOwnerName,
+    required this.adOwnerEmail,
+    required this.adPrice,
+    required this.adDuration,
+  });
 }
 
 class Ad extends StatefulWidget {
-  const Ad({super.key});
+  final AdArguments arguments;
+  const Ad({super.key, required this.arguments});
 
   @override
   State<Ad> createState() => _AdState();
 }
 
 class _AdState extends State<Ad> {
+
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as AdArguments;
+    final args = widget.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text("Advertisement"),

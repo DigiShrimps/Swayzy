@@ -24,34 +24,39 @@ class AppRoutes {
   static const String profile = "/profile";
   static const String settings = "/settings";
 
-  static MaterialPageRoute? onGenerateRoute(RouteSettings routeSettings) {
-    return MaterialPageRoute(
-      builder: (BuildContext context) {
-        switch (routeSettings.name) {
-          case main:
-            return const MainPage();
-          case ad:
-            return const Ad();
-          case auth:
-            return const Auth();
-          case chat:
-            return const Chat();
-          case creation:
-            return const Creation();
-          case explore:
-            return const Explore();
-          case innerBrowser:
-            return const InnerBrowser();
-          case notifications:
-            return Notifications();
-          case profile:
-            return const Profile();
-          case settings:
-            return const Settings();
-          default:
-            return const Auth();
-        }
-      },
-    );
+  static Route<dynamic>? onGenerateRoute(RouteSettings routeSettings) {
+    switch (routeSettings.name) {
+      case main:
+        return MaterialPageRoute(builder: (_) => const MainPage());
+      case ad:
+        return MaterialPageRoute(builder: (_) {
+          final args = routeSettings.arguments as AdArguments?;
+          if (args == null) {
+            return Scaffold(
+              appBar: AppBar(title: Text("Error")),
+              body: Center(child: Text("Помилка: Аргументи не передані!")),
+            );
+          }
+          return Ad(arguments: args);
+        });
+      case auth:
+        return MaterialPageRoute(builder: (_) => const Auth());
+      case chat:
+        return MaterialPageRoute(builder: (_) => const Chat());
+      case creation:
+        return MaterialPageRoute(builder: (_) => const Creation());
+      case explore:
+        return MaterialPageRoute(builder: (_) => const Explore());
+      case innerBrowser:
+        return MaterialPageRoute(builder: (_) => const InnerBrowser());
+      case notifications:
+        return MaterialPageRoute(builder: (_) => Notifications());
+      case profile:
+        return MaterialPageRoute(builder: (_) => const Profile());
+      case settings:
+        return MaterialPageRoute(builder: (_) => const Settings());
+      default:
+        return MaterialPageRoute(builder: (_) => const Auth());
+    }
   }
 }

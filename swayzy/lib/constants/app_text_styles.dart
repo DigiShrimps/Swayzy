@@ -64,7 +64,7 @@ class AppTextStyles {
 
   static final TextStyle orderCategory = _base.copyWith(
     color: AppColors.secondaryText,
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: FontWeight.bold,
   );
 }

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:swayzy/screens/explore/mocks/category.mocks.dart';
+import 'package:swayzy/screens/explore/widgets/order_card.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
@@ -18,6 +20,12 @@ class Explore extends StatefulWidget {
 
 class _ExploreState extends State<Explore> {
   ViewMode currentMode = ViewMode.inSearch;
+  final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+
+  Future<List<Map<String, dynamic>>> getOrderData() async {
+    QuerySnapshot querySnapshot = await firestoreInstance.collection('ads').get();
+    return querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,51 +66,78 @@ class _ExploreState extends State<Explore> {
               ),
             ],
           ),
+          const SizedBox(height: 10),
           Expanded(
-            child: ListView(
-              children: [
-                GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                    childAspectRatio: 0.9,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                setState(() {});
+              },
+              child: ListView(
+                children: [
+                  GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                      childAspectRatio: 1.2,
+                    ),
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      final category = orderCategories[index];
+                      return InkWell(
+                        onTap: () {},
+                        borderRadius: BorderRadius.circular(10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(category.pathToImage, width: 36, height: 36, fit: BoxFit.fitHeight),
+                            Text(category.title, style: AppTextStyles.orderCategory),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    final category = orderCategories[index];
-                    return InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(category.pathToImage, width: 36, height: 36, fit: BoxFit.fitHeight),
-                          Text(category.title, style: AppTextStyles.orderCategory),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
+                  const SizedBox(height: 10),
+                  FutureBuilder<List<Map<String, dynamic>>>(
+                    future: getOrderData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List data = snapshot.data as List<Map<String, dynamic>>;
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
+                            childAspectRatio: MediaQuery.of(context).size.width < 370 ? 0.7 : 1.0,
+                          ),
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            return OrderCard(
+                              ownerName: data[index]["ownerName"],
+                              imageUrl: data[index]["imageUrl"],
+                              price: data[index]["price"],
+                              title: data[index]["title"],
+                              createdAt: data[index]["createdAt"],
+                              category: data[index]["category"],
+                              duration: data[index]["duration"],
+                              ownerEmail: data[index]["ownerEmail"],
+                              description: data[index]["description"],
+                              reviewType: data[index]["reviewType"],
+                              ownerId: data[index]["ownerId"],
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
                   ),
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Card(
-
-                    );
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
