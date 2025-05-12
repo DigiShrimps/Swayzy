@@ -58,15 +58,27 @@ class Profile extends StatelessWidget{
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: MediaQuery.sizeOf(context).width - 100,
+                        width: MediaQuery.sizeOf(context).width,
                         child: const EditableUserDisplayName(),
                       ),
+                      // Container(
+                      //   // alignment: Alignment.center,
+                      //   // width: MediaQuery.sizeOf(context).width,
+                      //   // child: TextButton.icon(
+                      //   //   onPressed: () {
+                      //   //
+                      //   // },
+                      //   // style: AppButtonStyles.primary,
+                      //   // label: Text("Balance: "),
+                      //   // ),
+                      // ),
                       GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          mainAxisSpacing: 8.0,
+                          mainAxisSpacing: 15.0,
                           crossAxisSpacing: 8.0,
-                          mainAxisExtent: 180
+                          mainAxisExtent: 180,
+                          childAspectRatio: 0.7
                         ),
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,

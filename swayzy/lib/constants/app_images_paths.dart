@@ -15,5 +15,6 @@ class AppImagesPaths{
   static const String categoryMockServices = 'assets/images/categories_mocks/service.png';
   static const String categoryMockAutomobiles = 'assets/images/categories_mocks/car.png';
   static const String categoryMockClothes = 'assets/images/categories_mocks/tshirt.png';
+  static const String categoryMockAll = 'assets/images/categories_mocks/all.png';
 //#endregion
 }

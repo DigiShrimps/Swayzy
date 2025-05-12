@@ -1,9 +1,11 @@
 import 'dart:collection';
 import 'dart:core';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:swayzy/constants/app_button_styles.dart';
 import 'package:swayzy/constants/app_spaces.dart';
 import 'package:swayzy/screens/creation/mocks/category.mocks.dart';
@@ -23,6 +25,7 @@ final TextEditingController _titleController = TextEditingController();
 final TextEditingController _descriptionController = TextEditingController();
 final TextEditingController _durationController = TextEditingController();
 final TextEditingController _priceController = TextEditingController();
+final TextEditingController _performersController = TextEditingController();
 
 class Creation extends StatefulWidget {
   const Creation({super.key});
@@ -32,8 +35,8 @@ class Creation extends StatefulWidget {
 }
 
 class _CreationState extends State<Creation> {
-  // final ImagePicker _picker = ImagePicker();
-  // XFile? _image;
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
 
   static final List<String> categoryTitles = appCategories.map((c) => c.title).toList();
   static final List<DropdownEntry> categoryEntries = UnmodifiableListView<DropdownEntry>(
@@ -47,27 +50,39 @@ class _CreationState extends State<Creation> {
   );
   String dropdownReviewValue = reviewType.first;
 
-  // Future getImageFromGallery() async {
-  //   final XFile? image = await _picker.pickImage(
-  //     source: ImageSource.gallery,
-  //     imageQuality: 80,
-  //   );
-  //
-  //   setState(() {
-  //     _image = image;
-  //   });
-  // }
-  //
-  // Future<String> uploadImageToStorage(XFile image) async {
-  //   final ref = FirebaseStorage.instance
-  //       .ref()
-  //       .child('ad_images')
-  //       .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
-  //
-  //   final uploadTask = await ref.putFile(File(image.path));
-  //   print(uploadTask);
-  //   return await ref.getDownloadURL();
-  // }
+  static final List<String> socialType = <String>["Instagram", "Telegram", "TikTok", "FaceBook", "Reddit"];
+  static final List<DropdownEntry> socialEntries = UnmodifiableListView<DropdownEntry>(
+    socialType.map<DropdownEntry>((String title) => DropdownEntry(value: title, label: title)),
+  );
+  String dropdownSocialValue = socialType.first;
+
+  static final List<String> subsAmount = <String>["100+", "500+", "1000+", "10000+", "50000+", "100000+", "500000+", "1000000+"];
+  static final List<DropdownEntry> subsEntries = UnmodifiableListView<DropdownEntry>(
+    subsAmount.map<DropdownEntry>((String title) => DropdownEntry(value: title, label: title)),
+  );
+  String dropdownSubsValue = subsAmount.first;
+
+  Future getImageFromGallery() async {
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+
+    setState(() {
+      _image = image;
+    });
+  }
+
+  Future<String> uploadImageToStorage(XFile image) async {
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('ad_images')
+        .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+    final uploadTask = await ref.putFile(File(image.path));
+    print(uploadTask);
+    return await ref.getDownloadURL();
+  }
 
   Future<void> createAd(
     String title,
@@ -77,8 +92,11 @@ class _CreationState extends State<Creation> {
     String ownerId,
     String ownerName,
     String ownerEmail,
-    int price,
-    String duration) async {
+    double price,
+    String duration,
+    int amountOfPerformers,
+    String amountOfSubscribers,
+    String social,) async {
     //final imageUrl = await uploadImageToStorage(image);
     DateTime now = DateTime.now();
 
@@ -92,8 +110,11 @@ class _CreationState extends State<Creation> {
       'ownerEmail': ownerEmail,
       'price': price,
       'duration': duration,
-      //'imageUrl': imageUrl,
-      'createdAt': "${now.day} ${now.month} ${now.hour}:${now.minute}",
+      'amountOfPerformers': amountOfPerformers,
+      'amountOfSubscribers': amountOfSubscribers,
+      'social': social,
+      'imageUrl': null, //imageUrl,
+      'createdAt': "${now.day}.${now.month} ${now.hour}:${now.minute}",
     };
 
     await FirebaseFirestore.instance.collection('ads').add(adData);
@@ -113,62 +134,62 @@ class _CreationState extends State<Creation> {
           child: Column(
             spacing: AppSpacing.small,
             children: [
-              // Text(
-              //   "Choose an image:",
-              //   style: AppTextStyles.title,
-              // ),
-              // _image == null
-              //   ? Container(
-              //   width: 260,
-              //   height: 260,
-              //   alignment: Alignment.center,
-              //   decoration: BoxDecoration(
-              //       border: Border.all(color: AppColors.highlight),
-              //       color: AppColors.secondaryBackground
-              //   ),
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         Text(
-              //           "Add photo",
-              //           style: AppTextStyles.body,
-              //         ),
-              //         SizedBox(height: AppSpacing.small,),
-              //         FloatingActionButton(
-              //           onPressed: getImageFromGallery,
-              //             tooltip: 'Pick Image',
-              //             child: const Icon(Icons.add_a_photo),
-              //         ),
-              //       ],
-              //     ),
-              //   )
-              //   : Container(
-              //     width: 260,
-              //     decoration: BoxDecoration(
-              //       border: Border.all(color: AppColors.highlight, width: 3),
-              //       color: AppColors.secondaryBackground,
-              //     ),
-              //     child: Column(
-              //       children: [
-              //         Row(
-              //           spacing: AppSpacing.small,
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             Text(
-              //               "Add another photo",
-              //               style: AppTextStyles.body,
-              //             ),
-              //             FloatingActionButton(
-              //               onPressed: getImageFromGallery,
-              //               tooltip: 'Pick Image',
-              //               child: const Icon(Icons.add_a_photo),
-              //             ),
-              //           ],
-              //         ),
-              //         Image.file(File(_image!.path)),
-              //       ],
-              //     ),
-              //   ),
+              Text(
+                "Choose an image:",
+                style: AppTextStyles.title,
+              ),
+              _image == null
+                ? Container(
+                width: 260,
+                height: 260,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.highlight),
+                    color: AppColors.secondaryBackground
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Add photo",
+                        style: AppTextStyles.body,
+                      ),
+                      SizedBox(height: AppSpacing.small,),
+                      FloatingActionButton(
+                        onPressed: getImageFromGallery,
+                          tooltip: 'Pick Image',
+                          child: const Icon(Icons.add_a_photo),
+                      ),
+                    ],
+                  ),
+                )
+                : Container(
+                  width: 260,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.highlight, width: 3),
+                    color: AppColors.secondaryBackground,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        spacing: AppSpacing.small,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Add another photo",
+                            style: AppTextStyles.body,
+                          ),
+                          FloatingActionButton(
+                            onPressed: getImageFromGallery,
+                            tooltip: 'Pick Image',
+                            child: const Icon(Icons.add_a_photo),
+                          ),
+                        ],
+                      ),
+                      Image.file(File(_image!.path)),
+                    ],
+                  ),
+                ),
               Text(
                 "Title:",
                 style: AppTextStyles.title,
@@ -184,24 +205,41 @@ class _CreationState extends State<Creation> {
                   controller: _titleController,
                 ),
               ),
+              Text(
+                "Description:",
+                style: AppTextStyles.title,
+              ),
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width - 20,
+                child: TextField(
+                  maxLength: 1000,
+                  maxLines: 5,
+                  style: AppTextStyles.form,
+                  decoration: InputDecoration(
+                    hintText: "Describe what you want from potential performers, including \"where\", "
+                      "\"how\" and \"what\" they need to advertise"
+                  ),
+                  controller: _descriptionController,
+                ),
+              ),
               Container(
                 width: MediaQuery.sizeOf(context).width - 10,
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: AppSpacing.small,
+                  spacing: 10,
                   children: [
                     Column(
                       spacing: AppSpacing.small,
                       children: [
                         Text(
                           "Category:",
-                          style: AppTextStyles.title,
+                          style: AppTextStyles.body,
                         ),
                         SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.5,
+                          width: MediaQuery.sizeOf(context).width * 0.45,
                           child: DropdownMenu<String>(
-                            width: MediaQuery.sizeOf(context).width * 0.5,
+                            width: MediaQuery.sizeOf(context).width * 0.45,
                             expandedInsets: null,
                             textStyle: AppTextStyles.form,
                             initialSelection: appCategories.first.title,
@@ -220,12 +258,12 @@ class _CreationState extends State<Creation> {
                       children: [
                         Text(
                           "Review type:",
-                          style: AppTextStyles.title,
+                          style: AppTextStyles.body,
                         ),
                         SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.4,
+                          width: MediaQuery.sizeOf(context).width * 0.37,
                           child: DropdownMenu<String>(
-                            width: MediaQuery.sizeOf(context).width * 0.4,
+                            width: MediaQuery.sizeOf(context).width * 0.37,
                             expandedInsets: null,
                             textStyle: AppTextStyles.form,
                             initialSelection: reviewType.first,
@@ -242,21 +280,78 @@ class _CreationState extends State<Creation> {
                   ],
                 ),
               ),
+              Container(
+                width: MediaQuery.sizeOf(context).width - 10,
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 10,
+                  children: [
+                    Column(
+                      spacing: AppSpacing.small,
+                      children: [
+                        Text(
+                          "Social:",
+                          style: AppTextStyles.body,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.45,
+                          child: DropdownMenu<String>(
+                            width: MediaQuery.sizeOf(context).width * 0.45,
+                            expandedInsets: null,
+                            textStyle: AppTextStyles.form,
+                            initialSelection: socialType.first,
+                            dropdownMenuEntries: socialEntries,
+                            onSelected: (String? value) {
+                              setState(() {
+                                dropdownSocialValue = value!;
+                              });
+                            },
+                          )
+                        ),
+                      ],
+                    ),
+                    Column(
+                      spacing: AppSpacing.small,
+                      children: [
+                        Text(
+                          "Subscribers:",
+                          style: AppTextStyles.body,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.37,
+                          child: DropdownMenu<String>(
+                            width: MediaQuery.sizeOf(context).width * 0.37,
+                            expandedInsets: null,
+                            textStyle: AppTextStyles.form,
+                            initialSelection: subsAmount.first,
+                            dropdownMenuEntries: subsEntries,
+                            onSelected: (String? value) {
+                              setState(() {
+                                dropdownSubsValue = value!;
+                              });
+                            },
+                          )
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               Text(
-                "Description:",
-                style: AppTextStyles.title,
+                "Numbers of performers:",
+                style: AppTextStyles.body,
               ),
               SizedBox(
-                width: MediaQuery.sizeOf(context).width - 20,
+                width: MediaQuery.sizeOf(context).width - 200,
                 child: TextField(
-                  maxLength: 1000,
-                  maxLines: 5,
+                  textAlign: TextAlign.center,
+                  maxLength: 3,
                   style: AppTextStyles.form,
                   decoration: InputDecoration(
-                    hintText: "Describe what you want from potential performers, including \"where\", "
-                        "\"how\" and \"what\" they need to advertise"
+                    hintText: "Amount of influencers"
                   ),
-                  controller: _descriptionController,
+                  controller: _performersController,
                 ),
               ),
               Container(
@@ -271,7 +366,7 @@ class _CreationState extends State<Creation> {
                       children: [
                         Text(
                           "Duration:",
-                          style: AppTextStyles.title,
+                          style: AppTextStyles.body,
                         ),
                         SizedBox(
                           width: MediaQuery.sizeOf(context).width * 0.4,
@@ -291,12 +386,12 @@ class _CreationState extends State<Creation> {
                       children: [
                         Text(
                           "Price:",
-                          style: AppTextStyles.title,
+                          style: AppTextStyles.body,
                         ),
                         SizedBox(
                           width: MediaQuery.sizeOf(context).width * 0.5,
                           child: TextField(
-                            maxLength: 15,
+                            maxLength: 4,
                             style: AppTextStyles.form,
                             decoration: InputDecoration(
                               hintText: "SOL per performer"
@@ -319,8 +414,11 @@ class _CreationState extends State<Creation> {
                   String description = _descriptionController.text;
                   String reviewType = dropdownReviewValue;
                   String category = dropdownCategoryValue;
-                  int price = int.parse(_priceController.text);
+                  double price = double.parse(_priceController.text);
                   String duration = _durationController.text;
+                  int amountOfPerformers = int.parse(_performersController.text);
+                  String amountOfSubscribers = dropdownSubsValue;
+                  String social = dropdownSocialValue;
                   createAd(
                     title,
                     category,
@@ -330,12 +428,16 @@ class _CreationState extends State<Creation> {
                     user.displayName!,
                     user.email!,
                     price,
-                    duration
+                    duration,
+                    amountOfPerformers,
+                    amountOfSubscribers,
+                    social,
                   );
                   _titleController.clear();
                   _descriptionController.clear();
                   _priceController.clear();
                   _durationController.clear();
+                  _performersController.clear();
                 },
               ),
               SizedBox(width: AppSpacing.small,)
