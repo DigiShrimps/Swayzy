@@ -15,6 +15,7 @@ class AdArguments {
   final String adOwnerEmail;
   final double adPrice;
   final String adDuration;
+  final dynamic adImageUrl;
 
   AdArguments({
     required this.adTitle,
@@ -27,6 +28,7 @@ class AdArguments {
     required this.adOwnerEmail,
     required this.adPrice,
     required this.adDuration,
+    required this.adImageUrl,
   });
 }
 
@@ -50,64 +52,81 @@ class _AdState extends State<Ad> {
         backgroundColor: AppColors.secondaryBackground,
         centerTitle: true,
       ),
-      body: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        spacing: AppSpacing.medium,
-        children: [
-          Text(
-            args.adCreatedTime,
-            style: AppTextStyles.smallDescription,
-            textAlign: TextAlign.start,
-          ),
-          Text(
-            args.adTitle,
-            style: AppTextStyles.title,
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "${args.adPrice.toString()} SOL",
-            style: AppTextStyles.title,
-            textAlign: TextAlign.center,
-          ),
-          Row(
-            spacing: AppSpacing.small,
-            children: [
-              Text(
-                args.adCategory,
-                style: AppTextStyles.title,
-                textAlign: TextAlign.start,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: AppSpacing.large),
+        child: Column(
+          spacing: AppSpacing.medium,
+          children: [
+            SizedBox(height: 0),
+            Center(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width * 0.95,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.grey[300],
+                  image:
+                  args.adImageUrl != null
+                      ? DecorationImage(image: NetworkImage(args.adImageUrl), fit: BoxFit.contain)
+                      : null,
+                ),
+                child:
+                args.adImageUrl == null
+                    ? const Icon(Icons.image, size: 50, color: Colors.black54)
+                    : null,
               ),
-              Text(
-                args.adReviewType,
-                style: AppTextStyles.title,
-                textAlign: TextAlign.start,
-              ),
-              Text(
-                args.adDuration,
-                style: AppTextStyles.title,
-                textAlign: TextAlign.start,
-              ),
-            ],
-          ),
-          SizedBox(
-            width: MediaQuery.sizeOf(context).width - 20,
-            child: Text(
-              args.adDescription,
-              style: AppTextStyles.body,
-              textAlign: TextAlign.start,
             ),
-          ),
-          Text(
-            args.adOwnerName,
-            style: AppTextStyles.body,
-            textAlign: TextAlign.end,
-          ),
-          Text(
-            args.adOwnerEmail,
-            style: AppTextStyles.body,
-            textAlign: TextAlign.end,
-          ),
-        ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: AppSpacing.small,
+              children: [
+                Text(
+                  args.adTitle,
+                  style: AppTextStyles.title,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "Category: ${args.adCategory}",
+                  style: AppTextStyles.title,
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  "Price: ${args.adPrice.toString()} SOL",
+                  style: AppTextStyles.title,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "Review type: ${args.adReviewType}",
+                  style: AppTextStyles.title,
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  "Duration: ${args.adDuration}",
+                  style: AppTextStyles.title,
+                  textAlign: TextAlign.start,
+                ),
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width - 20,
+                  child: Text(
+                    args.adDescription,
+                    style: AppTextStyles.body,
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                Text(
+                  args.adOwnerName,
+                  style: AppTextStyles.smallDescription,
+                  textAlign: TextAlign.end,
+                ),
+                Text(
+                  args.adOwnerEmail,
+                  style: AppTextStyles.smallDescription,
+                  textAlign: TextAlign.end,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

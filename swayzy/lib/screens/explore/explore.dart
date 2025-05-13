@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:swayzy/screens/explore/mocks/category.mocks.dart';
-import 'package:swayzy/screens/explore/widgets/order_card.dart';
+import 'package:swayzy/screens/explore/widgets/in_process_grid.dart';
+import 'package:swayzy/screens/explore/widgets/in_search_grid.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 
 const String _titleText = "Home";
-
 enum ViewMode { inSearch, inProcess }
 
 class Explore extends StatefulWidget {
@@ -29,7 +28,6 @@ class _ExploreState extends State<Explore> {
 
   @override
   Widget build(BuildContext context) {
-    final orders = currentMode == ViewMode.inSearch ? "data" : "data";
 
     return Scaffold(
       appBar: AppBar(
@@ -72,72 +70,9 @@ class _ExploreState extends State<Explore> {
               onRefresh: () async {
                 setState(() {});
               },
-              child: ListView(
-                children: [
-                  GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                      childAspectRatio: 1.2,
-                    ),
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      final category = orderCategories[index];
-                      return InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(category.pathToImage, width: 36, height: 36, fit: BoxFit.fitHeight),
-                            Text(category.title, style: AppTextStyles.orderCategory),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  FutureBuilder<List<Map<String, dynamic>>>(
-                    future: getOrderData(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List data = snapshot.data as List<Map<String, dynamic>>;
-                        return GridView.builder(
-                          shrinkWrap: true,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0,
-                            childAspectRatio: MediaQuery.of(context).size.width < 370 ? 0.7 : 1.0,
-                          ),
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            return OrderCard(
-                              ownerName: data[index]["ownerName"],
-                              imageUrl: data[index]["imageUrl"],
-                              price: data[index]["price"],
-                              title: data[index]["title"],
-                              createdAt: data[index]["createdAt"],
-                              category: data[index]["category"],
-                              duration: data[index]["duration"],
-                              ownerEmail: data[index]["ownerEmail"],
-                              description: data[index]["description"],
-                              reviewType: data[index]["reviewType"],
-                              ownerId: data[index]["ownerId"],
-                            );
-                          },
-                        );
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  ),
-                ],
-              ),
+              child: currentMode == ViewMode.inSearch
+                  ? InSearchGrid(ordersFuture: getOrderData())
+                  : InProcessGrid(ordersFuture: getOrderData()),
             ),
           ),
         ],

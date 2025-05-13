@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_colors.dart';
 
 import '../../../constants/app_text_styles.dart';
-import '../../ad/ad.dart';
 
-class OrderCard extends StatelessWidget {
+class OrderCardInProcess extends StatelessWidget {
   final String ownerName;
   final dynamic imageUrl;
   final double price;
@@ -17,7 +16,7 @@ class OrderCard extends StatelessWidget {
   final String reviewType;
   final String ownerId;
 
-  const OrderCard({
+  const OrderCardInProcess({
     super.key,
     required this.ownerName,
     required this.imageUrl,
@@ -34,32 +33,16 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String orderStatus = "bebra";
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(
-          '/ad',
-          arguments: AdArguments(
-            adTitle: title,
-            adCategory: category,
-            adReviewType: reviewType,
-            adDescription: description,
-            adCreatedTime: createdAt,
-            adOwnerId: ownerId,
-            adOwnerName: ownerName,
-            adOwnerEmail: ownerEmail,
-            adPrice: price,
-            adDuration: duration,
-            adImageUrl: imageUrl
-          ),
-        );
-      },
+      onTap: () {},
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         color: AppColors.secondaryBackground,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Container(
@@ -68,27 +51,32 @@ class OrderCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
-                    image:
-                    imageUrl != null
-                        ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
-                        : null,
+                    image: imageUrl != null ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover) : null,
                   ),
-                  child:
-                  imageUrl == null
-                      ? const Icon(Icons.image, size: 50, color: Colors.black54)
-                      : null,
+                  child: imageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(ownerName, style: AppTextStyles.orderCategory),
-              Text(title, style: AppTextStyles.smallDescription),
-              Text(category, style: AppTextStyles.orderCategory),
+              Text(title, style: AppTextStyles.smallDescription, textAlign: TextAlign.center),
+              Text(orderStatus, style: AppTextStyles.orderCategory, textAlign: TextAlign.center),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("$price", style: AppTextStyles.orderCategory),
-                  Text(createdAt, style: AppTextStyles.orderCategory, textAlign: TextAlign.right),
+                  Text(
+                    ownerName,
+                    style:
+                        MediaQuery.of(context).size.width < 400
+                            ? AppTextStyles.orderDescription
+                            : AppTextStyles.orderCategory,
+                  ),
+                  Text(
+                    createdAt,
+                    style:
+                        MediaQuery.of(context).size.width < 400
+                            ? AppTextStyles.orderDescription
+                            : AppTextStyles.orderCategory,
+                  ),
                 ],
               ),
             ],
