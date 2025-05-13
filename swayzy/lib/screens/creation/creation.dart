@@ -130,319 +130,342 @@ class _CreationState extends State<Creation> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            spacing: AppSpacing.small,
-            children: [
-              Text(
-                "Choose an image:",
-                style: AppTextStyles.title,
-              ),
-              _image == null
-                ? Container(
-                width: 260,
-                height: 260,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.highlight),
-                    color: AppColors.secondaryBackground
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Add photo",
-                        style: AppTextStyles.body,
-                      ),
-                      SizedBox(height: AppSpacing.small,),
-                      FloatingActionButton(
-                        onPressed: getImageFromGallery,
+        child: Wrap(
+          children: [
+            Center(
+              child: Column(
+                spacing: AppSpacing.small,
+                children: [
+                  Text(
+                    "Choose an image:",
+                    style: AppTextStyles.title,
+                  ),
+                  _image == null
+                      ? Container(
+                    width: 260,
+                    height: 260,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.highlight),
+                        color: AppColors.secondaryBackground
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Add photo",
+                          style: AppTextStyles.body,
+                        ),
+                        SizedBox(height: AppSpacing.small,),
+                        FloatingActionButton(
+                          onPressed: getImageFromGallery,
                           tooltip: 'Pick Image',
                           child: const Icon(Icons.add_a_photo),
-                      ),
-                    ],
-                  ),
-                )
-                : Container(
-                  width: 260,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.highlight, width: 3),
-                    color: AppColors.secondaryBackground,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        spacing: AppSpacing.small,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Add another photo",
-                            style: AppTextStyles.body,
-                          ),
-                          FloatingActionButton(
-                            onPressed: getImageFromGallery,
-                            tooltip: 'Pick Image',
-                            child: const Icon(Icons.add_a_photo),
-                          ),
-                        ],
-                      ),
-                      Image.file(File(_image!.path)),
-                    ],
-                  ),
-                ),
-              Text(
-                "Title:",
-                style: AppTextStyles.title,
-              ),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width - 20,
-                child: TextField(
-                  maxLength: 30,
-                  style: AppTextStyles.form,
-                  decoration: InputDecoration(
-                    hintText: "Example: Samsung A34 Black"
-                  ),
-                  controller: _titleController,
-                ),
-              ),
-              Text(
-                "Description:",
-                style: AppTextStyles.title,
-              ),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width - 20,
-                child: TextField(
-                  maxLength: 1000,
-                  maxLines: 5,
-                  style: AppTextStyles.form,
-                  decoration: InputDecoration(
-                    hintText: "Describe what you want from potential performers, including \"where\", "
-                      "\"how\" and \"what\" they need to advertise"
-                  ),
-                  controller: _descriptionController,
-                ),
-              ),
-              Container(
-                width: MediaQuery.sizeOf(context).width - 10,
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 10,
-                  children: [
-                    Column(
-                      spacing: AppSpacing.small,
-                      children: [
-                        Text(
-                          "Category:",
-                          style: AppTextStyles.body,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.45,
-                          child: DropdownMenu<String>(
-                            width: MediaQuery.sizeOf(context).width * 0.45,
-                            expandedInsets: null,
-                            textStyle: AppTextStyles.form,
-                            initialSelection: appCategories.first.title,
-                            dropdownMenuEntries: categoryEntries,
-                            onSelected: (String? value) {
-                              setState(() {
-                                dropdownCategoryValue = value!;
-                              });
-                            },
-                          )
                         ),
                       ],
                     ),
-                    Column(
-                      spacing: AppSpacing.small,
-                      children: [
-                        Text(
-                          "Review type:",
-                          style: AppTextStyles.body,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.37,
-                          child: DropdownMenu<String>(
-                            width: MediaQuery.sizeOf(context).width * 0.37,
-                            expandedInsets: null,
-                            textStyle: AppTextStyles.form,
-                            initialSelection: reviewType.first,
-                            dropdownMenuEntries: reviewEntries,
-                            onSelected: (String? value) {
-                              setState(() {
-                                dropdownReviewValue = value!;
-                              });
-                            },
-                          )
-                        ),
-                      ],
+                  )
+                      : Container(
+                    width: 260,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.highlight, width: 3),
+                      color: AppColors.secondaryBackground,
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                width: MediaQuery.sizeOf(context).width - 10,
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 10,
-                  children: [
-                    Column(
-                      spacing: AppSpacing.small,
+                    child: Column(
                       children: [
-                        Text(
-                          "Social:",
-                          style: AppTextStyles.body,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.45,
-                          child: DropdownMenu<String>(
-                            width: MediaQuery.sizeOf(context).width * 0.45,
-                            expandedInsets: null,
-                            textStyle: AppTextStyles.form,
-                            initialSelection: socialType.first,
-                            dropdownMenuEntries: socialEntries,
-                            onSelected: (String? value) {
-                              setState(() {
-                                dropdownSocialValue = value!;
-                              });
-                            },
-                          )
-                        ),
-                      ],
-                    ),
-                    Column(
-                      spacing: AppSpacing.small,
-                      children: [
-                        Text(
-                          "Subscribers:",
-                          style: AppTextStyles.body,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.37,
-                          child: DropdownMenu<String>(
-                            width: MediaQuery.sizeOf(context).width * 0.37,
-                            expandedInsets: null,
-                            textStyle: AppTextStyles.form,
-                            initialSelection: subsAmount.first,
-                            dropdownMenuEntries: subsEntries,
-                            onSelected: (String? value) {
-                              setState(() {
-                                dropdownSubsValue = value!;
-                              });
-                            },
-                          )
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                "Numbers of performers:",
-                style: AppTextStyles.body,
-              ),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width - 200,
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  maxLength: 3,
-                  style: AppTextStyles.form,
-                  decoration: InputDecoration(
-                    hintText: "Amount of influencers"
-                  ),
-                  controller: _performersController,
-                ),
-              ),
-              Container(
-                width: MediaQuery.sizeOf(context).width - 10,
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: AppSpacing.small,
-                  children: [
-                    Column(
-                      spacing: AppSpacing.small,
-                      children: [
-                        Text(
-                          "Duration:",
-                          style: AppTextStyles.body,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.4,
-                          child: TextField(
-                            maxLength: 15,
-                            style: AppTextStyles.form,
-                            decoration: InputDecoration(
-                              hintText: "Post save time"
+                        Row(
+                          spacing: AppSpacing.small,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Add another photo",
+                              style: AppTextStyles.body,
                             ),
-                            controller: _durationController,
+                            FloatingActionButton(
+                              onPressed: getImageFromGallery,
+                              tooltip: 'Pick Image',
+                              child: const Icon(Icons.add_a_photo),
+                            ),
+                          ],
+                        ),
+                        Image.file(File(_image!.path)),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    "Title:",
+                    style: AppTextStyles.title,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 20,
+                    child: TextField(
+                      maxLength: 30,
+                      style: AppTextStyles.form,
+                      decoration: InputDecoration(
+                          hintText: "Example: Samsung A34 Black"
+                      ),
+                      controller: _titleController,
+                    ),
+                  ),
+                  Text(
+                    "Description:",
+                    style: AppTextStyles.title,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 20,
+                    child: TextField(
+                      maxLength: 1000,
+                      maxLines: 5,
+                      style: AppTextStyles.form,
+                      decoration: InputDecoration(
+                          hintText: "Describe what you want from potential performers, including \"where\", "
+                              "\"how\" and \"what\" they need to advertise"
+                      ),
+                      controller: _descriptionController,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width - 20,
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 10,
+                      children: [
+                        Flexible(
+                          flex: 5,
+                          child: Column(
+                            spacing: AppSpacing.small,
+                            children: [
+                              Text(
+                                "Category:",
+                                style: AppTextStyles.form,
+                              ),
+                              SizedBox(
+                                  //width: MediaQuery.sizeOf(context).width * 0.45,
+                                  child: DropdownMenu<String>(
+                                    //width: MediaQuery.sizeOf(context).width * 0.45,
+                                    expandedInsets: null,
+                                    textStyle: AppTextStyles.body,
+                                    initialSelection: appCategories.first.title,
+                                    dropdownMenuEntries: categoryEntries,
+                                    onSelected: (String? value) {
+                                      setState(() {
+                                        dropdownCategoryValue = value!;
+                                      });
+                                    },
+                                  )
+                              ),
+                            ],
+                          ),
+                        ),
+                        Flexible(
+                          flex: 4,
+                          child: Column(
+                            spacing: AppSpacing.small,
+                            children: [
+                              Text(
+                                "Review type:",
+                                style: AppTextStyles.form,
+                              ),
+                              SizedBox(
+                                  //width: MediaQuery.sizeOf(context).width * 0.37,
+                                  child: DropdownMenu<String>(
+                                    //width: MediaQuery.sizeOf(context).width * 0.37,
+                                    expandedInsets: null,
+                                    textStyle: AppTextStyles.body,
+                                    initialSelection: reviewType.first,
+                                    dropdownMenuEntries: reviewEntries,
+                                    onSelected: (String? value) {
+                                      setState(() {
+                                        dropdownReviewValue = value!;
+                                      });
+                                    },
+                                  )
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                    Column(
+                  ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width - 20,
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 10,
+                      children: [
+                        Flexible(
+                          child: Column(
+                            spacing: AppSpacing.small,
+                            children: [
+                              Text(
+                                "Social network:",
+                                style: AppTextStyles.form,
+                              ),
+                              SizedBox(
+                                  //width: MediaQuery.sizeOf(context).width * 0.45,
+                                  child: DropdownMenu<String>(
+                                    //width: MediaQuery.sizeOf(context).width * 0.45,
+                                    expandedInsets: null,
+                                    textStyle: AppTextStyles.body,
+                                    initialSelection: socialType.first,
+                                    dropdownMenuEntries: socialEntries,
+                                    onSelected: (String? value) {
+                                      setState(() {
+                                        dropdownSocialValue = value!;
+                                      });
+                                    },
+                                  )
+                              ),
+                            ],
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Column(
+                            spacing: AppSpacing.small,
+                            children: [
+                              Text(
+                                "Subscribers:",
+                                style: AppTextStyles.form,
+                              ),
+                              SizedBox(
+                                  //width: MediaQuery.sizeOf(context).width * 0.37,
+                                  child: DropdownMenu<String>(
+                                    //width: MediaQuery.sizeOf(context).width * 0.37,
+                                    expandedInsets: null,
+                                    textStyle: AppTextStyles.body,
+                                    initialSelection: subsAmount.first,
+                                    dropdownMenuEntries: subsEntries,
+                                    onSelected: (String? value) {
+                                      setState(() {
+                                        dropdownSubsValue = value!;
+                                      });
+                                    },
+                                  )
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    "Number of influencers involved:",
+                    style: AppTextStyles.form,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 200,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      maxLength: 3,
+                      style: AppTextStyles.body,
+                      decoration: InputDecoration(
+                        hintText: "1-100"
+                      ),
+                      controller: _performersController,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width - 10,
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       spacing: AppSpacing.small,
                       children: [
-                        Text(
-                          "Price:",
-                          style: AppTextStyles.body,
+                        Flexible(
+                          flex: 5,
+                          child: Column(
+                            spacing: AppSpacing.small,
+                            children: [
+                              Text(
+                                "Duration:",
+                                style: AppTextStyles.form,
+                              ),
+                              SizedBox(
+                                //width: MediaQuery.sizeOf(context).width * 0.4,
+                                child: TextField(
+                                  maxLength: 15,
+                                  style: AppTextStyles.body,
+                                  decoration: InputDecoration(
+                                    hintText: "Post save time"
+                                  ),
+                                  controller: _durationController,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.5,
-                          child: TextField(
-                            maxLength: 4,
-                            style: AppTextStyles.form,
-                            decoration: InputDecoration(
-                              hintText: "SOL per performer"
-                            ),
-                            controller: _priceController,
+                        Flexible(
+                          flex: 5,
+                          child: Column(
+                            spacing: AppSpacing.small,
+                            children: [
+                              Text(
+                                "Price:",
+                                style: AppTextStyles.form,
+                              ),
+                              SizedBox(
+                                //width: MediaQuery.sizeOf(context).width * 0.5,
+                                child: TextField(
+                                  keyboardType: TextInputType.number,
+                                  maxLength: 4,
+                                  style: AppTextStyles.body,
+                                  decoration: InputDecoration(
+                                      hintText: "SOL/influencer"
+                                  ),
+                                  controller: _priceController,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  TextButton.icon(
+                    label: Text("Save", style: AppTextStyles.title,),
+                    icon: Icon(Icons.save_rounded),
+                    style: AppButtonStyles.primary,
+                    onPressed: () {
+                      var user = FirebaseAuth.instance.currentUser!;
+                      String title = _titleController.text;
+                      String description = _descriptionController.text;
+                      String reviewType = dropdownReviewValue;
+                      String category = dropdownCategoryValue;
+                      double price = double.parse(_priceController.text);
+                      String duration = _durationController.text;
+                      int amountOfPerformers = int.parse(_performersController.text);
+                      String amountOfSubscribers = dropdownSubsValue;
+                      String social = dropdownSocialValue;
+                      createAd(
+                        title,
+                        category,
+                        reviewType,
+                        description,
+                        user.uid,
+                        user.displayName!,
+                        user.email!,
+                        price,
+                        duration,
+                        amountOfPerformers,
+                        amountOfSubscribers,
+                        social,
+                      );
+                      _titleController.clear();
+                      _descriptionController.clear();
+                      _priceController.clear();
+                      _durationController.clear();
+                      _performersController.clear();
+                    },
+                  ),
+                  SizedBox(width: AppSpacing.small,)
+                ],
               ),
-              TextButton.icon(
-                label: Text("Save", style: AppTextStyles.title,),
-                icon: Icon(Icons.save_rounded),
-                style: AppButtonStyles.primary,
-                onPressed: () {
-                  var user = FirebaseAuth.instance.currentUser!;
-                  String title = _titleController.text;
-                  String description = _descriptionController.text;
-                  String reviewType = dropdownReviewValue;
-                  String category = dropdownCategoryValue;
-                  double price = double.parse(_priceController.text);
-                  String duration = _durationController.text;
-                  int amountOfPerformers = int.parse(_performersController.text);
-                  String amountOfSubscribers = dropdownSubsValue;
-                  String social = dropdownSocialValue;
-                  createAd(
-                    title,
-                    category,
-                    reviewType,
-                    description,
-                    user.uid,
-                    user.displayName!,
-                    user.email!,
-                    price,
-                    duration,
-                    amountOfPerformers,
-                    amountOfSubscribers,
-                    social,
-                  );
-                  _titleController.clear();
-                  _descriptionController.clear();
-                  _priceController.clear();
-                  _durationController.clear();
-                  _performersController.clear();
-                },
-              ),
-              SizedBox(width: AppSpacing.small,)
-            ],
-          ),
+            ),
+          ]
         ),
       ),
     );

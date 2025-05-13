@@ -22,7 +22,7 @@ class AppTextStyles {
 
   static final TextStyle form = _base.copyWith(
     color: AppColors.text,
-    fontSize: AppFontSizes.medium,
+    fontSize: AppFontSizes.body,
     fontWeight: FontWeight.bold,
   );
 
