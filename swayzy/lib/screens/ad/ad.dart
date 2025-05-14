@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_spaces.dart';
 
+import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 
@@ -15,7 +18,9 @@ class AdArguments {
   final String adOwnerEmail;
   final double adPrice;
   final String adDuration;
+  final dynamic adId;
   final dynamic adImageUrl;
+  dynamic processId;
 
   AdArguments({
     required this.adTitle,
@@ -29,11 +34,14 @@ class AdArguments {
     required this.adPrice,
     required this.adDuration,
     required this.adImageUrl,
+    required this.adId,
+    this.processId
   });
 }
 
 class Ad extends StatefulWidget {
   final AdArguments arguments;
+
   const Ad({super.key, required this.arguments});
 
   @override
@@ -41,6 +49,21 @@ class Ad extends StatefulWidget {
 }
 
 class _AdState extends State<Ad> {
+  var user = FirebaseAuth.instance.currentUser!;
+
+  Future<void> createAdInProcess(String ownerId, String adId, String userId, String status) async {
+    final adData = {'ownerId': ownerId, 'adId': adId, 'userId': userId, 'status': status};
+
+    await FirebaseFirestore.instance.collection('inProcess').add(adData);
+  }
+
+  Future<void> updateStatus(String inProcessId, String newStatus) async {
+    CollectionReference inProcessRef = FirebaseFirestore.instance.collection('inProcess');
+
+    await inProcessRef.doc(inProcessId).update({
+      'status': newStatus,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,64 +89,67 @@ class _AdState extends State<Ad> {
                   borderRadius: BorderRadius.circular(8),
                   color: Colors.grey[300],
                   image:
-                  args.adImageUrl != null
-                      ? DecorationImage(image: NetworkImage(args.adImageUrl), fit: BoxFit.contain)
-                      : null,
+                      args.adImageUrl != null
+                          ? DecorationImage(image: NetworkImage(args.adImageUrl), fit: BoxFit.contain)
+                          : null,
                 ),
-                child:
-                args.adImageUrl == null
-                    ? const Icon(Icons.image, size: 50, color: Colors.black54)
-                    : null,
+                child: args.adImageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: AppSpacing.small,
-              children: [
-                Text(
-                  args.adTitle,
-                  style: AppTextStyles.title,
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  "Category: ${args.adCategory}",
-                  style: AppTextStyles.title,
-                  textAlign: TextAlign.start,
-                ),
-                Text(
-                  "Price: ${args.adPrice.toString()} SOL",
-                  style: AppTextStyles.title,
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  "Review type: ${args.adReviewType}",
-                  style: AppTextStyles.title,
-                  textAlign: TextAlign.start,
-                ),
-                Text(
-                  "Duration: ${args.adDuration}",
-                  style: AppTextStyles.title,
-                  textAlign: TextAlign.start,
-                ),
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width - 20,
-                  child: Text(
-                    args.adDescription,
-                    style: AppTextStyles.body,
-                    textAlign: TextAlign.start,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: AppSpacing.small,
+                children: [
+                  Text(args.adTitle, style: AppTextStyles.title, textAlign: TextAlign.center),
+                  Text("Category: ${args.adCategory}", style: AppTextStyles.title, textAlign: TextAlign.start),
+                  Text(
+                    "Price: ${args.adPrice.toString()} SOL",
+                    style: AppTextStyles.title,
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                Text(
-                  args.adOwnerName,
-                  style: AppTextStyles.smallDescription,
-                  textAlign: TextAlign.end,
-                ),
-                Text(
-                  args.adOwnerEmail,
-                  style: AppTextStyles.smallDescription,
-                  textAlign: TextAlign.end,
-                ),
-              ],
+                  Text("Review type: ${args.adReviewType}", style: AppTextStyles.title, textAlign: TextAlign.start),
+                  Text("Duration: ${args.adDuration}", style: AppTextStyles.title, textAlign: TextAlign.start),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 20,
+                    child: Text(args.adDescription, style: AppTextStyles.body, textAlign: TextAlign.start),
+                  ),
+                  Text(args.adOwnerName, style: AppTextStyles.smallDescription, textAlign: TextAlign.end),
+                  Text(args.adOwnerEmail, style: AppTextStyles.smallDescription, textAlign: TextAlign.end),
+                  args.adId == null
+                      ? Center(
+                        child: ElevatedButton(
+                          style: AppButtonStyles.primary,
+                          onPressed: () {
+                            if (args.processId != null && args.processId != "Completed") {
+                              updateStatus(args.processId, "Completed");
+                            }
+                          },
+                          child: Text("Complete"),
+                        ),
+                      )
+                      : Center(
+                        child: ElevatedButton(
+                          style: AppButtonStyles.primary,
+                          onPressed: () {
+                            if (args.adOwnerId != user.uid) {
+                              createAdInProcess(args.adOwnerId, args.adId, user.uid, "In Work");
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppColors.error,
+                                  duration: Duration(seconds: 2),
+                                  content: Text("You can't take your order", style: AppTextStyles.form),
+                                ),
+                              );
+                            }
+                          },
+                          child: Text("Take order"),
+                        ),
+                      ),
+                ],
+              ),
             ),
           ],
         ),

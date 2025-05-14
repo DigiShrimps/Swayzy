@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_colors.dart';
 
 import '../../../constants/app_text_styles.dart';
+import '../../ad/ad.dart';
 
 class OrderCardInProcess extends StatelessWidget {
   final String ownerName;
@@ -15,6 +16,8 @@ class OrderCardInProcess extends StatelessWidget {
   final String description;
   final String reviewType;
   final String ownerId;
+  final String orderStatus;
+  final String processId;
 
   const OrderCardInProcess({
     super.key,
@@ -29,13 +32,33 @@ class OrderCardInProcess extends StatelessWidget {
     required this.description,
     required this.reviewType,
     required this.ownerId,
+    required this.orderStatus,
+    required this.processId
   });
 
   @override
   Widget build(BuildContext context) {
-    final String orderStatus = "bebra";
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          '/ad',
+          arguments: AdArguments(
+            adTitle: title,
+            adCategory: category,
+            adReviewType: reviewType,
+            adDescription: description,
+            adCreatedTime: createdAt,
+            adOwnerId: ownerId,
+            adOwnerName: ownerName,
+            adOwnerEmail: ownerEmail,
+            adPrice: price,
+            adDuration: duration,
+            adImageUrl: imageUrl,
+            adId: null,
+            processId: processId
+          ),
+        );
+      },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         color: AppColors.secondaryBackground,
@@ -57,8 +80,8 @@ class OrderCardInProcess extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(title, style: AppTextStyles.smallDescription, textAlign: TextAlign.center),
-              Text(orderStatus, style: AppTextStyles.orderCategory, textAlign: TextAlign.center),
+              Text(title, style: AppTextStyles.orderTitle, textAlign: TextAlign.center),
+              Text(orderStatus, style: AppTextStyles.orderDescription, textAlign: TextAlign.center),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

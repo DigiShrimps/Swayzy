@@ -16,6 +16,7 @@ class OrderCard extends StatelessWidget {
   final String description;
   final String reviewType;
   final String ownerId;
+  final String adId;
 
   const OrderCard({
     super.key,
@@ -30,6 +31,7 @@ class OrderCard extends StatelessWidget {
     required this.description,
     required this.reviewType,
     required this.ownerId,
+    required this.adId,
   });
 
   @override
@@ -49,7 +51,8 @@ class OrderCard extends StatelessWidget {
             adOwnerEmail: ownerEmail,
             adPrice: price,
             adDuration: duration,
-            adImageUrl: imageUrl
+            adImageUrl: imageUrl,
+            adId: adId,
           ),
         );
       },
@@ -68,21 +71,15 @@ class OrderCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
-                    image:
-                    imageUrl != null
-                        ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
-                        : null,
+                    image: imageUrl != null ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover) : null,
                   ),
-                  child:
-                  imageUrl == null
-                      ? const Icon(Icons.image, size: 50, color: Colors.black54)
-                      : null,
+                  child: imageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(ownerName, style: AppTextStyles.orderCategory),
-              Text(title, style: AppTextStyles.smallDescription),
-              Text(category, style: AppTextStyles.orderCategory),
+              Center(child: Text(ownerName, style: AppTextStyles.orderDescription)),
+              Center(child: Text(title, style: AppTextStyles.orderTitle)),
+              Center(child: Text(category, style: AppTextStyles.orderDescription)),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

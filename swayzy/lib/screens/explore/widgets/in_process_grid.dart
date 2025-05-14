@@ -3,6 +3,7 @@ import 'order_card_in_process.dart';
 
 class InProcessGrid extends StatelessWidget {
   final Future<List<Map<String, dynamic>>> ordersFuture;
+
   const InProcessGrid({super.key, required this.ordersFuture});
 
   @override
@@ -34,6 +35,8 @@ class InProcessGrid extends StatelessWidget {
                 description: data[index]["description"],
                 reviewType: data[index]["reviewType"],
                 ownerId: data[index]["ownerId"],
+                orderStatus: data[index]["status"],
+                processId: data[index]["inProcessId"],
               );
             },
           );

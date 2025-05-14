@@ -5,6 +5,7 @@ import 'order_card.dart';
 
 class InSearchGrid extends StatefulWidget {
   final Future<List<Map<String, dynamic>>> ordersFuture;
+
   const InSearchGrid({super.key, required this.ordersFuture});
 
   @override
@@ -75,6 +76,7 @@ class _InSearchGridState extends State<InSearchGrid> {
                     description: data[index]["description"],
                     reviewType: data[index]["reviewType"],
                     ownerId: data[index]["ownerId"],
+                    adId: data[index]["id"],
                   );
                 },
               );

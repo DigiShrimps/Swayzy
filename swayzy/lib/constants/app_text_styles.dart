@@ -73,4 +73,11 @@ class AppTextStyles {
     fontSize: 10,
     fontWeight: FontWeight.bold,
   );
+
+  static final TextStyle orderTitle = _base.copyWith(
+    color: AppColors.text,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+
 }
