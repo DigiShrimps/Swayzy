@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:swayzy/constants/app_font_sizes.dart';
 import 'package:swayzy/constants/app_spaces.dart';
 
 import '../../constants/app_button_styles.dart';
@@ -18,6 +19,8 @@ class AdArguments {
   final String adOwnerEmail;
   final double adPrice;
   final String adDuration;
+  final String adSocial;
+  final String adSubscribers;
   final dynamic adId;
   final dynamic adImageUrl;
   dynamic processId;
@@ -33,6 +36,8 @@ class AdArguments {
     required this.adOwnerEmail,
     required this.adPrice,
     required this.adDuration,
+    required this.adSocial,
+    required this.adSubscribers,
     required this.adImageUrl,
     required this.adId,
     this.processId
@@ -76,49 +81,180 @@ class _AdState extends State<Ad> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: AppSpacing.large),
-        child: Column(
-          spacing: AppSpacing.medium,
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.small, horizontal: AppSpacing.medium),
+        child: Wrap(
           children: [
-            SizedBox(height: 0),
-            Center(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.3,
-                width: MediaQuery.of(context).size.width * 0.95,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.grey[300],
-                  image:
+            Column(
+              spacing: AppSpacing.medium,
+              children: [
+                SizedBox(height: 0),
+                Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    width: MediaQuery.of(context).size.width * 0.95,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[300],
+                      image:
                       args.adImageUrl != null
                           ? DecorationImage(image: NetworkImage(args.adImageUrl), fit: BoxFit.contain)
                           : null,
+                    ),
+                    child: args.adImageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
+                  ),
                 ),
-                child: args.adImageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: AppSpacing.small,
-                children: [
-                  Text(args.adTitle, style: AppTextStyles.title, textAlign: TextAlign.center),
-                  Text("Category: ${args.adCategory}", style: AppTextStyles.title, textAlign: TextAlign.start),
-                  Text(
-                    "Price: ${args.adPrice.toString()} SOL",
-                    style: AppTextStyles.title,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text("Review type: ${args.adReviewType}", style: AppTextStyles.title, textAlign: TextAlign.start),
-                  Text("Duration: ${args.adDuration}", style: AppTextStyles.title, textAlign: TextAlign.start),
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 20,
-                    child: Text(args.adDescription, style: AppTextStyles.body, textAlign: TextAlign.start),
-                  ),
-                  Text(args.adOwnerName, style: AppTextStyles.smallDescription, textAlign: TextAlign.end),
-                  Text(args.adOwnerEmail, style: AppTextStyles.smallDescription, textAlign: TextAlign.end),
-                  args.adId == null
-                      ? Center(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    //spacing: AppSpacing.small,
+                    children: [
+                      Text(
+                        args.adCreatedTime,
+                        style: AppTextStyles.orderCategory,
+                      ),
+                      SizedBox(height: AppSpacing.small),
+                      Text(
+                        args.adTitle,
+                        style: AppTextStyles.title,
+                      ),
+                      SizedBox(height: AppSpacing.small),
+                      Text(
+                        "Price: ${args.adPrice.toString()} SOL",
+                        style: AppTextStyles.buttonPrimary,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: AppSpacing.small),
+                      SizedBox(
+                        //width: MediaQuery.sizeOf(context).width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: AppSpacing.small,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Flexible(
+                              flex: 7,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColors.accent,
+                                ),
+                                padding: EdgeInsets.all(10),
+                                height: 66,
+                                alignment: Alignment.center,
+                                child: Text(args.adCategory,
+                                  style: AppTextStyles.form,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColors.accent,
+                                ),
+                                padding: EdgeInsets.all(10),
+                                height: 66,
+                                alignment: Alignment.center,
+                                child: Text("${args.adReviewType}\nreview",
+                                  style: AppTextStyles.form,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 6,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.accent,
+                                ),
+                                padding: EdgeInsets.all(10),
+                                child: Text("Duration:\n${args.adDuration}",
+                                  style: AppTextStyles.form,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        thickness: 2,
+                        color: AppColors.highlight,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: AppSpacing.medium,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColors.accent,
+                              ),
+                              padding: EdgeInsets.all(10),
+                              height: 66,
+                              alignment: Alignment.center,
+                              child: Flexible(
+                                flex: 1,
+                                child: Text(args.adSocial,
+                                  style: AppTextStyles.form,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColors.accent,
+                              ),
+                              padding: EdgeInsets.all(10),
+                              child: Flexible(
+                                flex: 1,
+                                child: Text("${args.adSubscribers}\nsubscribers",
+                                  style: AppTextStyles.form,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.medium),
+                      Text(
+                        "Description:",
+                        style: AppTextStyles.buttonPrimary,
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width - 20,
+                        child: Text(
+                          args.adDescription,
+                          style: AppTextStyles.form,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.medium),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            args.adOwnerName,
+                            style: AppTextStyles.smallDescription,
+                          ),
+                          Text(
+                            args.adOwnerEmail,
+                            style: AppTextStyles.smallDescription,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: AppSpacing.medium),
+                      args.adId == null
+                          ? Center(
                         child: ElevatedButton(
                           style: AppButtonStyles.primary,
                           onPressed: () {
@@ -129,7 +265,7 @@ class _AdState extends State<Ad> {
                           child: Text("Complete"),
                         ),
                       )
-                      : Center(
+                          : Center(
                         child: ElevatedButton(
                           style: AppButtonStyles.primary,
                           onPressed: () {
@@ -148,10 +284,13 @@ class _AdState extends State<Ad> {
                           child: Text("Take order"),
                         ),
                       ),
-                ],
-              ),
+                      SizedBox(height: AppSpacing.medium),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ]
         ),
       ),
     );

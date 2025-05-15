@@ -15,6 +15,8 @@ class OrderCardInProcess extends StatelessWidget {
   final String ownerEmail;
   final String description;
   final String reviewType;
+  final String social;
+  final String subscribers;
   final String ownerId;
   final String orderStatus;
   final String processId;
@@ -32,6 +34,8 @@ class OrderCardInProcess extends StatelessWidget {
     required this.description,
     required this.reviewType,
     required this.ownerId,
+    required this.social,
+    required this.subscribers,
     required this.orderStatus,
     required this.processId
   });
@@ -53,6 +57,8 @@ class OrderCardInProcess extends StatelessWidget {
             adOwnerEmail: ownerEmail,
             adPrice: price,
             adDuration: duration,
+            adSocial: social,
+            adSubscribers: subscribers,
             adImageUrl: imageUrl,
             adId: null,
             processId: processId

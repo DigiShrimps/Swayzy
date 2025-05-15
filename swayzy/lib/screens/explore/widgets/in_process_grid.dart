@@ -34,6 +34,8 @@ class InProcessGrid extends StatelessWidget {
                 ownerEmail: data[index]["ownerEmail"],
                 description: data[index]["description"],
                 reviewType: data[index]["reviewType"],
+                social: data[index]["social"],
+                subscribers: data[index]["amountOfSubscribers"],
                 ownerId: data[index]["ownerId"],
                 orderStatus: data[index]["status"],
                 processId: data[index]["inProcessId"],

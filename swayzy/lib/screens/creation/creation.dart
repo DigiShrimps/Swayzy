@@ -10,6 +10,7 @@ import 'package:swayzy/constants/app_button_styles.dart';
 import 'package:swayzy/constants/app_spaces.dart';
 import 'package:swayzy/screens/creation/mocks/category.mocks.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
@@ -98,7 +99,9 @@ class _CreationState extends State<Creation> {
     String amountOfSubscribers,
     String social,) async {
     //final imageUrl = await uploadImageToStorage(image);
-    DateTime now = DateTime.now();
+    int timeNow = DateTime.now().millisecondsSinceEpoch;
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeNow);
+    var dateFormatter = DateFormat('dd-MM-yyyy HH:mm');
 
     final adData = {
       'title': title,
@@ -114,7 +117,7 @@ class _CreationState extends State<Creation> {
       'amountOfSubscribers': amountOfSubscribers,
       'social': social,
       'imageUrl': null, //imageUrl,
-      'createdAt': "${now.day}.${now.month} ${now.hour}:${now.minute}",
+      'createdAt': dateFormatter.format(dateTime),
     };
 
     await FirebaseFirestore.instance.collection('ads').add(adData);

@@ -75,6 +75,8 @@ class _InSearchGridState extends State<InSearchGrid> {
                     ownerEmail: data[index]["ownerEmail"],
                     description: data[index]["description"],
                     reviewType: data[index]["reviewType"],
+                    social: data[index]["social"],
+                    subscribers: data[index]["amountOfSubscribers"],
                     ownerId: data[index]["ownerId"],
                     adId: data[index]["id"],
                   );

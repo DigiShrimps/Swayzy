@@ -15,6 +15,8 @@ class OrderCard extends StatelessWidget {
   final String ownerEmail;
   final String description;
   final String reviewType;
+  final String social;
+  final String subscribers;
   final String ownerId;
   final String adId;
 
@@ -30,6 +32,8 @@ class OrderCard extends StatelessWidget {
     required this.ownerEmail,
     required this.description,
     required this.reviewType,
+    required this.social,
+    required this.subscribers,
     required this.ownerId,
     required this.adId,
   });
@@ -51,6 +55,8 @@ class OrderCard extends StatelessWidget {
             adOwnerEmail: ownerEmail,
             adPrice: price,
             adDuration: duration,
+            adSocial: social,
+            adSubscribers: subscribers,
             adImageUrl: imageUrl,
             adId: adId,
           ),
