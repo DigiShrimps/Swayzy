@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.DigiShrimps.app.swayzy" />
-                  <option name="mobileSdkAppId" value="1:928593099570:android:4ecdcc4eea8aeae4b1352b" />
-                  <option name="projectId" value="swayzy-b0baf" />
-                  <option name="projectNumber" value="928593099570" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
