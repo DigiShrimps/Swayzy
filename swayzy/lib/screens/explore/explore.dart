@@ -77,7 +77,7 @@ class _ExploreState extends State<Explore> {
                   style: currentMode == ViewMode.inSearch
                       ? AppButtonStyles.selectedButton
                       : AppButtonStyles.unselectedButton,
-                  child: Text("In Search", style: AppTextStyles.buttonPrimary),
+                  child: Text("In Search"),
                 ),
               ),
               Expanded(
@@ -90,7 +90,7 @@ class _ExploreState extends State<Explore> {
                   style: currentMode == ViewMode.inProcess
                       ? AppButtonStyles.selectedButton
                       : AppButtonStyles.unselectedButton,
-                  child: Text("In Process", style: AppTextStyles.buttonPrimary),
+                  child: Text("In Process"),
                 ),
               ),
             ],
