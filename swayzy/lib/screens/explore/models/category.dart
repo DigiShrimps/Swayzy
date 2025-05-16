@@ -3,9 +3,5 @@ class Category {
   final String pathToImage;
   final String id;
 
-  Category({
-    required this.title,
-    required this.pathToImage,
-    required this.id,
-  });
+  Category({required this.title, required this.pathToImage, required this.id});
 }

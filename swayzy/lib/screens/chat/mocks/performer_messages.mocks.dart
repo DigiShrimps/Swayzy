@@ -7,7 +7,8 @@ final List<Message> performerMessages = [
     lastMessageText: "message_text...",
     messageTime: "20:11",
     isChecked: true,
-    photoURL: "https://lh3.googleusercontent.com/a/ACg8ocK7GV-PWk7qgZIYuh45jlogSZC8r08uDZwoBv6RCuSf_qcpJPI=s96-c",
+    photoURL:
+        "https://lh3.googleusercontent.com/a/ACg8ocK7GV-PWk7qgZIYuh45jlogSZC8r08uDZwoBv6RCuSf_qcpJPI=s96-c",
   ),
   Message(
     userName: "Vitalii",

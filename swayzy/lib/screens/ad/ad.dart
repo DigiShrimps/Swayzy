@@ -9,6 +9,15 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../solana/solana_service.dart';
 
+class Ad extends StatefulWidget {
+  final AdArguments arguments;
+
+  const Ad({super.key, required this.arguments});
+
+  @override
+  State<Ad> createState() => _AdState();
+}
+
 class AdArguments {
   final String adTitle;
   final String adCategory;
@@ -41,35 +50,12 @@ class AdArguments {
     required this.adSubscribers,
     required this.adImageUrl,
     required this.adId,
-    this.processId
+    this.processId,
   });
-}
-
-class Ad extends StatefulWidget {
-  final AdArguments arguments;
-
-  const Ad({super.key, required this.arguments});
-
-  @override
-  State<Ad> createState() => _AdState();
 }
 
 class _AdState extends State<Ad> {
   var user = FirebaseAuth.instance.currentUser!;
-
-  Future<void> createAdInProcess(String ownerId, String adId, String userId, String status) async {
-    final adData = {'ownerId': ownerId, 'adId': adId, 'userId': userId, 'status': status};
-
-    await FirebaseFirestore.instance.collection('inProcess').add(adData);
-  }
-
-  Future<void> updateStatus(String inProcessId, String newStatus) async {
-    CollectionReference inProcessRef = FirebaseFirestore.instance.collection('inProcess');
-
-    await inProcessRef.doc(inProcessId).update({
-      'status': newStatus,
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +66,13 @@ class _AdState extends State<Ad> {
         titleTextStyle: AppTextStyles.title,
         backgroundColor: AppColors.secondaryBackground,
         centerTitle: true,
+        surfaceTintColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.small, horizontal: AppSpacing.medium),
+        padding: EdgeInsets.symmetric(
+          vertical: AppSpacing.small,
+          horizontal: AppSpacing.medium,
+        ),
         child: Wrap(
           children: [
             Column(
@@ -97,11 +87,21 @@ class _AdState extends State<Ad> {
                       borderRadius: BorderRadius.circular(8),
                       color: Colors.grey[300],
                       image:
-                      args.adImageUrl != null
-                          ? DecorationImage(image: NetworkImage(args.adImageUrl), fit: BoxFit.contain)
-                          : null,
+                          args.adImageUrl != null
+                              ? DecorationImage(
+                                image: NetworkImage(args.adImageUrl),
+                                fit: BoxFit.contain,
+                              )
+                              : null,
                     ),
-                    child: args.adImageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
+                    child:
+                        args.adImageUrl == null
+                            ? const Icon(
+                              Icons.image,
+                              size: 50,
+                              color: Colors.black54,
+                            )
+                            : null,
                   ),
                 ),
                 Padding(
@@ -115,10 +115,7 @@ class _AdState extends State<Ad> {
                         style: AppTextStyles.orderCategory,
                       ),
                       SizedBox(height: AppSpacing.small),
-                      Text(
-                        args.adTitle,
-                        style: AppTextStyles.title,
-                      ),
+                      Text(args.adTitle, style: AppTextStyles.title),
                       SizedBox(height: AppSpacing.small),
                       Text(
                         "Price: ${args.adPrice.toString()} SOL",
@@ -143,7 +140,8 @@ class _AdState extends State<Ad> {
                                 padding: EdgeInsets.all(10),
                                 height: 60,
                                 alignment: Alignment.center,
-                                child: Text(args.adCategory,
+                                child: Text(
+                                  args.adCategory,
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -159,7 +157,8 @@ class _AdState extends State<Ad> {
                                 padding: EdgeInsets.all(10),
                                 height: 60,
                                 alignment: Alignment.center,
-                                child: Text("${args.adReviewType}\nreview",
+                                child: Text(
+                                  "${args.adReviewType}\nreview",
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -169,11 +168,12 @@ class _AdState extends State<Ad> {
                               flex: 9,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.accent,
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColors.accent,
                                 ),
                                 padding: EdgeInsets.all(10),
-                                child: Text("Duration:\n${args.adDuration}",
+                                child: Text(
+                                  "Duration:\n${args.adDuration}",
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -182,10 +182,7 @@ class _AdState extends State<Ad> {
                           ],
                         ),
                       ),
-                      Divider(
-                        thickness: 2,
-                        color: AppColors.highlight,
-                      ),
+                      Divider(thickness: 2, color: AppColors.highlight),
                       SizedBox(
                         width: MediaQuery.sizeOf(context).width,
                         child: Row(
@@ -202,7 +199,8 @@ class _AdState extends State<Ad> {
                                 padding: EdgeInsets.all(10),
                                 height: 60,
                                 alignment: Alignment.center,
-                                child: Text(args.adSocial,
+                                child: Text(
+                                  args.adSocial,
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -216,7 +214,8 @@ class _AdState extends State<Ad> {
                                   color: AppColors.accent,
                                 ),
                                 padding: EdgeInsets.all(10),
-                                child: Text("${args.adSubscribers}\nsubscribers",
+                                child: Text(
+                                  "${args.adSubscribers}\nsubscribers",
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -247,10 +246,7 @@ class _AdState extends State<Ad> {
                             args.adOwnerName,
                             style: AppTextStyles.smallDescription,
                           ),
-                          Divider(
-                            thickness: 2,
-                            color: AppColors.highlight,
-                          ),
+                          Divider(thickness: 2, color: AppColors.highlight),
                           Text(
                             args.adOwnerEmail,
                             style: AppTextStyles.smallDescription,
@@ -260,72 +256,121 @@ class _AdState extends State<Ad> {
                       SizedBox(height: AppSpacing.medium),
                       args.adId == null
                           ? Center(
-                        child: ElevatedButton(
-                          style: AppButtonStyles.primary,
-                          onPressed: () async {
-                            if (args.processId != null && args.processId != "Completed") {
-                              updateStatus(args.processId, "Completed");
-                              var querySender = await FirebaseFirestore.instance
-                                  .collection('users')
-                                  .where('userId', isEqualTo: args.adOwnerId)
-                                  .get();
-                              String senderWalletMnemonic = querySender.docs.first['mnemonic'];
-                              var queryRecipient = await FirebaseFirestore.instance
-                                  .collection('users')
-                                  .where('userId', isEqualTo: user.uid)
-                                  .get();
-                              String recipientWalletMnemonic = queryRecipient.docs.first['mnemonic'];
+                            child: ElevatedButton(
+                              style: AppButtonStyles.primary,
+                              onPressed: () async {
+                                if (args.processId != null &&
+                                    args.processId != "Completed") {
+                                  updateStatus(args.processId, "Completed");
+                                  var querySender =
+                                      await FirebaseFirestore.instance
+                                          .collection('users')
+                                          .where(
+                                            'userId',
+                                            isEqualTo: args.adOwnerId,
+                                          )
+                                          .get();
+                                  String senderWalletMnemonic =
+                                      querySender.docs.first['mnemonic'];
+                                  var queryRecipient =
+                                      await FirebaseFirestore.instance
+                                          .collection('users')
+                                          .where('userId', isEqualTo: user.uid)
+                                          .get();
+                                  String recipientWalletMnemonic =
+                                      queryRecipient.docs.first['mnemonic'];
 
-                              await passDataToContract(senderWalletMnemonic, recipientWalletMnemonic, args.adPrice);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: AppColors.tokenSuccess,
-                                  duration: Duration(seconds: 2),
-                                  content: Text("Complete!", style: AppTextStyles.form),
-                                ),
-                              );
-
-                            }
-                          },
-                          child: Text("Complete"),
-                        ),
-                      )
+                                  await passDataToContract(
+                                    senderWalletMnemonic,
+                                    recipientWalletMnemonic,
+                                    args.adPrice,
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: AppColors.tokenSuccess,
+                                      duration: Duration(seconds: 2),
+                                      content: Text(
+                                        "Complete!",
+                                        style: AppTextStyles.form,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text("Complete"),
+                            ),
+                          )
                           : Center(
-                        child: ElevatedButton(
-                          style: AppButtonStyles.primary,
-                          onPressed: () {
-                            if (args.adOwnerId != user.uid) {
-                              createAdInProcess(args.adOwnerId, args.adId, user.uid, "In Work");
-                              Navigator.of(context).pop();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: AppColors.tokenSuccess,
-                                  duration: Duration(seconds: 2),
-                                  content: Text("Order taken!", style: AppTextStyles.form),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: AppColors.error,
-                                  duration: Duration(seconds: 2),
-                                  content: Text("You can't take your order", style: AppTextStyles.form),
-                                ),
-                              );
-                            }
-                          },
-                          child: Text("Take order"),
-                        ),
-                      ),
+                            child: ElevatedButton(
+                              style: AppButtonStyles.primary,
+                              onPressed: () {
+                                if (args.adOwnerId != user.uid) {
+                                  createAdInProcess(
+                                    args.adOwnerId,
+                                    args.adId,
+                                    user.uid,
+                                    "In Work",
+                                  );
+                                  Navigator.of(context).pop();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: AppColors.tokenSuccess,
+                                      duration: Duration(seconds: 2),
+                                      content: Text(
+                                        "Order taken!",
+                                        style: AppTextStyles.form,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: AppColors.error,
+                                      duration: Duration(seconds: 2),
+                                      content: Text(
+                                        "You can't take your order",
+                                        style: AppTextStyles.form,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text("Take order"),
+                            ),
+                          ),
                       SizedBox(height: AppSpacing.medium),
                     ],
                   ),
                 ),
               ],
             ),
-          ]
+          ],
         ),
       ),
     );
+  }
+
+  Future<void> createAdInProcess(
+    String ownerId,
+    String adId,
+    String userId,
+    String status,
+  ) async {
+    final adData = {
+      'ownerId': ownerId,
+      'adId': adId,
+      'userId': userId,
+      'status': status,
+    };
+
+    await FirebaseFirestore.instance.collection('inProcess').add(adData);
+  }
+
+  Future<void> updateStatus(String inProcessId, String newStatus) async {
+    CollectionReference inProcessRef = FirebaseFirestore.instance.collection(
+      'inProcess',
+    );
+
+    await inProcessRef.doc(inProcessId).update({'status': newStatus});
   }
 }

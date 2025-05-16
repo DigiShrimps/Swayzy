@@ -4,9 +4,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'constants/app_button_styles.dart';
-import 'constants/app_text_styles.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_routes.dart';
+import 'constants/app_text_styles.dart';
 import 'firebase_config.dart';
 import 'screens/chat/chat.dart';
 import 'screens/creation/creation.dart';
@@ -18,10 +18,13 @@ void main() async {
   await dotenv.load(fileName: './dotenv');
   await Firebase.initializeApp(options: firebaseConfig);
   runApp(const MyApp());
-  // runApp(ChangeNotifierProvider(
-  //   create: (context) => Auth(),
-  //   builder: ((context, child) => const MyApp()),
-  // ));
+}
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
 }
 
 class MyApp extends StatelessWidget {
@@ -35,21 +38,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         textTheme: TextTheme(
-            titleLarge: AppTextStyles.title,
-            titleMedium: AppTextStyles.title,
-            titleSmall: AppTextStyles.title,
-            bodyLarge: AppTextStyles.body,
-            bodyMedium: AppTextStyles.body,
-            bodySmall: AppTextStyles.body,
-            displayLarge: AppTextStyles.body,
-            displayMedium: AppTextStyles.body,
-            displaySmall: AppTextStyles.body,
-            headlineLarge: AppTextStyles.title,
-            headlineMedium: AppTextStyles.title,
-            headlineSmall: AppTextStyles.title,
-            labelLarge: AppTextStyles.body,
-            labelMedium: AppTextStyles.body,
-            labelSmall: AppTextStyles.body
+          titleLarge: AppTextStyles.title,
+          titleMedium: AppTextStyles.title,
+          titleSmall: AppTextStyles.title,
+          bodyLarge: AppTextStyles.body,
+          bodyMedium: AppTextStyles.body,
+          bodySmall: AppTextStyles.body,
+          displayLarge: AppTextStyles.body,
+          displayMedium: AppTextStyles.body,
+          displaySmall: AppTextStyles.body,
+          headlineLarge: AppTextStyles.title,
+          headlineMedium: AppTextStyles.title,
+          headlineSmall: AppTextStyles.title,
+          labelLarge: AppTextStyles.body,
+          labelMedium: AppTextStyles.body,
+          labelSmall: AppTextStyles.body,
         ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.highlight,
@@ -59,44 +62,31 @@ class MyApp extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(
-              color: AppColors.highlight
-            )
+            borderSide: BorderSide(color: AppColors.highlight),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(
-                color: AppColors.highlight
-            )
+            borderSide: BorderSide(color: AppColors.highlight),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(
-              color: AppColors.highlight
-            )
+            borderSide: BorderSide(color: AppColors.highlight),
           ),
           labelStyle: AppTextStyles.form,
         ),
         iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(
-            foregroundColor: WidgetStateProperty.all(AppColors.text)
-          )
+            foregroundColor: WidgetStateProperty.all(AppColors.text),
+          ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
-          style: AppButtonStyles.secondary
-        )
+          style: AppButtonStyles.secondary,
+        ),
       ),
       initialRoute: '/auth',
       onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
-}
-
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
-
-  @override
-  State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
@@ -109,21 +99,12 @@ class _MainPageState extends State<MainPage> {
     const Profile(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -131,16 +112,16 @@ class _MainPageState extends State<MainPage> {
             label: "",
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline_rounded, size: 40),
-              label: ""
+            icon: Icon(Icons.add_circle_outline_rounded, size: 40),
+            label: "",
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.chat_outlined, size: 40),
-              label: ""
+            icon: Icon(Icons.chat_outlined, size: 40),
+            label: "",
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined, size: 40),
-              label: ""
+            icon: Icon(Icons.account_circle_outlined, size: 40),
+            label: "",
           ),
         ],
         currentIndex: _selectedIndex,
@@ -153,5 +134,11 @@ class _MainPageState extends State<MainPage> {
         onTap: _onItemTapped,
       ),
     );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }

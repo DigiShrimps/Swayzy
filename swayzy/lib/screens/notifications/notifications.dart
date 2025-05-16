@@ -14,21 +14,6 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  void toggleReadState(int index) {
-    return setState(() {
-      appNotifications[index].isRead =
-      !appNotifications[index].isRead;
-    });
-  }
-
-  IconData changeReadIcon(bool isRead) {
-    return isRead ? Icons.mark_email_read_rounded : Icons.mark_email_unread_rounded;
-  }
-
-  Color changeReadColor(bool isRead) {
-    return isRead ? AppColors.accent : AppColors.highlight;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +21,8 @@ class _NotificationsState extends State<Notifications> {
         title: const Text(_titleText),
         titleTextStyle: AppTextStyles.title,
         centerTitle: true,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.secondaryBackground,
       ),
       body: ListView.builder(
         itemCount: appNotifications.length,
@@ -43,7 +30,9 @@ class _NotificationsState extends State<Notifications> {
           final notification = appNotifications[index];
           return GestureDetector(
             onTap: () {
-              toggleReadState(index); // TODO перенаправлення на сторінку In Process
+              toggleReadState(
+                index,
+              ); // TODO перенаправлення на сторінку In Process
             },
             child: Card(
               color: AppColors.secondaryBackground,
@@ -57,7 +46,7 @@ class _NotificationsState extends State<Notifications> {
                       changeReadIcon(notification.isRead),
                       color: changeReadColor(notification.isRead),
                       size: 30,
-                      ),
+                    ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Column(
@@ -82,7 +71,23 @@ class _NotificationsState extends State<Notifications> {
             ),
           );
         },
-      )
+      ),
     );
+  }
+
+  Color changeReadColor(bool isRead) {
+    return isRead ? AppColors.accent : AppColors.highlight;
+  }
+
+  IconData changeReadIcon(bool isRead) {
+    return isRead
+        ? Icons.mark_email_read_rounded
+        : Icons.mark_email_unread_rounded;
+  }
+
+  void toggleReadState(int index) {
+    return setState(() {
+      appNotifications[index].isRead = !appNotifications[index].isRead;
+    });
   }
 }

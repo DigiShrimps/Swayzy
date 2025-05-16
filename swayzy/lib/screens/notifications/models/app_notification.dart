@@ -3,5 +3,9 @@ class AppNotification {
   final String description;
   bool isRead;
 
-  AppNotification({required this.title, required this.description, required this.isRead,});
+  AppNotification({
+    required this.title,
+    required this.description,
+    required this.isRead,
+  });
 }

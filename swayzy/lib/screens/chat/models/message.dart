@@ -12,6 +12,6 @@ class Message {
     required this.lastMessageText,
     required this.messageTime,
     required this.isChecked,
-    required this.photoURL
+    required this.photoURL,
   });
 }

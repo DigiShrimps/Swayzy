@@ -9,8 +9,6 @@ import 'mocks/performer_messages.mocks.dart';
 
 const String _titleText = "Chat";
 
-enum ViewMode { asCustomer, asPerformer }
-
 class Chat extends StatefulWidget {
   const Chat({super.key});
 
@@ -18,12 +16,17 @@ class Chat extends StatefulWidget {
   State<Chat> createState() => _ChatState();
 }
 
+enum ViewMode { asCustomer, asPerformer }
+
 class _ChatState extends State<Chat> {
   ViewMode currentMode = ViewMode.asCustomer;
 
   @override
   Widget build(BuildContext context) {
-    final messages = currentMode == ViewMode.asCustomer ? customerMessages : performerMessages;
+    final messages =
+        currentMode == ViewMode.asCustomer
+            ? customerMessages
+            : performerMessages;
 
     return Scaffold(
       appBar: AppBar(
@@ -31,6 +34,7 @@ class _ChatState extends State<Chat> {
         titleTextStyle: AppTextStyles.title,
         backgroundColor: AppColors.secondaryBackground,
         centerTitle: true,
+        surfaceTintColor: Colors.transparent,
       ),
       body: Column(
         children: [
@@ -43,9 +47,10 @@ class _ChatState extends State<Chat> {
                       currentMode = ViewMode.asCustomer;
                     });
                   },
-                  style: currentMode == ViewMode.asCustomer
-                      ? AppButtonStyles.selectedButton
-                      : AppButtonStyles.unselectedButton,
+                  style:
+                      currentMode == ViewMode.asCustomer
+                          ? AppButtonStyles.selectedButton
+                          : AppButtonStyles.unselectedButton,
                   child: const Text("Customer"),
                 ),
               ),
@@ -56,9 +61,10 @@ class _ChatState extends State<Chat> {
                       currentMode = ViewMode.asPerformer;
                     });
                   },
-                  style: currentMode == ViewMode.asPerformer
-                      ? AppButtonStyles.selectedButton
-                      : AppButtonStyles.unselectedButton,
+                  style:
+                      currentMode == ViewMode.asPerformer
+                          ? AppButtonStyles.selectedButton
+                          : AppButtonStyles.unselectedButton,
                   child: const Text("Performer"),
                 ),
               ),

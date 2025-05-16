@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../constants/app_text_styles.dart';
 import '../mocks/category.mocks.dart';
 import 'order_card.dart';
@@ -41,7 +42,12 @@ class _InSearchGridState extends State<InSearchGrid> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(category.pathToImage, width: 36, height: 36, fit: BoxFit.fitHeight),
+                  Image.asset(
+                    category.pathToImage,
+                    width: 36,
+                    height: 36,
+                    fit: BoxFit.fitHeight,
+                  ),
                   Text(category.title, style: AppTextStyles.orderCategory),
                 ],
               ),

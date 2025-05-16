@@ -83,21 +83,21 @@ class OrderCardInProcess extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
                     image:
-                      imageUrl != null
-                        ? DecorationImage(
-                          image: NetworkImage(imageUrl),
-                          fit: BoxFit.fitWidth,
-                        )
-                        : null,
+                        imageUrl != null
+                            ? DecorationImage(
+                              image: NetworkImage(imageUrl),
+                              fit: BoxFit.fitWidth,
+                            )
+                            : null,
                   ),
                   child:
-                    imageUrl == null
-                      ? const Icon(
-                        Icons.image,
-                        size: 50,
-                        color: Colors.black54,
-                      )
-                      : null,
+                      imageUrl == null
+                          ? const Icon(
+                            Icons.image,
+                            size: 50,
+                            color: Colors.black54,
+                          )
+                          : null,
                 ),
               ),
               const SizedBox(height: 8),
@@ -139,25 +139,6 @@ class OrderCardInProcess extends StatelessWidget {
                   ),
                 ),
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Text(
-              //       ownerName,
-              //       style:
-              //           MediaQuery.of(context).size.width < 400
-              //               ? AppTextStyles.orderDescription
-              //               : AppTextStyles.orderCategory,
-              //     ),
-              //     Text(
-              //       createdAt,
-              //       style:
-              //           MediaQuery.of(context).size.width < 400
-              //               ? AppTextStyles.orderDescription
-              //               : AppTextStyles.orderCategory,
-              //     ),
-              //   ],
-              // ),
             ],
           ),
         ),

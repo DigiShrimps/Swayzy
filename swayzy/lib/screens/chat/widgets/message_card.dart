@@ -33,8 +33,12 @@ class MessageCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: photoURL != null ? NetworkImage(photoURL!) : null,
-              child: photoURL == null ? const Icon(Icons.account_circle_rounded, size: 40) : null,
+              backgroundImage:
+                  photoURL != null ? NetworkImage(photoURL!) : null,
+              child:
+                  photoURL == null
+                      ? const Icon(Icons.account_circle_rounded, size: 40)
+                      : null,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -62,8 +66,17 @@ class MessageCard extends StatelessWidget {
                           style: AppTextStyles.smallDescription,
                         ),
                       ),
-                      isChecked? Icon(Icons.done, size: 20, color: AppColors.highlight) :
-                      Icon(Icons.done_all, size: 20, color: AppColors.accent)
+                      isChecked
+                          ? Icon(
+                            Icons.done,
+                            size: 20,
+                            color: AppColors.highlight,
+                          )
+                          : Icon(
+                            Icons.done_all,
+                            size: 20,
+                            color: AppColors.accent,
+                          ),
                     ],
                   ),
                 ],

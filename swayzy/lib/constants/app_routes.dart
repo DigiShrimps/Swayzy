@@ -31,16 +31,18 @@ class AppRoutes {
       case main:
         return MaterialPageRoute(builder: (_) => const MainPage());
       case ad:
-        return MaterialPageRoute(builder: (_) {
-          final args = routeSettings.arguments as AdArguments?;
-          if (args == null) {
-            return Scaffold(
-              appBar: AppBar(title: Text("Error")),
-              body: Center(child: Text("Помилка: Аргументи не передані!")),
-            );
-          }
-          return Ad(arguments: args);
-        });
+        return MaterialPageRoute(
+          builder: (_) {
+            final args = routeSettings.arguments as AdArguments?;
+            if (args == null) {
+              return Scaffold(
+                appBar: AppBar(title: Text("Error")),
+                body: Center(child: Text("Помилка: Аргументи не передані!")),
+              );
+            }
+            return Ad(arguments: args);
+          },
+        );
       case auth:
         return MaterialPageRoute(builder: (_) => const Auth());
       case chat:
@@ -59,7 +61,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const Settings());
       case socialDialog:
         final socialName = routeSettings.arguments as String?;
-        return MaterialPageRoute(builder: (_) => ChangeSocialInfoDialog(socialName: socialName));
+        return MaterialPageRoute(
+          builder: (_) => ChangeSocialInfoDialog(socialName: socialName),
+        );
       default:
         return MaterialPageRoute(builder: (_) => const Auth());
     }

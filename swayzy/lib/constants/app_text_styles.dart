@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'app_fonts.dart';
+
 import 'app_colors.dart';
 import 'app_font_sizes.dart';
+import 'app_fonts.dart';
 
 class AppTextStyles {
-  static const TextStyle _base = TextStyle(
-    fontFamily: AppFonts.fontFamily,
-  );
+  static const TextStyle _base = TextStyle(fontFamily: AppFonts.fontFamily);
 
   static final TextStyle title = _base.copyWith(
     color: AppColors.text,
@@ -85,5 +84,4 @@ class AppTextStyles {
     fontSize: 16,
     fontWeight: FontWeight.bold,
   );
-
 }

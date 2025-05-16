@@ -1,10 +1,10 @@
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_images_paths.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:swayzy/constants/private_data.dart';
 import 'package:swayzy/main.dart';
 
@@ -19,20 +19,6 @@ class Auth extends StatefulWidget {
 
 class _AuthState extends State<Auth> {
   String _mnemonic = "";
-
-  @override
-  void initState() {
-    super.initState();
-    _generateMnemonic();
-  }
-
-  Future<void> _generateMnemonic() async {
-    String mnemonic = bip39.generateMnemonic();
-
-    setState(() {
-      _mnemonic = mnemonic;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,35 +70,51 @@ class _AuthState extends State<Auth> {
         }
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           Future<bool> isDuplicateUniqueName(String userId) async {
-            QuerySnapshot query = await FirebaseFirestore.instance
-                .collection('users')
-                .where('userId', isEqualTo: userId)
-                .get();
+            QuerySnapshot query =
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .where('userId', isEqualTo: userId)
+                    .get();
             return query.docs.isNotEmpty;
           }
-          if (await isDuplicateUniqueName(FirebaseAuth.instance.currentUser!.uid)) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              '/', (Route<dynamic> route) => false,
-            );
+
+          if (await isDuplicateUniqueName(
+            FirebaseAuth.instance.currentUser!.uid,
+          )) {
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
           } else {
             FirebaseFirestore.instance
-              .collection('users')
-              .doc(FirebaseAuth.instance.currentUser!.uid)
-              .set(<String, dynamic>{
-              'timestamp': DateTime.now().millisecondsSinceEpoch,
-              'name': FirebaseAuth.instance.currentUser!.displayName,
-              'userId': FirebaseAuth.instance.currentUser!.uid,
-              'mnemonic': _mnemonic
-            });
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              '/', (Route<dynamic> route) => false,
-            );
+                .collection('users')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .set(<String, dynamic>{
+                  'timestamp': DateTime.now().millisecondsSinceEpoch,
+                  'name': FirebaseAuth.instance.currentUser!.displayName,
+                  'userId': FirebaseAuth.instance.currentUser!.uid,
+                  'mnemonic': _mnemonic,
+                });
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
           }
         });
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _generateMnemonic();
+  }
+
+  Future<void> _generateMnemonic() async {
+    String mnemonic = bip39.generateMnemonic();
+
+    setState(() {
+      _mnemonic = mnemonic;
+    });
   }
 }

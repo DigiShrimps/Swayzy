@@ -25,14 +25,26 @@ class AppButtonStyles {
     backgroundColor: WidgetStateProperty.all(AppColors.primaryBackground),
     foregroundColor: WidgetStateProperty.all(AppColors.highlight),
     textStyle: WidgetStateProperty.all(AppTextStyles.buttonSecondary),
-    side: WidgetStateProperty.all(const BorderSide(color: AppColors.highlight, width: 2.0, style: BorderStyle.solid)),
+    side: WidgetStateProperty.all(
+      const BorderSide(
+        color: AppColors.highlight,
+        width: 2.0,
+        style: BorderStyle.solid,
+      ),
+    ),
   );
 
   static final ButtonStyle delete = _base.copyWith(
     foregroundColor: WidgetStateProperty.all(AppColors.text),
     backgroundColor: WidgetStateProperty.all(AppColors.error),
     textStyle: WidgetStateProperty.all(AppTextStyles.buttonAuth),
-    side: WidgetStateProperty.all(const BorderSide(color: AppColors.error, width: 2.0, style: BorderStyle.solid)),
+    side: WidgetStateProperty.all(
+      const BorderSide(
+        color: AppColors.error,
+        width: 2.0,
+        style: BorderStyle.solid,
+      ),
+    ),
   );
 
   static final ButtonStyle chat = _base.copyWith(
@@ -51,6 +63,8 @@ class AppButtonStyles {
     backgroundColor: WidgetStateProperty.all(AppColors.primaryBackground),
     foregroundColor: WidgetStateProperty.all(AppColors.highlight),
     textStyle: WidgetStateProperty.all(AppTextStyles.buttonPrimary),
-    side: WidgetStateProperty.all(BorderSide(color: AppColors.highlight, width: 2)),
+    side: WidgetStateProperty.all(
+      BorderSide(color: AppColors.highlight, width: 2),
+    ),
   );
 }
