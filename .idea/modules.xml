@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/swayzy/swayzy.iml" filepath="$PROJECT_DIR$/swayzy/swayzy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/swayzy/android/swayzy_android.iml" filepath="$PROJECT_DIR$/swayzy/android/swayzy_android.iml" />
     </modules>
   </component>
 </project>
