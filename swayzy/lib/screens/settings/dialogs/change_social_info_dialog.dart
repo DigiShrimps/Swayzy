@@ -21,7 +21,7 @@ class ChangeSocialInfoDialog extends StatefulWidget {
   State<ChangeSocialInfoDialog> createState() => _ChangeSocialInfoDialogState();
 }
 
-void saveSocialData (ChangeSocialInfoDialog widget, context) {
+void saveSocialData (ChangeSocialInfoDialog widget, context) { // TODO додати на пустий рядок
   FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -53,17 +53,6 @@ class _ChangeSocialInfoDialogState extends State<ChangeSocialInfoDialog> {
           children: [
             Text(widget.socialName!, style: AppTextStyles.title, textAlign: TextAlign.center,),
             SizedBox(height: AppSpacing.small,),
-            // SizedBox(
-            //   width: MediaQuery.sizeOf(context).width - 80,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     spacing: AppSpacing.small,
-            //     children: [
-            //       Flexible(child: Text("URL:", style: AppTextStyles.form,)),
-            //       Flexible(child: TextFormField(controller: _urlController,)),
-            //     ],
-            //   ),
-            // ),
             SizedBox(height: AppSpacing.small,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -108,7 +97,6 @@ class _ChangeSocialInfoDialogState extends State<ChangeSocialInfoDialog> {
                           child: SizedBox(
                             child: DropdownMenu<String>(
                               expandedInsets: null,
-                              //width: MediaQuery.sizeOf(context).width,
                               textStyle: AppTextStyles.body,
                               initialSelection: subsAmount.first,
                               dropdownMenuEntries: subsEntries,
@@ -126,29 +114,6 @@ class _ChangeSocialInfoDialogState extends State<ChangeSocialInfoDialog> {
                 ),
               ],
             ),
-            // SizedBox(
-            //   width: MediaQuery.sizeOf(context).width - 80,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     spacing: AppSpacing.small,
-            //     children: [
-            //       Flexible(child: Text("Followers:", style: AppTextStyles.form,)),
-            //       Flexible(child: SizedBox(
-            //         child: DropdownMenu<String>(
-            //           expandedInsets: null,
-            //           textStyle: AppTextStyles.body,
-            //           initialSelection: subsAmount.first,
-            //           dropdownMenuEntries: subsEntries,
-            //           onSelected: (String? value) {
-            //             setState(() {
-            //               dropdownSubsValue = value!;
-            //             });
-            //           },
-            //         )
-            //       ),),
-            //     ],
-            //   ),
-            // ),
             SizedBox(height: AppSpacing.small,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

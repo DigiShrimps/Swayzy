@@ -80,21 +80,21 @@ class OrderCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
                     image:
-                        imageUrl != null
-                            ? DecorationImage(
-                              image: NetworkImage(imageUrl),
-                              fit: BoxFit.fitWidth,
-                            )
-                            : null,
+                      imageUrl != null
+                        ? DecorationImage(
+                          image: NetworkImage(imageUrl),
+                          fit: BoxFit.fitWidth,
+                        )
+                        : null,
                   ),
                   child:
-                      imageUrl == null
-                          ? const Icon(
-                            Icons.image,
-                            size: 50,
-                            color: Colors.black54,
-                          )
-                          : null,
+                    imageUrl == null
+                      ? const Icon(
+                        Icons.image,
+                        size: 50,
+                        color: Colors.black54,
+                      )
+                      : null,
                 ),
               ),
               const SizedBox(height: 8),
@@ -105,7 +105,7 @@ class OrderCard extends StatelessWidget {
                 ),
               ),
               Flexible(
-                flex: 1,
+                flex: 3,
                 child: Center(
                   child: Text(
                     title,

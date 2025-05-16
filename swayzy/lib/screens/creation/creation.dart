@@ -235,7 +235,7 @@ class _CreationState extends State<Creation> {
                       spacing: AppSpacing.small,
                       children: [
                         Flexible(
-                          flex: 5,
+                          flex: 113,
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
@@ -244,23 +244,23 @@ class _CreationState extends State<Creation> {
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
-                                  child: DropdownMenu<String>(
-                                    expandedInsets: null,
-                                    textStyle: AppTextStyles.body,
-                                    initialSelection: appCategories.first.title,
-                                    dropdownMenuEntries: categoryEntries,
-                                    onSelected: (String? value) {
-                                      setState(() {
-                                        dropdownCategoryValue = value!;
-                                      });
-                                    },
-                                  )
+                                child: DropdownMenu<String>(
+                                  expandedInsets: null,
+                                  textStyle: AppTextStyles.body,
+                                  initialSelection: appCategories.first.title,
+                                  dropdownMenuEntries: categoryEntries,
+                                  onSelected: (String? value) {
+                                    setState(() {
+                                      dropdownCategoryValue = value!;
+                                    });
+                                  },
+                                )
                               ),
                             ],
                           ),
                         ),
                         Flexible(
-                          flex: 4,
+                          flex: 100,
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [

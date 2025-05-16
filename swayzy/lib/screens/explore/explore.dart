@@ -24,7 +24,7 @@ class _ExploreState extends State<Explore> {
   var user = FirebaseAuth.instance.currentUser!;
 
   Future<List<Map<String, dynamic>>> getOrderData() async {
-    QuerySnapshot querySnapshot = await firestoreInstance.collection('ads').get();
+    QuerySnapshot querySnapshot = await firestoreInstance.collection('ads').orderBy('createdAt', descending: true).get();
     return querySnapshot.docs.map((doc) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       data['id'] = doc.id;
