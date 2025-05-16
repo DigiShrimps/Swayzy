@@ -19,7 +19,8 @@ class InProcessGrid extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 5.0,
               mainAxisSpacing: 5.0,
-              childAspectRatio: MediaQuery.of(context).size.width < 370 ? 0.7 : 1.0,
+              mainAxisExtent: 400,
+              //childAspectRatio: MediaQuery.of(context).size.width < 370 ? 0.7 : 1.0,
             ),
             itemCount: data.length,
             itemBuilder: (context, index) {

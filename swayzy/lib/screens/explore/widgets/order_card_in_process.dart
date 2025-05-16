@@ -37,7 +37,7 @@ class OrderCardInProcess extends StatelessWidget {
     required this.social,
     required this.subscribers,
     required this.orderStatus,
-    required this.processId
+    required this.processId,
   });
 
   @override
@@ -61,11 +61,12 @@ class OrderCardInProcess extends StatelessWidget {
             adSubscribers: subscribers,
             adImageUrl: imageUrl,
             adId: null,
-            processId: processId
+            processId: processId,
           ),
         );
       },
       child: Card(
+        elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         color: AppColors.secondaryBackground,
         child: Padding(
@@ -74,40 +75,89 @@ class OrderCardInProcess extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
+                flex: 10,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
-                    image: imageUrl != null ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover) : null,
+                    image:
+                      imageUrl != null
+                        ? DecorationImage(
+                          image: NetworkImage(imageUrl),
+                          fit: BoxFit.fill,
+                        )
+                        : null,
                   ),
-                  child: imageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
+                  child:
+                    imageUrl == null
+                      ? const Icon(
+                        Icons.image,
+                        size: 50,
+                        color: Colors.black54,
+                      )
+                      : null,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(title, style: AppTextStyles.orderTitle, textAlign: TextAlign.center),
-              Text(orderStatus, style: AppTextStyles.orderDescription, textAlign: TextAlign.center),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text(
                     ownerName,
-                    style:
-                        MediaQuery.of(context).size.width < 400
-                            ? AppTextStyles.orderDescription
-                            : AppTextStyles.orderCategory,
+                    style: AppTextStyles.orderDescription,
+                    textAlign: TextAlign.center,
                   ),
-                  Text(
-                    createdAt,
-                    style:
-                        MediaQuery.of(context).size.width < 400
-                            ? AppTextStyles.orderDescription
-                            : AppTextStyles.orderCategory,
-                  ),
-                ],
+                ),
               ),
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    title,
+                    style: AppTextStyles.orderTitle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Text(
+                  orderStatus,
+                  style: AppTextStyles.orderDescription,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    createdAt,
+                    style: AppTextStyles.orderDescription,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Text(
+              //       ownerName,
+              //       style:
+              //           MediaQuery.of(context).size.width < 400
+              //               ? AppTextStyles.orderDescription
+              //               : AppTextStyles.orderCategory,
+              //     ),
+              //     Text(
+              //       createdAt,
+              //       style:
+              //           MediaQuery.of(context).size.width < 400
+              //               ? AppTextStyles.orderDescription
+              //               : AppTextStyles.orderCategory,
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),

@@ -68,6 +68,12 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
   );
 
+  static final TextStyle orderCategoryWhite = _base.copyWith(
+    color: AppColors.text,
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+  );
+
   static final TextStyle orderDescription = _base.copyWith(
     color: AppColors.secondaryText,
     fontSize: 10,

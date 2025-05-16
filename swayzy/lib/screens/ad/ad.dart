@@ -140,10 +140,10 @@ class _AdState extends State<Ad> {
                                   color: AppColors.accent,
                                 ),
                                 padding: EdgeInsets.all(10),
-                                height: 66,
+                                height: 60,
                                 alignment: Alignment.center,
                                 child: Text(args.adCategory,
-                                  style: AppTextStyles.form,
+                                  style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -156,10 +156,10 @@ class _AdState extends State<Ad> {
                                   color: AppColors.accent,
                                 ),
                                 padding: EdgeInsets.all(10),
-                                height: 66,
+                                height: 60,
                                 alignment: Alignment.center,
                                 child: Text("${args.adReviewType}\nreview",
-                                  style: AppTextStyles.form,
+                                  style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -173,7 +173,7 @@ class _AdState extends State<Ad> {
                                 ),
                                 padding: EdgeInsets.all(10),
                                 child: Text("Duration:\n${args.adDuration}",
-                                  style: AppTextStyles.form,
+                                  style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -191,32 +191,32 @@ class _AdState extends State<Ad> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: AppSpacing.medium,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
+                            Flexible(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: AppColors.accent,
-                              ),
-                              padding: EdgeInsets.all(10),
-                              height: 66,
-                              alignment: Alignment.center,
-                              child: Flexible(
-                                flex: 1,
+                                ),
+                                padding: EdgeInsets.all(10),
+                                height: 60,
+                                alignment: Alignment.center,
                                 child: Text(args.adSocial,
-                                  style: AppTextStyles.form,
+                                  style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
+                            Flexible(
+                              flex: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: AppColors.accent,
-                              ),
-                              padding: EdgeInsets.all(10),
-                              child: Flexible(
-                                flex: 1,
+                                ),
+                                padding: EdgeInsets.all(10),
                                 child: Text("${args.adSubscribers}\nsubscribers",
-                                  style: AppTextStyles.form,
+                                  style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -239,12 +239,16 @@ class _AdState extends State<Ad> {
                         ),
                       ),
                       SizedBox(height: AppSpacing.medium),
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             args.adOwnerName,
                             style: AppTextStyles.smallDescription,
+                          ),
+                          Divider(
+                            thickness: 2,
+                            color: AppColors.highlight,
                           ),
                           Text(
                             args.adOwnerEmail,
@@ -271,6 +275,14 @@ class _AdState extends State<Ad> {
                           onPressed: () {
                             if (args.adOwnerId != user.uid) {
                               createAdInProcess(args.adOwnerId, args.adId, user.uid, "In Work");
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppColors.tokenSuccess,
+                                  duration: Duration(seconds: 2),
+                                  content: Text("Complete!", style: AppTextStyles.form),
+                                ),
+                              );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(

@@ -200,7 +200,7 @@ class _CreationState extends State<Creation> {
                     style: AppTextStyles.title,
                   ),
                   SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 20,
+                    width: MediaQuery.sizeOf(context).width - 40,
                     child: TextField(
                       maxLength: 30,
                       style: AppTextStyles.form,
@@ -215,7 +215,7 @@ class _CreationState extends State<Creation> {
                     style: AppTextStyles.title,
                   ),
                   SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 20,
+                    width: MediaQuery.sizeOf(context).width - 40,
                     child: TextField(
                       maxLength: 1000,
                       maxLines: 5,
@@ -228,11 +228,11 @@ class _CreationState extends State<Creation> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.sizeOf(context).width - 20,
+                    width: MediaQuery.sizeOf(context).width - 40,
                     alignment: Alignment.center,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 10,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      spacing: AppSpacing.small,
                       children: [
                         Flexible(
                           flex: 5,
@@ -244,9 +244,7 @@ class _CreationState extends State<Creation> {
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
-                                  //width: MediaQuery.sizeOf(context).width * 0.45,
                                   child: DropdownMenu<String>(
-                                    //width: MediaQuery.sizeOf(context).width * 0.45,
                                     expandedInsets: null,
                                     textStyle: AppTextStyles.body,
                                     initialSelection: appCategories.first.title,
@@ -271,9 +269,7 @@ class _CreationState extends State<Creation> {
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
-                                  //width: MediaQuery.sizeOf(context).width * 0.37,
                                   child: DropdownMenu<String>(
-                                    //width: MediaQuery.sizeOf(context).width * 0.37,
                                     expandedInsets: null,
                                     textStyle: AppTextStyles.body,
                                     initialSelection: reviewType.first,
@@ -292,13 +288,14 @@ class _CreationState extends State<Creation> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.sizeOf(context).width - 20,
+                    width: MediaQuery.sizeOf(context).width - 40,
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 10,
+                      spacing: AppSpacing.small,
                       children: [
                         Flexible(
+                          flex: 103,
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
@@ -307,9 +304,7 @@ class _CreationState extends State<Creation> {
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
-                                  //width: MediaQuery.sizeOf(context).width * 0.45,
                                   child: DropdownMenu<String>(
-                                    //width: MediaQuery.sizeOf(context).width * 0.45,
                                     expandedInsets: null,
                                     textStyle: AppTextStyles.body,
                                     initialSelection: socialType.first,
@@ -325,7 +320,7 @@ class _CreationState extends State<Creation> {
                           ),
                         ),
                         Flexible(
-                          flex: 1,
+                          flex: 100,
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
@@ -334,9 +329,7 @@ class _CreationState extends State<Creation> {
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
-                                  //width: MediaQuery.sizeOf(context).width * 0.37,
                                   child: DropdownMenu<String>(
-                                    //width: MediaQuery.sizeOf(context).width * 0.37,
                                     expandedInsets: null,
                                     textStyle: AppTextStyles.body,
                                     initialSelection: subsAmount.first,
@@ -372,14 +365,14 @@ class _CreationState extends State<Creation> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.sizeOf(context).width - 10,
+                    width: MediaQuery.sizeOf(context).width - 40,
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: AppSpacing.small,
                       children: [
                         Flexible(
-                          flex: 5,
+                          flex: 1,
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
@@ -388,9 +381,8 @@ class _CreationState extends State<Creation> {
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
-                                //width: MediaQuery.sizeOf(context).width * 0.4,
                                 child: TextField(
-                                  maxLength: 15,
+                                  maxLength: 10,
                                   style: AppTextStyles.body,
                                   decoration: InputDecoration(
                                     hintText: "Post save time"
@@ -402,7 +394,7 @@ class _CreationState extends State<Creation> {
                           ),
                         ),
                         Flexible(
-                          flex: 5,
+                          flex: 1,
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
@@ -411,7 +403,6 @@ class _CreationState extends State<Creation> {
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
-                                //width: MediaQuery.sizeOf(context).width * 0.5,
                                 child: TextField(
                                   keyboardType: TextInputType.number,
                                   maxLength: 4,

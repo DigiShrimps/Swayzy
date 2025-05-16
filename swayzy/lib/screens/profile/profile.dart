@@ -4,10 +4,13 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:solana/solana.dart';
 import 'package:swayzy/constants/app_colors.dart';
 import 'package:swayzy/constants/app_text_styles.dart';
 import 'package:swayzy/screens/profile/mocks/badge.mocks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_spaces.dart';
@@ -23,18 +26,24 @@ class _ProfileState extends State<Profile> {
   String? _publicKey;
   String? _balance;
   SolanaClient? client;
+  String? _instagramFollowers;
+  String? _instagramURL;
+  String? _telegramFollowers;
+  String? _telegramURL;
+  String? _tiktokFollowers;
+  String? _tiktokURL;
+  String? _facebookFollowers;
+  String? _facebookURL;
+  String? _redditFollowers;
+  String? _redditURL;
 
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
-
-  // Future<List<Map<String, dynamic>>> getOrderData() async {
-  //   QuerySnapshot querySnapshot = await firestoreInstance.collection('users').get();
-  //   return querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-  // }
 
   @override
   void initState() {
     super.initState();
     _readPk();
+    _readSocial();
   }
 
   void _readPk() async {
@@ -46,6 +55,23 @@ class _ProfileState extends State<Profile> {
       _publicKey = keypair.address;
     });
     _initializeClient();
+  }
+
+  void _readSocial() async {
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+    setState(() {
+      _instagramFollowers = docSnapshot.data()?['InstagramFollowers'] ?? "N/A";
+      _instagramURL = docSnapshot.data()?['InstagramURL'];
+      _telegramFollowers = docSnapshot.data()?['TelegramFollowers'] ?? "N/A";
+      _telegramURL = docSnapshot.data()?['TelegramURL'];
+      _tiktokFollowers = docSnapshot.data()?['TiktokFollowers'] ?? "N/A";
+      _tiktokURL = docSnapshot.data()?['TiktokURL'];
+      _facebookFollowers = docSnapshot.data()?['FacebookFollowers'] ?? "N/A";
+      _facebookURL = docSnapshot.data()?['FacebookURL'];
+      _redditFollowers = docSnapshot.data()?['RedditFollowers'] ?? "N/A";
+      _redditURL = docSnapshot.data()?['RedditURL'];
+    });
   }
 
   void _initializeClient() async {
@@ -68,6 +94,49 @@ class _ProfileState extends State<Profile> {
     setState(() {
       _balance = balance.toString();
     });
+  }
+
+  _launchURL(String pageURL) async {
+    final Uri _url = Uri.parse(pageURL);
+    if (!await launchUrl(_url)) {
+      throw Exception(
+        'Could not launch $_url',
+      );
+    }
+  }
+
+  void showErrorSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: AppColors.error,
+        duration: Duration(seconds: 2),
+        content: Text("Social isn't connected", style: AppTextStyles.form),
+      ),
+    );
+  }
+
+  Future<void> deleteUser(User user, BuildContext context) async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    if (googleUser == null) {
+      return;
+    }
+
+    final GoogleSignInAuthentication googleAuth =
+    await googleUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    await user.reauthenticateWithCredential(credential);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .delete();
+    await user.delete();
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacementNamed('/auth');
   }
 
   @override
@@ -110,15 +179,144 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     spacing: AppSpacing.small,
                     children: [
+                      SizedBox(width: AppSpacing.small,),
                       CircleAvatar(
-                        radius: 100,
-                        backgroundImage: photoURL != null ? NetworkImage(photoURL) : null,
-                        child: photoURL == null ? const Icon(Icons.account_circle_rounded) : null,
+                        radius: 105,
+                        backgroundColor: AppColors.accent,
+                        child: CircleAvatar(
+                          radius: 100,
+                          backgroundImage: photoURL != null ? NetworkImage(photoURL) : null,
+                          child: photoURL == null ? const Icon(Icons.account_circle_rounded) : null,
+                        ),
                       ),
                       Container(
                         alignment: Alignment.center,
                         width: MediaQuery.sizeOf(context).width,
                         child: const EditableUserDisplayName(),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: MediaQuery.sizeOf(context).width,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: AppColors.highlight, width: 2),
+                          color: AppColors.secondaryBackground,
+                        ),
+                        child: Wrap(
+                          spacing: AppSpacing.small,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.center,
+                          runSpacing: AppSpacing.small,
+                          children: [
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.instagram),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if(_instagramURL != null && _instagramURL!.isNotEmpty) {
+                                      _launchURL(_instagramURL!);
+                                    } else {
+                                    showErrorSnackbar(context);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_instagramFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.telegram),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if(_telegramURL != null && _telegramURL!.isNotEmpty) {
+                                      _launchURL(_telegramURL!);
+                                    } else {
+                                      showErrorSnackbar(context);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_telegramFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.tiktok),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if(_tiktokURL != null && _tiktokURL!.isNotEmpty) {
+                                      _launchURL(_tiktokURL!);
+                                    } else {
+                                      showErrorSnackbar(context);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_tiktokFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.facebook),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if(_facebookURL != null && _facebookURL!.isNotEmpty) {
+                                      _launchURL(_facebookURL!);
+                                    } else {
+                                      showErrorSnackbar(context);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_facebookFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.reddit),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    print(_redditURL);
+                                    if(_redditURL != null && _redditURL!.isNotEmpty) {
+                                      _launchURL(_redditURL!);
+                                    } else {
+                                      showErrorSnackbar(context);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_redditFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
+                          ],
+                        )
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
@@ -135,8 +333,9 @@ class _ProfileState extends State<Profile> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Balance: $_balance SOL",
+                                  "Balance:\n$_balance SOL",
                                   style: AppTextStyles.title,
+                                  textAlign: TextAlign.center,
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.refresh),
@@ -160,7 +359,7 @@ class _ProfileState extends State<Profile> {
                               onPressed: () {
                                 Clipboard.setData(ClipboardData(text: "$_publicKey"));
                               },
-                              child: Text("Скопіювати адресу"),
+                              child: Text("Copy address"),
                             ),
                             SizedBox(width: AppSpacing.small,)
                           ],
@@ -212,13 +411,12 @@ class _ProfileState extends State<Profile> {
                       ElevatedButton.icon(
                         style: AppButtonStyles.delete,
                         onPressed: () async {
-                          await user.delete();
-                          await FirebaseAuth.instance.signOut();
-                          Navigator.of(context).pushReplacementNamed('/auth');
+                          await deleteUser(user, context);
                         },
                         label: const Text('Delete account'),
                         icon: const Icon(Icons.delete_rounded),
                       ),
+                      SizedBox(width: AppSpacing.medium,),
                     ],
                   ),
                 ),

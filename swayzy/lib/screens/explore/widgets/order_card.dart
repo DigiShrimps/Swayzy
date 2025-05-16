@@ -63,37 +63,87 @@ class OrderCard extends StatelessWidget {
         );
       },
       child: Card(
+        elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         color: AppColors.secondaryBackground,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
+                flex: 10,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
-                    image: imageUrl != null ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover) : null,
+                    image:
+                        imageUrl != null
+                            ? DecorationImage(
+                              image: NetworkImage(imageUrl),
+                              fit: BoxFit.fill,
+                            )
+                            : null,
                   ),
-                  child: imageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
+                  child:
+                      imageUrl == null
+                          ? const Icon(
+                            Icons.image,
+                            size: 50,
+                            color: Colors.black54,
+                          )
+                          : null,
                 ),
               ),
               const SizedBox(height: 8),
-              Center(child: Text(ownerName, style: AppTextStyles.orderDescription)),
-              Center(child: Text(title, style: AppTextStyles.orderTitle)),
-              Center(child: Text(category, style: AppTextStyles.orderDescription)),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("$price", style: AppTextStyles.orderCategory),
-                  Text(createdAt, style: AppTextStyles.orderCategory, textAlign: TextAlign.right),
-                ],
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text(ownerName, style: AppTextStyles.orderDescription),
+                ),
               ),
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    title,
+                    style: AppTextStyles.orderTitle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text("$price SOL", style: AppTextStyles.orderTitle),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text(category, style: AppTextStyles.orderDescription),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    createdAt,
+                    style: AppTextStyles.orderDescription,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Text("$price", style: AppTextStyles.orderCategory),
+              //     Text(createdAt, style: AppTextStyles.orderCategory, textAlign: TextAlign.right),
+              //   ],
+              // ),
             ],
           ),
         ),

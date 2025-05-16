@@ -10,6 +10,7 @@ import '../screens/inner_browser/inner_browser.dart';
 import '../screens/notifications/models/app_notification.dart';
 import '../screens/notifications/notifications.dart';
 import '../screens/profile/profile.dart';
+import '../screens/settings/dialogs/change_social_info_dialog.dart';
 import '../screens/settings/settings.dart';
 
 class AppRoutes {
@@ -23,6 +24,7 @@ class AppRoutes {
   static const String notifications = "/notifications";
   static const String profile = "/profile";
   static const String settings = "/settings";
+  static const String socialDialog = "/socialDialog";
 
   static Route<dynamic>? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -55,6 +57,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const Profile());
       case settings:
         return MaterialPageRoute(builder: (_) => const Settings());
+      case socialDialog:
+        final socialName = routeSettings.arguments as String?;
+        return MaterialPageRoute(builder: (_) => ChangeSocialInfoDialog(socialName: socialName));
       default:
         return MaterialPageRoute(builder: (_) => const Auth());
     }
