@@ -453,6 +453,14 @@ class _CreationState extends State<Creation> {
                       _priceController.clear();
                       _durationController.clear();
                       _performersController.clear();
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: AppColors.tokenSuccess,
+                          duration: Duration(seconds: 2),
+                          content: Text("Order created", style: AppTextStyles.form),
+                        ),
+                      );
                     },
                   ),
                   SizedBox(width: AppSpacing.small,)

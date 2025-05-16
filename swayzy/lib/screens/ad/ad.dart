@@ -7,6 +7,7 @@ import 'package:swayzy/constants/app_spaces.dart';
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
+import '../../solana/solana_service.dart';
 
 class AdArguments {
   final String adTitle;
@@ -133,7 +134,7 @@ class _AdState extends State<Ad> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Flexible(
-                              flex: 7,
+                              flex: 10,
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -149,7 +150,7 @@ class _AdState extends State<Ad> {
                               ),
                             ),
                             Flexible(
-                              flex: 5,
+                              flex: 8,
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -165,7 +166,7 @@ class _AdState extends State<Ad> {
                               ),
                             ),
                             Flexible(
-                              flex: 6,
+                              flex: 9,
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
@@ -261,9 +262,29 @@ class _AdState extends State<Ad> {
                           ? Center(
                         child: ElevatedButton(
                           style: AppButtonStyles.primary,
-                          onPressed: () {
+                          onPressed: () async {
                             if (args.processId != null && args.processId != "Completed") {
                               updateStatus(args.processId, "Completed");
+                              var querySender = await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .where('userId', isEqualTo: args.adOwnerId)
+                                  .get();
+                              String senderWalletMnemonic = querySender.docs.first['mnemonic'];
+                              var queryRecipient = await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .where('userId', isEqualTo: user.uid)
+                                  .get();
+                              String recipientWalletMnemonic = queryRecipient.docs.first['mnemonic'];
+
+                              await passDataToContract(senderWalletMnemonic, recipientWalletMnemonic, args.adPrice);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppColors.tokenSuccess,
+                                  duration: Duration(seconds: 2),
+                                  content: Text("Complete!", style: AppTextStyles.form),
+                                ),
+                              );
+
                             }
                           },
                           child: Text("Complete"),
@@ -280,7 +301,7 @@ class _AdState extends State<Ad> {
                                 SnackBar(
                                   backgroundColor: AppColors.tokenSuccess,
                                   duration: Duration(seconds: 2),
-                                  content: Text("Complete!", style: AppTextStyles.form),
+                                  content: Text("Order taken!", style: AppTextStyles.form),
                                 ),
                               );
                             } else {

@@ -83,7 +83,7 @@ class OrderCard extends StatelessWidget {
                         imageUrl != null
                             ? DecorationImage(
                               image: NetworkImage(imageUrl),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.fitWidth,
                             )
                             : null,
                   ),
