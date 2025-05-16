@@ -8,6 +8,7 @@ import 'mocks/customer_messages.mocks.dart';
 import 'mocks/performer_messages.mocks.dart';
 
 const String _titleText = "Chat";
+
 enum ViewMode { asCustomer, asPerformer }
 
 class Chat extends StatefulWidget {
@@ -42,8 +43,10 @@ class _ChatState extends State<Chat> {
                       currentMode = ViewMode.asCustomer;
                     });
                   },
-                  style: AppButtonStyles.chat,
-                  child: Text("Customer", style: AppTextStyles.buttonPrimary),
+                  style: currentMode == ViewMode.asCustomer
+                      ? AppButtonStyles.selectedButton
+                      : AppButtonStyles.unselectedButton,
+                  child: const Text("Customer"),
                 ),
               ),
               Expanded(
@@ -53,8 +56,10 @@ class _ChatState extends State<Chat> {
                       currentMode = ViewMode.asPerformer;
                     });
                   },
-                  style: AppButtonStyles.chat,
-                  child: Text("Performer", style: AppTextStyles.buttonPrimary),
+                  style: currentMode == ViewMode.asPerformer
+                      ? AppButtonStyles.selectedButton
+                      : AppButtonStyles.unselectedButton,
+                  child: const Text("Performer"),
                 ),
               ),
             ],

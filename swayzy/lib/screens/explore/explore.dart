@@ -74,7 +74,9 @@ class _ExploreState extends State<Explore> {
                       currentMode = ViewMode.inSearch;
                     });
                   },
-                  style: AppButtonStyles.chat,
+                  style: currentMode == ViewMode.inSearch
+                      ? AppButtonStyles.selectedButton
+                      : AppButtonStyles.unselectedButton,
                   child: Text("In Search", style: AppTextStyles.buttonPrimary),
                 ),
               ),
@@ -85,7 +87,9 @@ class _ExploreState extends State<Explore> {
                       currentMode = ViewMode.inProcess;
                     });
                   },
-                  style: AppButtonStyles.chat,
+                  style: currentMode == ViewMode.inProcess
+                      ? AppButtonStyles.selectedButton
+                      : AppButtonStyles.unselectedButton,
                   child: Text("In Process", style: AppTextStyles.buttonPrimary),
                 ),
               ),
