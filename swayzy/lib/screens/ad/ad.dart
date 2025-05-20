@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:swayzy/constants/app_font_sizes.dart';
 import 'package:swayzy/constants/app_spaces.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
+import '../../global_widgets/custom_app_bar.dart';
 import '../../solana/solana_service.dart';
+import 'models/ad_arguments.dart';
+
+const String _titleText = "Advertisement";
 
 class Ad extends StatefulWidget {
   final AdArguments arguments;
@@ -18,42 +21,6 @@ class Ad extends StatefulWidget {
   State<Ad> createState() => _AdState();
 }
 
-class AdArguments {
-  final String adTitle;
-  final String adCategory;
-  final String adReviewType;
-  final String adDescription;
-  final String adCreatedTime;
-  final String adOwnerId;
-  final String adOwnerName;
-  final String adOwnerEmail;
-  final double adPrice;
-  final String adDuration;
-  final String adSocial;
-  final String adSubscribers;
-  final dynamic adId;
-  final dynamic adImageUrl;
-  dynamic processId;
-
-  AdArguments({
-    required this.adTitle,
-    required this.adCategory,
-    required this.adReviewType,
-    required this.adDescription,
-    required this.adCreatedTime,
-    required this.adOwnerId,
-    required this.adOwnerName,
-    required this.adOwnerEmail,
-    required this.adPrice,
-    required this.adDuration,
-    required this.adSocial,
-    required this.adSubscribers,
-    required this.adImageUrl,
-    required this.adId,
-    this.processId,
-  });
-}
-
 class _AdState extends State<Ad> {
   var user = FirebaseAuth.instance.currentUser!;
 
@@ -61,13 +28,7 @@ class _AdState extends State<Ad> {
   Widget build(BuildContext context) {
     final args = widget.arguments;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Advertisement"),
-        titleTextStyle: AppTextStyles.title,
-        backgroundColor: AppColors.secondaryBackground,
-        centerTitle: true,
-        surfaceTintColor: Colors.transparent,
-      ),
+      appBar: CustomAppBar(title: _titleText,),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
           vertical: AppSpacing.small,

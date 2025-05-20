@@ -57,31 +57,31 @@ class AppTextStyles {
 
   static final TextStyle buttonAuth = _base.copyWith(
     color: AppColors.secondaryText,
-    fontSize: 16,
+    fontSize: AppFontSizes.body,
     fontWeight: FontWeight.normal,
   );
 
   static final TextStyle orderCategory = _base.copyWith(
     color: AppColors.secondaryText,
-    fontSize: 12,
+    fontSize: AppFontSizes.orderCategory,
     fontWeight: FontWeight.bold,
   );
 
   static final TextStyle orderCategoryWhite = _base.copyWith(
     color: AppColors.text,
-    fontSize: 12,
+    fontSize: AppFontSizes.orderCategory,
     fontWeight: FontWeight.bold,
   );
 
   static final TextStyle orderDescription = _base.copyWith(
     color: AppColors.secondaryText,
-    fontSize: 10,
+    fontSize: AppFontSizes.orderDescription,
     fontWeight: FontWeight.bold,
   );
 
   static final TextStyle orderTitle = _base.copyWith(
     color: AppColors.text,
-    fontSize: 16,
+    fontSize: AppFontSizes.body,
     fontWeight: FontWeight.bold,
   );
 }

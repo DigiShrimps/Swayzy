@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
+import '../../global_widgets/custom_app_bar.dart';
 
 const String _titleText = "Settings";
 
@@ -22,13 +23,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(_titleText),
-        titleTextStyle: AppTextStyles.title,
-        backgroundColor: AppColors.secondaryBackground,
-        centerTitle: true,
-        surfaceTintColor: Colors.transparent,
-      ),
+      appBar: CustomAppBar(title: _titleText,),
       body: SettingsList(
         lightTheme: const SettingsThemeData(
           settingsListBackground: AppColors.primaryBackground,

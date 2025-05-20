@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
+import '../../global_widgets/custom_app_bar.dart';
 import 'mocks/app_notification.mocks.dart';
 
 const String _titleText = "Notifications";
@@ -17,13 +18,7 @@ class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(_titleText),
-        titleTextStyle: AppTextStyles.title,
-        centerTitle: true,
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.secondaryBackground,
-      ),
+      appBar: CustomAppBar(title: _titleText,),
       body: ListView.builder(
         itemCount: appNotifications.length,
         itemBuilder: (context, index) {

@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 import '../screens/ad/ad.dart';
+import '../screens/ad/models/ad_arguments.dart';
 import '../screens/auth/auth.dart';
 import '../screens/chat/chat.dart';
 import '../screens/creation/creation.dart';
 import '../screens/explore/explore.dart';
-import '../screens/inner_browser/inner_browser.dart';
-import '../screens/notifications/models/app_notification.dart';
 import '../screens/notifications/notifications.dart';
 import '../screens/profile/profile.dart';
 import '../screens/settings/dialogs/change_social_info_dialog.dart';
@@ -20,7 +19,6 @@ class AppRoutes {
   static const String chat = "/chat";
   static const String creation = "/creation";
   static const String explore = "/explore";
-  static const String innerBrowser = "/innerBrowser";
   static const String notifications = "/notifications";
   static const String profile = "/profile";
   static const String settings = "/settings";
@@ -51,8 +49,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const Creation());
       case explore:
         return MaterialPageRoute(builder: (_) => const Explore());
-      case innerBrowser:
-        return MaterialPageRoute(builder: (_) => const InnerBrowser());
       case notifications:
         return MaterialPageRoute(builder: (_) => Notifications());
       case profile:

@@ -12,4 +12,5 @@ class AppColors {
   static const Color tokenSuccess = Color(0xFF32CD32);
   static const Color nftFrame = Color(0xFF4682B4);
   static const Color error = Color(0xFFD32C16);
+  static const Color authBackground = Color(0xFF4618A7);
 }

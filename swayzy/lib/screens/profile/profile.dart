@@ -38,6 +38,12 @@ class _ProfileState extends State<Profile> {
   String? _redditURL;
 
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+  @override
+  void setState(fn){
+    if(mounted){
+      super.setState(fn);
+    }
+  } // fix for Unhandled Exception: setState() called after dispose()
 
   @override
   Widget build(BuildContext context) {
@@ -393,6 +399,13 @@ class _ProfileState extends State<Profile> {
 
     await user.reauthenticateWithCredential(credential);
     await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
+    final snapshots = await FirebaseFirestore.instance
+      .collection('ads')
+      .where('ownerId', isEqualTo: user.uid)
+      .get();
+    for(var doc in snapshots.docs){
+      await doc.reference.delete();
+    }
     await user.delete();
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacementNamed('/auth');

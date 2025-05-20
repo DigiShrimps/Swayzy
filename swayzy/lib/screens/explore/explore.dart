@@ -7,6 +7,7 @@ import 'package:swayzy/screens/explore/widgets/in_search_grid.dart';
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
+import '../../global_widgets/custom_app_bar.dart';
 
 const String _titleText = "Home";
 
@@ -27,13 +28,7 @@ class _ExploreState extends State<Explore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(_titleText),
-        titleTextStyle: AppTextStyles.title,
-        backgroundColor: AppColors.secondaryBackground,
-        centerTitle: true,
-        surfaceTintColor: Colors.transparent,
-      ),
+      appBar: CustomAppBar(title: _titleText,),
       body: Column(
         children: [
           Row(
