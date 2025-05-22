@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_colors.dart';
 
 import '../../../constants/app_text_styles.dart';
-import '../../ad/ad.dart';
 import '../../ad/models/ad_arguments.dart';
 
 class OrderCardInProcess extends StatelessWidget {
@@ -63,6 +62,7 @@ class OrderCardInProcess extends StatelessWidget {
             adImageUrl: imageUrl,
             adId: null,
             processId: processId,
+            userAdStatus: orderStatus
           ),
         );
       },

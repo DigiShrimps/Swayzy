@@ -14,6 +14,7 @@ class AdArguments {
   final dynamic adId;
   final dynamic adImageUrl;
   dynamic processId;
+  dynamic userAdStatus;
 
   AdArguments({
     required this.adTitle,
@@ -31,5 +32,6 @@ class AdArguments {
     required this.adImageUrl,
     required this.adId,
     this.processId,
+    this.userAdStatus,
   });
 }

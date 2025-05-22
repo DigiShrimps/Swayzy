@@ -5,8 +5,6 @@ import 'package:swayzy/screens/explore/widgets/in_process_grid.dart';
 import 'package:swayzy/screens/explore/widgets/in_search_grid.dart';
 
 import '../../constants/app_button_styles.dart';
-import '../../constants/app_colors.dart';
-import '../../constants/app_text_styles.dart';
 import '../../global_widgets/custom_app_bar.dart';
 
 const String _titleText = "Home";
