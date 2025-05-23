@@ -8,16 +8,20 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:swayzy/constants/app_button_styles.dart';
 import 'package:swayzy/constants/app_spaces.dart';
 import 'package:swayzy/screens/creation/mocks/category.mocks.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
+import '../../constants/subs_amount_list.dart';
+import '../../services/supabase/supabase_storage_service.dart';
 
 const String _titleText = "Creation";
 late String description;
-late String image;
+late XFile image;
 late String ownerId;
 final storage = FirebaseStorage.instance;
 late String title;
@@ -26,6 +30,7 @@ final TextEditingController _durationController = TextEditingController();
 final TextEditingController _performersController = TextEditingController();
 final TextEditingController _priceController = TextEditingController();
 final TextEditingController _titleController = TextEditingController();
+
 typedef DropdownEntry = DropdownMenuEntry<String>;
 
 class Creation extends StatefulWidget {
@@ -56,6 +61,7 @@ class _CreationState extends State<Creation> {
           (String title) => DropdownEntry(value: title, label: title),
         ),
       );
+
   static final List<String> socialType = <String>[
     "Instagram",
     "Telegram",
@@ -63,37 +69,27 @@ class _CreationState extends State<Creation> {
     "FaceBook",
     "Reddit",
   ];
-
   static final List<DropdownEntry> socialEntries =
       UnmodifiableListView<DropdownEntry>(
         socialType.map<DropdownEntry>(
           (String title) => DropdownEntry(value: title, label: title),
         ),
       );
-  static final List<String> subsAmount = <String>[
-    "100+",
-    "500+",
-    "1000+",
-    "10000+",
-    "50000+",
-    "100000+",
-    "500000+",
-    "1000000+",
+
+  static List<TextEditingController> controllers = [
+    _titleController,
+    _descriptionController,
+    _priceController,
+    _durationController,
+    _performersController,
   ];
-  static final List<DropdownEntry> subsEntries =
-      UnmodifiableListView<DropdownEntry>(
-        subsAmount.map<DropdownEntry>(
-          (String title) => DropdownEntry(value: title, label: title),
-        ),
-      );
 
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
   String dropdownCategoryValue = categoryTitles.first;
-
   String dropdownReviewValue = reviewType.first;
   String dropdownSocialValue = socialType.first;
-  String dropdownSubsValue = subsAmount.first;
+  String dropdownSubsValue = SubsAmount.subsAmount.first;
 
   @override
   Widget build(BuildContext context) {
@@ -114,57 +110,57 @@ class _CreationState extends State<Creation> {
                 children: [
                   Text("Choose an image:", style: AppTextStyles.title),
                   _image == null
-                    ? Container(
-                      width: 260,
-                      height: 260,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.highlight),
-                        color: AppColors.secondaryBackground,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Add photo", style: AppTextStyles.body),
-                          SizedBox(height: AppSpacing.small),
-                          FloatingActionButton(
-                            onPressed: getImageFromGallery,
-                            tooltip: 'Pick Image',
-                            child: const Icon(Icons.add_a_photo),
-                          ),
-                        ],
-                      ),
-                    )
-                    : Container(
-                      width: 260,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.highlight,
-                          width: 3,
+                      ? Container(
+                        width: 260,
+                        height: 260,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.highlight),
+                          color: AppColors.secondaryBackground,
                         ),
-                        color: AppColors.secondaryBackground,
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            spacing: AppSpacing.small,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Add another photo",
-                                style: AppTextStyles.body,
-                              ),
-                              FloatingActionButton(
-                                onPressed: getImageFromGallery,
-                                tooltip: 'Pick Image',
-                                child: const Icon(Icons.add_a_photo),
-                              ),
-                            ],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Add photo", style: AppTextStyles.body),
+                            SizedBox(height: AppSpacing.small),
+                            FloatingActionButton(
+                              onPressed: getImageFromGallery,
+                              tooltip: 'Pick Image',
+                              child: const Icon(Icons.add_a_photo),
+                            ),
+                          ],
+                        ),
+                      )
+                      : Container(
+                        width: 260,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.highlight,
+                            width: 3,
                           ),
-                          Image.file(File(_image!.path)),
-                        ],
+                          color: AppColors.secondaryBackground,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              spacing: AppSpacing.small,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Add another photo",
+                                  style: AppTextStyles.body,
+                                ),
+                                FloatingActionButton(
+                                  onPressed: getImageFromGallery,
+                                  tooltip: 'Pick Image',
+                                  child: const Icon(Icons.add_a_photo),
+                                ),
+                              ],
+                            ),
+                            Image.file(File(_image!.path)),
+                          ],
+                        ),
                       ),
-                    ),
                   Text("Title:", style: AppTextStyles.title),
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width - 40,
@@ -288,8 +284,8 @@ class _CreationState extends State<Creation> {
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
                                   textStyle: AppTextStyles.body,
-                                  initialSelection: subsAmount.first,
-                                  dropdownMenuEntries: subsEntries,
+                                  initialSelection: SubsAmount.subsAmount.first,
+                                  dropdownMenuEntries: SubsAmount.subsEntries,
                                   onSelected: (String? value) {
                                     setState(() {
                                       dropdownSubsValue = value!;
@@ -372,48 +368,7 @@ class _CreationState extends State<Creation> {
                     icon: Icon(Icons.save_rounded),
                     style: AppButtonStyles.primary,
                     onPressed: () {
-                      var user = FirebaseAuth.instance.currentUser!;
-                      String title = _titleController.text;
-                      String description = _descriptionController.text;
-                      String reviewType = dropdownReviewValue;
-                      String category = dropdownCategoryValue;
-                      double price = double.parse(_priceController.text);
-                      String duration = _durationController.text;
-                      int amountOfPerformers = int.parse(
-                        _performersController.text,
-                      );
-                      String amountOfSubscribers = dropdownSubsValue;
-                      String social = dropdownSocialValue;
-                      createAd(
-                        title,
-                        category,
-                        reviewType,
-                        description,
-                        user.uid,
-                        user.displayName!,
-                        user.email!,
-                        price,
-                        duration,
-                        amountOfPerformers,
-                        amountOfSubscribers,
-                        social,
-                      );
-                      _titleController.clear();
-                      _descriptionController.clear();
-                      _priceController.clear();
-                      _durationController.clear();
-                      _performersController.clear();
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: AppColors.tokenSuccess,
-                          duration: Duration(seconds: 2),
-                          content: Text(
-                            "Order created",
-                            style: AppTextStyles.form,
-                          ),
-                        ),
-                      );
+                      saveAd(context);
                     },
                   ),
                   SizedBox(width: AppSpacing.small),
@@ -422,6 +377,49 @@ class _CreationState extends State<Creation> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void saveAd(BuildContext context) {
+    var user = FirebaseAuth.instance.currentUser!;
+
+    String title = _titleController.text;
+    String description = _descriptionController.text;
+    String duration = _durationController.text;
+
+    String amountOfSubscribers = dropdownSubsValue;
+    String social = dropdownSocialValue;
+    String reviewType = dropdownReviewValue;
+    String category = dropdownCategoryValue;
+
+    double price = double.parse(_priceController.text);
+    int amountOfPerformers = int.parse(_performersController.text);
+
+    createAd(
+      title,
+      category,
+      reviewType,
+      description,
+      user.uid,
+      user.displayName!,
+      user.email!,
+      price,
+      duration,
+      amountOfPerformers,
+      amountOfSubscribers,
+      social,
+    );
+
+    for (var controller in controllers) {
+      controller.clear();
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: AppColors.tokenSuccess,
+        duration: Duration(seconds: 2),
+        content: Text("Order created", style: AppTextStyles.form),
       ),
     );
   }
@@ -440,7 +438,7 @@ class _CreationState extends State<Creation> {
     String amountOfSubscribers,
     String social,
   ) async {
-    //final imageUrl = await uploadImageToStorage(image);
+    final imageUrl = await uploadImageToStorage(_image!);
     int timeNow = DateTime.now().millisecondsSinceEpoch;
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeNow);
     var dateFormatter = DateFormat('dd-MM-yyyy HH:mm');
@@ -458,7 +456,7 @@ class _CreationState extends State<Creation> {
       'amountOfPerformers': amountOfPerformers,
       'amountOfSubscribers': amountOfSubscribers,
       'social': social,
-      'imageUrl': null, //imageUrl,
+      'imageUrl': imageUrl,
       'createdAt': dateFormatter.format(dateTime),
     };
 
@@ -476,14 +474,16 @@ class _CreationState extends State<Creation> {
     });
   }
 
-  Future<String> uploadImageToStorage(XFile image) async {
-    final ref = FirebaseStorage.instance
-        .ref()
-        .child('ad_images')
-        .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+  Future uploadImageToStorage(XFile image) async {
+    SupabaseStorageService supabaseStorageService = SupabaseStorageService();
+    final uuid = Uuid();
+    File file = File(image.path);
 
-    final uploadTask = await ref.putFile(File(image.path));
-    print(uploadTask);
-    return await ref.getDownloadURL();
+    final publicUrl = await supabaseStorageService.uploadFile(
+      file: file,
+      fileName: basename("${uuid.v4()}_file.path"),
+    );
+
+    return publicUrl;
   }
 }

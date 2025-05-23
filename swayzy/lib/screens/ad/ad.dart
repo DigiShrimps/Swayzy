@@ -6,7 +6,7 @@ import 'package:swayzy/constants/app_spaces.dart';
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
-import '../../solana/solana_service.dart';
+import '../../services/solana/solana_service.dart';
 import 'models/ad_arguments.dart';
 
 
