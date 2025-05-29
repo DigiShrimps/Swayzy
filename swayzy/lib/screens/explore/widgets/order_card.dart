@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_colors.dart';
 
 import '../../../constants/app_text_styles.dart';
-import '../../ad/ad.dart';
+import '../../ad/models/ad_arguments.dart';
 
 class OrderCard extends StatelessWidget {
   final String ownerName;

@@ -1,34 +1,12 @@
-import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/app_button_styles.dart';
+import '../../../constants/subs_amount_list.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_spaces.dart';
 import '../../../constants/app_text_styles.dart';
-import '../../creation/creation.dart';
-
-String dropdownSubsValue = subsAmount.first;
-
-final List<String> subsAmount = <String>[
-  "<100",
-  "100+",
-  "500+",
-  "1000+",
-  "10000+",
-  "50000+",
-  "100000+",
-  "500000+",
-  "1000000+",
-];
-
-final List<DropdownEntry> subsEntries = UnmodifiableListView<DropdownEntry>(
-  subsAmount.map<DropdownEntry>(
-    (String title) => DropdownEntry(value: title, label: title),
-  ),
-);
 
 final TextEditingController _urlController = TextEditingController();
 void saveSocialData(ChangeSocialInfoDialog widget, context) {
@@ -38,7 +16,7 @@ void saveSocialData(ChangeSocialInfoDialog widget, context) {
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .update({
         '${widget.socialName}URL': _urlController.text,
-        '${widget.socialName}Followers': dropdownSubsValue,
+        '${widget.socialName}Followers': SubsAmount.dropdownSubsValue,
       });
   _urlController.clear();
   Navigator.pop(context);
@@ -115,11 +93,11 @@ class _ChangeSocialInfoDialogState extends State<ChangeSocialInfoDialog> {
                             child: DropdownMenu<String>(
                               expandedInsets: null,
                               textStyle: AppTextStyles.body,
-                              initialSelection: subsAmount.first,
-                              dropdownMenuEntries: subsEntries,
+                              initialSelection: SubsAmount.subsAmount.first,
+                              dropdownMenuEntries: SubsAmount.subsEntries,
                               onSelected: (String? value) {
                                 setState(() {
-                                  dropdownSubsValue = value!;
+                                  SubsAmount.dropdownSubsValue = value!;
                                 });
                               },
                             ),

@@ -2,11 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'constants/app_button_styles.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_routes.dart';
 import 'constants/app_text_styles.dart';
+import 'constants/private_data.dart';
 import 'firebase_config.dart';
 import 'screens/chat/chat.dart';
 import 'screens/creation/creation.dart';
@@ -17,6 +20,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: './dotenv');
   await Firebase.initializeApp(options: firebaseConfig);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  await Supabase.initialize(
+    url: PrivateData.supabaseId,
+    anonKey: PrivateData.supabaseApi,
+  );
   runApp(const MyApp());
 }
 

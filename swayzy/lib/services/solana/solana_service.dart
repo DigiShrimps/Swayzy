@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:bip39/bip39.dart' as bip39;
 import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:swayzy/constants/private_data.dart';
@@ -30,7 +29,7 @@ Future<void> passDataToContract(
 
   final instructionCode = 1;
   int lamport = 1000000000;
-  final amount = BigInt.from(solAmount * lamport); // 0.01 SOL
+  final amount = BigInt.from(solAmount * lamport);
   final data = ByteArray([instructionCode, ..._encodeAmount(amount)]);
 
   final message = Message(

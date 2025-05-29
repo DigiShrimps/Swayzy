@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
+import 'package:swayzy/constants/app_colors.dart';
 import 'package:swayzy/constants/app_images_paths.dart';
 import 'package:swayzy/constants/private_data.dart';
-import 'package:swayzy/main.dart';
 
 import '../../constants/app_text_styles.dart';
 
@@ -28,7 +28,7 @@ class _AuthState extends State<Auth> {
         if (!snapshot.hasData) {
           return Theme(
             data: Theme.of(context).copyWith(
-              scaffoldBackgroundColor: const Color(0xFF4618A7),
+              scaffoldBackgroundColor: AppColors.authBackground,
               textTheme: TextTheme(bodyMedium: AppTextStyles.body),
             ),
             child: PopScope(
