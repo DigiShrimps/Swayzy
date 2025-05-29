@@ -44,11 +44,11 @@ class _CreationState extends State<Creation> {
   static final List<String> categoryTitles =
       appCategories.map((c) => c.title).toList();
   static final List<DropdownEntry> categoryEntries =
-      UnmodifiableListView<DropdownEntry>(
-        categoryTitles.map<DropdownEntry>(
-          (String title) => DropdownEntry(value: title, label: title),
-        ),
-      );
+    UnmodifiableListView<DropdownEntry>(
+      categoryTitles.map<DropdownEntry>(
+        (String title) => DropdownEntry(value: title, label: title),
+      ),
+    );
 
   static final List<String> reviewType = <String>[
     "Positive",
