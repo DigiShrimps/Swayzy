@@ -54,7 +54,9 @@ class AppRoutes {
       case profile:
         return MaterialPageRoute(builder: (_) => const Profile());
       case settings:
-        return MaterialPageRoute(builder: (_) => const Settings());
+        return MaterialPageRoute(builder: (_) => Settings(
+          onLocaleToggle: changeLanguageCallback!,
+        ));
       case socialDialog:
         final socialName = routeSettings.arguments as String?;
         return MaterialPageRoute(

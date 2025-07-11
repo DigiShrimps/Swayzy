@@ -1,6 +1,5 @@
 class Category {
-  final String title;
-  final String pathToImage;
+  final String key;
 
-  Category({required this.title, required this.pathToImage});
+  Category({required this.key});
 }

@@ -3,10 +3,9 @@ import 'package:swayzy/screens/chat/widgets/message_card.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../global_widgets/custom_app_bar.dart';
+import '../../l10n/app_localizations.dart';
 import 'mocks/customer_messages.mocks.dart';
 import 'mocks/performer_messages.mocks.dart';
-
-const String _titleText = "Chat";
 
 class Chat extends StatefulWidget {
   const Chat({super.key});
@@ -22,13 +21,16 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final String titleText = localizations.chatTitle;
+
     final messages =
         currentMode == ViewMode.asCustomer
             ? customerMessages
             : performerMessages;
 
     return Scaffold(
-      appBar: CustomAppBar(title: _titleText,),
+      appBar: CustomAppBar(title: titleText),
       body: Column(
         children: [
           Row(
@@ -44,7 +46,7 @@ class _ChatState extends State<Chat> {
                       currentMode == ViewMode.asCustomer
                           ? AppButtonStyles.selectedButton
                           : AppButtonStyles.unselectedButton,
-                  child: const Text("Customer"),
+                  child: Text(localizations.customerButton),
                 ),
               ),
               Expanded(
@@ -58,7 +60,7 @@ class _ChatState extends State<Chat> {
                       currentMode == ViewMode.asPerformer
                           ? AppButtonStyles.selectedButton
                           : AppButtonStyles.unselectedButton,
-                  child: const Text("Performer"),
+                  child: Text(localizations.performerButton),
                 ),
               ),
             ],

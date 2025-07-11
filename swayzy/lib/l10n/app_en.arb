@@ -1,0 +1,131 @@
+{
+    "@@locale": "en",
+    "@_NAV_BAR": {
+        },
+        "bottomNavBarItem": "",
+
+    "@_PAGE_TITLES": {
+        },
+        "homeTitle": "Home",
+        "creationTitle": "Creation",
+        "chatTitle": "Chat",
+        "notificationTitle": "Notification",
+        "settingsTitle": "Settings",
+
+    "@_HOME_PAGE": {
+        },
+        "@_BUTTONS": {
+            },
+            "searchButton": "All",
+            "processButton": "In process",
+
+    "@_CREATION_PAGE": {
+        },
+        "@_IMAGE_LABELS": {
+            },
+            "chooseImageLabel": "Choose an image for ad:",
+            "addPhotoLabel": "Add photo",
+            "addPhotoTooltip": "Pick Image",
+            "addAnotherPhotoLabel": "Add another photo",
+
+        "@_TITLE_LABELS": {
+            },
+            "chooseTitleLabel": "Title:",
+            "hintTitleLabel": "Example: Samsung A34 Black",
+
+        "@_DESCRIPTION_LABELS": {
+            },
+            "chooseDescriptionLabel": "Description:",
+            "hintDescriptionLabel": "Describe what you want from potential performers, including «where», «how» and «what» they need to advertise",
+
+        "@_SELECTOR_LABELS": {
+            },
+            "categorySelectorLabel": "Category:",
+            "categoryOption": "{key, select, electronics{Electronics} services{Services} vehicles{Vehicles} clothes{Clothes} other{}}",
+            "reviewSelectorLabel": "Review Type:",
+            "reviewOption": "{key, select, positive{Positive} fair{Fair} negative{Negative} other{}}",
+            "socialSelectorLabel": "Social Network:",
+            "subscribersSelectorLabel": "Subscribers:",
+
+        "@_INFLUENCERS_LABELS": {
+            },
+            "chooseInfluencersLabel": "Number of influencers involved:",
+            "hintInfluencersLabel": "1-100",
+
+        "@_DURATION_LABELS": {
+            },
+            "chooseDurationLabel": "Duration:",
+            "hintDurationLabel": "Post save time",
+
+        "@_PRICE_LABELS": {
+            },
+            "choosePriceLabel": "Price:",
+            "hintPriceLabel": "Cedra/influencer",
+
+        "@_BUTTONS": {
+            },
+            "saveButton": "Save",
+
+    "@_CHAT_PAGE": {
+        },
+        "@_BUTTONS": {
+            },
+            "customerButton": "Customer",
+            "performerButton": "Performer",
+
+    "@_PROFILE_PAGE": {
+        },
+        "@_ERROR_MESSAGE": {
+            },
+            "notEnterToAccount": "Not logged into account",
+
+        "@_BUTTONS": {
+            },
+            "exitButton": "Exit",
+            "deleteButton": "Delete account",
+
+        "@_SCAFFOLD_MESSAGES": {
+            },
+            "noSocialError": "Social isn't connected",
+
+    "@_SETTINGS_PAGE": {
+        },
+        "@_SECTIONS": {
+            },
+            "settingsSectionCommon": "Common",
+            "socialSectionCommon": "Social",
+            "settingsSectionAbout": "About",
+
+        "@_SUPPORT_EMAIL": {
+            },
+            "supportSubject": "[Swayzy Support] *Topic of question*",
+            "supportMessage": "Hello! I have question about the app: ",
+
+        "@_TILES": {
+            },
+            "languageTitle": "Language",
+            "languageOption": "English",
+            "notifications": "Notifications",
+            "githubText": "GitHub repository for a project",
+            "supportTitle": "Support",
+            "supportText": "Write us if you have any questions",
+            "feedbackTitle": "Feedback",
+            "feedbackText": "Write if you have any suggestions or complaints",
+            "copyright": " Developed by DigiShrimps",
+
+    "@_DIALOGS": {
+        },
+        "@_BUTTONS": {
+            },
+            "okButton": "Confirm",
+            "cancelButton": "Cancel",
+
+        "@_CONFIRM_DELETING_ACCOUNT_DIALOG": {
+            },
+            "confirmationText": "Deleting your account will delete your profile, all your playlists, music you've created, and more.\nAre you sure?",
+
+        "@_ADD_SOCIAL_DIALOG": {
+            },
+            "followersText": "Followers:",
+            "noUrlError": "Error: URL not given"
+}

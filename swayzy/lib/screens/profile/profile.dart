@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:solana/solana.dart';
 import 'package:swayzy/constants/app_colors.dart';
 import 'package:swayzy/constants/app_text_styles.dart';
@@ -14,6 +13,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_spaces.dart';
+import '../../l10n/app_localizations.dart';
+import 'dialogs/confirm_deleting_account_dialog.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -47,14 +48,14 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
-    final photoURL = user?.photoURL;
 
     return SafeArea(
       child: Scaffold(
         body:
             user == null
-                ? const Center(child: Text('Not logged in'))
+                ? const Center(child: Text('Not logged in')) // TODO видалити, юзлесс
                 : RefreshIndicator(
                   onRefresh: () async {
                     setState(() {
@@ -95,24 +96,8 @@ class _ProfileState extends State<Profile> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              SizedBox(width: AppSpacing.small),
-                              CircleAvatar(
-                                radius: 85,
-                                backgroundColor: AppColors.accent,
-                                child: CircleAvatar(
-                                  radius: 80,
-                                  backgroundImage:
-                                      photoURL != null
-                                          ? NetworkImage(photoURL)
-                                          : null,
-                                  child:
-                                      photoURL == null
-                                          ? const Icon(
-                                            Icons.account_circle_rounded,
-                                          )
-                                          : null,
-                                ),
-                              ),
+                              SizedBox(height: AppSpacing.small),
+                              _buildUserAvatar(user),
                               Container(
                                 alignment: Alignment.center,
                                 width: MediaQuery.sizeOf(context).width,
@@ -150,7 +135,7 @@ class _ProfileState extends State<Profile> {
                                                 _instagramURL!.isNotEmpty) {
                                               _launchURL(_instagramURL!);
                                             } else {
-                                              showErrorSnackbar(context);
+                                              showErrorSnackbar(context, localizations);
                                             }
                                           },
                                         ),
@@ -174,7 +159,7 @@ class _ProfileState extends State<Profile> {
                                                 _telegramURL!.isNotEmpty) {
                                               _launchURL(_telegramURL!);
                                             } else {
-                                              showErrorSnackbar(context);
+                                              showErrorSnackbar(context, localizations);
                                             }
                                           },
                                         ),
@@ -196,7 +181,7 @@ class _ProfileState extends State<Profile> {
                                                 _tiktokURL!.isNotEmpty) {
                                               _launchURL(_tiktokURL!);
                                             } else {
-                                              showErrorSnackbar(context);
+                                              showErrorSnackbar(context, localizations);
                                             }
                                           },
                                         ),
@@ -220,7 +205,7 @@ class _ProfileState extends State<Profile> {
                                                 _facebookURL!.isNotEmpty) {
                                               _launchURL(_facebookURL!);
                                             } else {
-                                              showErrorSnackbar(context);
+                                              showErrorSnackbar(context, localizations);
                                             }
                                           },
                                         ),
@@ -238,12 +223,11 @@ class _ProfileState extends State<Profile> {
                                           iconSize: 50,
                                           color: AppColors.highlight,
                                           onPressed: () {
-                                            print(_redditURL);
                                             if (_redditURL != null &&
                                                 _redditURL!.isNotEmpty) {
                                               _launchURL(_redditURL!);
                                             } else {
-                                              showErrorSnackbar(context);
+                                              showErrorSnackbar(context, localizations);
                                             }
                                           },
                                         ),
@@ -267,7 +251,7 @@ class _ProfileState extends State<Profile> {
                                   ),
                                   color: AppColors.secondaryBackground,
                                 ),
-                                child: SizedBox(
+                                child: SizedBox( // ця фігня буде перероблюватись
                                   width: double.infinity,
                                   child: Column(
                                     spacing: AppSpacing.small,
@@ -344,22 +328,19 @@ class _ProfileState extends State<Profile> {
                               ),
                               ElevatedButton.icon(
                                 style: AppButtonStyles.primary,
-                                onPressed: () async {
-                                  await FirebaseAuth.instance.signOut();
-                                  Navigator.of(
-                                    context,
-                                  ).pushReplacementNamed('/auth');
-                                },
-                                label: const Text('Logout'),
+                                label: Text(localizations.exitButton),
                                 icon: const Icon(Icons.logout_rounded),
+                                onPressed: () async {
+                                  await signOutUser(context);
+                                },
                               ),
                               ElevatedButton.icon(
                                 style: AppButtonStyles.delete,
-                                onPressed: () async {
-                                  await deleteUser(user, context);
-                                },
-                                label: const Text('Delete account'),
+                                label: Text(localizations.deleteButton),
                                 icon: const Icon(Icons.delete_rounded),
+                                onPressed: () async {
+                                  showConfirmDeletingDialog(context);
+                                },
                               ),
                               SizedBox(width: AppSpacing.medium),
                             ],
@@ -373,32 +354,45 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Future<void> deleteUser(User user, BuildContext context) async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    if (googleUser == null) {
-      return;
+  Widget _buildUserAvatar(User user) {
+    final photoUrl = user.photoURL;
+    if (photoUrl == null) {
+      return const CircleAvatar(
+        radius: 100,
+        child: Icon(Icons.account_circle_rounded, size: 100),
+      );
     }
 
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final highResUrl = _getHighResUserImage(photoUrl);
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+    return CircleAvatar(
+      radius: 100,
+      backgroundImage: NetworkImage(highResUrl),
     );
+  }
 
-    await user.reauthenticateWithCredential(credential);
-    await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
-    final snapshots = await FirebaseFirestore.instance
-      .collection('ads')
-      .where('ownerId', isEqualTo: user.uid)
-      .get();
-    for(var doc in snapshots.docs){
-      await doc.reference.delete();
-    }
-    await user.delete();
+  String _getHighResUserImage(String photoUrl) {
+    // завантаження аватару з кращим розширенням
+    String lowResImageSuffix = "s96-c";
+    String highResImageSuffix = "s400-c";
+
+    return photoUrl.replaceFirst(lowResImageSuffix, highResImageSuffix);
+  }
+
+  Future<void> signOutUser(BuildContext context) async {
+    final navigator = Navigator.of(context);
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushReplacementNamed('/auth');
+    navigator.pushReplacementNamed('/auth');
+  }
+
+  void showConfirmDeletingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return const ConfirmDeletingAccountDialog();
+      },
+    );
   }
 
   @override
@@ -408,12 +402,12 @@ class _ProfileState extends State<Profile> {
     _readSocial();
   }
 
-  void showErrorSnackbar(BuildContext context) {
+  void showErrorSnackbar(BuildContext context, AppLocalizations localizations) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: AppColors.error,
         duration: Duration(seconds: 2),
-        content: Text("Social isn't connected", style: AppTextStyles.form),
+        content: Text(localizations.noSocialError, style: AppTextStyles.form),
       ),
     );
   }

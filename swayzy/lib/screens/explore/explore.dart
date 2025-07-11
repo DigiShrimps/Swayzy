@@ -6,8 +6,7 @@ import 'package:swayzy/screens/explore/widgets/in_search_grid.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../global_widgets/custom_app_bar.dart';
-
-const String _titleText = "Home";
+import '../../l10n/app_localizations.dart';
 
 class Explore extends StatefulWidget {
   const Explore({super.key});
@@ -25,8 +24,11 @@ class _ExploreState extends State<Explore> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final String titleText = localizations.homeTitle;
+
     return Scaffold(
-      appBar: CustomAppBar(title: _titleText,),
+      appBar: CustomAppBar(title: titleText),
       body: Column(
         children: [
           Row(
@@ -42,7 +44,7 @@ class _ExploreState extends State<Explore> {
                       currentMode == ViewMode.inSearch
                           ? AppButtonStyles.selectedButton
                           : AppButtonStyles.unselectedButton,
-                  child: Text("In Search"),
+                  child: Text(localizations.searchButton),
                 ),
               ),
               Expanded(
@@ -56,7 +58,7 @@ class _ExploreState extends State<Explore> {
                       currentMode == ViewMode.inProcess
                           ? AppButtonStyles.selectedButton
                           : AppButtonStyles.unselectedButton,
-                  child: Text("In Process"),
+                  child: Text(localizations.processButton),
                 ),
               ),
             ],

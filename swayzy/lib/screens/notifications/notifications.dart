@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../global_widgets/custom_app_bar.dart';
+import '../../l10n/app_localizations.dart';
 import 'mocks/app_notification.mocks.dart';
-
-const String _titleText = "Notifications";
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -17,8 +16,11 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final String titleText = localizations.notificationTitle;
+
     return Scaffold(
-      appBar: CustomAppBar(title: _titleText,),
+      appBar: CustomAppBar(title: titleText,),
       body: ListView.builder(
         itemCount: appNotifications.length,
         itemBuilder: (context, index) {

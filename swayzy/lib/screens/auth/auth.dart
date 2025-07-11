@@ -56,7 +56,7 @@ class _AuthState extends State<Auth> {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          "WELCOME TO YOUR INFLUENCER ADVENTURE!",
+                          "WELCOME TO YOUR INFLUENCER ADVENTURE!", // TODO спитати чи треба тут змінювати чи лишити як лозунг
                           style: AppTextStyles.title,
                           textAlign: TextAlign.center,
                         ),
@@ -77,7 +77,6 @@ class _AuthState extends State<Auth> {
                     .get();
             return query.docs.isNotEmpty;
           }
-
           if (await isDuplicateUniqueName(
             FirebaseAuth.instance.currentUser!.uid,
           )) {

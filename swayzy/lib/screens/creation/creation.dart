@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:swayzy/constants/app_button_styles.dart';
+import 'package:swayzy/constants/app_font_sizes.dart';
 import 'package:swayzy/constants/app_spaces.dart';
 import 'package:swayzy/screens/creation/mocks/category.mocks.dart';
 import 'package:uuid/uuid.dart';
@@ -17,9 +18,10 @@ import 'package:uuid/uuid.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/subs_amount_list.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/supabase/supabase_storage_service.dart';
+import 'mocks/reviewType.mocks.dart';
 
-const String _titleText = "Creation";
 late String description;
 late XFile image;
 late String ownerId;
@@ -41,26 +43,41 @@ class Creation extends StatefulWidget {
 }
 
 class _CreationState extends State<Creation> {
-  static final List<String> categoryTitles =
-      appCategories.map((c) => c.title).toList();
-  static final List<DropdownEntry> categoryEntries =
-    UnmodifiableListView<DropdownEntry>(
-      categoryTitles.map<DropdownEntry>(
-        (String title) => DropdownEntry(value: title, label: title),
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {});
+  }
+
+  // static final List<String> categoryTitles =
+  //     appCategories.map((c) => c.title).toList();
+  // static final List<DropdownEntry> categoryEntries =
+  //   UnmodifiableListView<DropdownEntry>(
+  //     categoryTitles.map<DropdownEntry>(
+  //       (String title) => DropdownEntry(value: title, label: title),
+  //     ),
+  //   );
+
+  List<DropdownEntry> categoryEntries(AppLocalizations loc) {
+    return UnmodifiableListView<DropdownEntry>(
+      appCategories.map<DropdownEntry>(
+        (category) => DropdownEntry(
+        value: category.key,
+        label: loc.categoryOption(category.key)),
       ),
     );
+  }
 
-  static final List<String> reviewType = <String>[
-    "Positive",
-    "Fair",
-    "Negative",
-  ];
-  static final List<DropdownEntry> reviewEntries =
-      UnmodifiableListView<DropdownEntry>(
-        reviewType.map<DropdownEntry>(
-          (String title) => DropdownEntry(value: title, label: title),
-        ),
-      );
+  List<DropdownEntry> reviewTypesEntries(AppLocalizations loc) {
+    return UnmodifiableListView<DropdownEntry>(
+      reviewTypes.map<DropdownEntry>(
+        (review) => DropdownEntry(
+        value: review.key,
+        label: loc.reviewOption(review.key)),
+      ),
+    );
+  }
 
   static final List<String> socialType = <String>[
     "Instagram",
@@ -86,16 +103,19 @@ class _CreationState extends State<Creation> {
 
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
-  String dropdownCategoryValue = categoryTitles.first;
-  String dropdownReviewValue = reviewType.first;
+  String dropdownCategoryValue = appCategories.first.key;
+  String dropdownReviewValue = reviewTypes.first.key;
   String dropdownSocialValue = socialType.first;
   String dropdownSubsValue = SubsAmount.subsAmount.first;
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final String titleText = localizations.creationTitle;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(_titleText),
+        title: Text(titleText),
         titleTextStyle: AppTextStyles.title,
         backgroundColor: AppColors.secondaryBackground,
         centerTitle: true,
@@ -108,7 +128,7 @@ class _CreationState extends State<Creation> {
               child: Column(
                 spacing: AppSpacing.small,
                 children: [
-                  Text("Choose an image:", style: AppTextStyles.title),
+                  Text(localizations.chooseImageLabel, style: AppTextStyles.title, textAlign: TextAlign.center,),
                   _image == null
                       ? Container(
                         width: 260,
@@ -121,11 +141,11 @@ class _CreationState extends State<Creation> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Add photo", style: AppTextStyles.body),
+                            Text(localizations.addPhotoLabel, style: AppTextStyles.body),
                             SizedBox(height: AppSpacing.small),
                             FloatingActionButton(
                               onPressed: getImageFromGallery,
-                              tooltip: 'Pick Image',
+                              tooltip: localizations.addPhotoTooltip,
                               child: const Icon(Icons.add_a_photo),
                             ),
                           ],
@@ -147,12 +167,12 @@ class _CreationState extends State<Creation> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Add another photo",
+                                  localizations.addAnotherPhotoLabel,
                                   style: AppTextStyles.body,
                                 ),
                                 FloatingActionButton(
                                   onPressed: getImageFromGallery,
-                                  tooltip: 'Pick Image',
+                                  tooltip: localizations.addPhotoTooltip,
                                   child: const Icon(Icons.add_a_photo),
                                 ),
                               ],
@@ -161,19 +181,19 @@ class _CreationState extends State<Creation> {
                           ],
                         ),
                       ),
-                  Text("Title:", style: AppTextStyles.title),
+                  Text(localizations.chooseTitleLabel, style: AppTextStyles.title),
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width - 40,
                     child: TextField(
                       maxLength: 30,
                       style: AppTextStyles.form,
                       decoration: InputDecoration(
-                        hintText: "Example: Samsung A34 Black",
+                        hintText: localizations.hintTitleLabel,
                       ),
                       controller: _titleController,
                     ),
                   ),
-                  Text("Description:", style: AppTextStyles.title),
+                  Text(localizations.chooseDescriptionLabel, style: AppTextStyles.title),
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width - 40,
                     child: TextField(
@@ -181,9 +201,7 @@ class _CreationState extends State<Creation> {
                       maxLines: 5,
                       style: AppTextStyles.form,
                       decoration: InputDecoration(
-                        hintText:
-                            "Describe what you want from potential performers, including \"where\", "
-                            "\"how\" and \"what\" they need to advertise",
+                        hintText: localizations.hintDescriptionLabel,
                       ),
                       controller: _descriptionController,
                     ),
@@ -200,13 +218,14 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text("Category:", style: AppTextStyles.form),
+                              Text(localizations.categorySelectorLabel, style: AppTextStyles.form),
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
+                                  key: ValueKey(localizations.localeName),
                                   textStyle: AppTextStyles.body,
-                                  initialSelection: appCategories.first.title,
-                                  dropdownMenuEntries: categoryEntries,
+                                  initialSelection: dropdownCategoryValue,
+                                  dropdownMenuEntries: categoryEntries(localizations),
                                   onSelected: (String? value) {
                                     setState(() {
                                       dropdownCategoryValue = value!;
@@ -222,13 +241,14 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text("Review type:", style: AppTextStyles.form),
+                              Text(localizations.reviewSelectorLabel, style: AppTextStyles.form),
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
+                                  key: ValueKey(localizations.localeName), // використано для динамічного перекладу при зміні мови
                                   textStyle: AppTextStyles.body,
-                                  initialSelection: reviewType.first,
-                                  dropdownMenuEntries: reviewEntries,
+                                  initialSelection: dropdownReviewValue,
+                                  dropdownMenuEntries: reviewTypesEntries(localizations),
                                   onSelected: (String? value) {
                                     setState(() {
                                       dropdownReviewValue = value!;
@@ -255,7 +275,7 @@ class _CreationState extends State<Creation> {
                             spacing: AppSpacing.small,
                             children: [
                               Text(
-                                "Social network:",
+                                localizations.socialSelectorLabel,
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
@@ -279,7 +299,7 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text("Subscribers:", style: AppTextStyles.form),
+                              Text(localizations.subscribersSelectorLabel, style: AppTextStyles.form),
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
@@ -300,7 +320,7 @@ class _CreationState extends State<Creation> {
                     ),
                   ),
                   Text(
-                    "Number of influencers involved:",
+                    localizations.chooseInfluencersLabel,
                     style: AppTextStyles.form,
                   ),
                   SizedBox(
@@ -310,7 +330,7 @@ class _CreationState extends State<Creation> {
                       keyboardType: TextInputType.number,
                       maxLength: 3,
                       style: AppTextStyles.body,
-                      decoration: InputDecoration(hintText: "1-100"),
+                      decoration: InputDecoration(hintText: localizations.hintInfluencersLabel),
                       controller: _performersController,
                     ),
                   ),
@@ -326,13 +346,14 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text("Duration:", style: AppTextStyles.form),
+                              Text(localizations.chooseDurationLabel, style: AppTextStyles.form),
                               SizedBox(
                                 child: TextField(
                                   maxLength: 10,
                                   style: AppTextStyles.body,
                                   decoration: InputDecoration(
-                                    hintText: "Post save time",
+                                    hintText: localizations.hintDurationLabel,
+                                    //  hintStyle: TextStyle(fontSize: AppFontSizes.small) якщо на телефоні не буде влазити
                                   ),
                                   controller: _durationController,
                                 ),
@@ -345,14 +366,14 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text("Price:", style: AppTextStyles.form),
+                              Text(localizations.choosePriceLabel, style: AppTextStyles.form),
                               SizedBox(
                                 child: TextField(
                                   keyboardType: TextInputType.number,
                                   maxLength: 4,
                                   style: AppTextStyles.body,
                                   decoration: InputDecoration(
-                                    hintText: "SOL/influencer",
+                                    hintText: localizations.hintPriceLabel,
                                   ),
                                   controller: _priceController,
                                 ),
@@ -364,7 +385,7 @@ class _CreationState extends State<Creation> {
                     ),
                   ),
                   TextButton.icon(
-                    label: Text("Save", style: AppTextStyles.title),
+                    label: Text(localizations.saveButton, style: AppTextStyles.title),
                     icon: Icon(Icons.save_rounded),
                     style: AppButtonStyles.primary,
                     onPressed: () {

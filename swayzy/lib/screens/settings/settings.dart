@@ -1,29 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swayzy/constants/app_font_sizes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../global_widgets/custom_app_bar.dart';
+import '../../l10n/app_localizations.dart';
+import 'dialogs/change_social_info_dialog.dart';
 
-const String _titleText = "Settings";
-
+const String githubDiscussionsURL =
+    "https://github.com/DigiShrimps/Swayzy/discussions";
+const String githubCodeURL =
+    "https://github.com/DigiShrimps/Swayzy";
 bool areNotificationsEnabled = true;
 
+const Map<String, String> languages = {'en': 'English', 'uk': 'Українська'};
+final languagesItems = languages.entries
+    .map((lan) => DropdownMenuItem<String>(
+  value: lan.key,
+  child: Text(lan.value),
+))
+    .toList();
+
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  final Function(String) onLocaleToggle;
+  const Settings({super.key, required this.onLocaleToggle});
 
   @override
   State<Settings> createState() => _SettingsState();
 }
 
 class _SettingsState extends State<Settings> {
+  String? selectedLanguage;
+
+  void _loadSelectedLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedLang = prefs.getString('language') ?? 'en';
+    setState(() {
+      selectedLanguage = savedLang;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedLanguage();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final String titleText = localizations.settingsTitle;
+    final subject = localizations.supportSubject;
+    final message = localizations.supportMessage;
+
     return Scaffold(
-      appBar: CustomAppBar(title: _titleText,),
+      appBar: CustomAppBar(title: titleText,),
       body: SettingsList(
         lightTheme: const SettingsThemeData(
           settingsListBackground: AppColors.primaryBackground,
@@ -42,21 +77,41 @@ class _SettingsState extends State<Settings> {
         contentPadding: EdgeInsets.symmetric(horizontal: 20),
         sections: [
           SettingsSection(
-            title: Text('Common', style: AppTextStyles.buttonSecondary),
+            title: Text(localizations.settingsSectionCommon, style: AppTextStyles.buttonSecondary),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(Icons.language),
-                title: Text('Language', style: AppTextStyles.setting),
-                trailing: Text('English', style: AppTextStyles.setting),
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.contrast_rounded),
-                title: Text('Theme', style: AppTextStyles.setting),
-                trailing: Text('Dark', style: AppTextStyles.setting),
+                title: Text(localizations.languageTitle, style: AppTextStyles.setting, softWrap: false,
+                  overflow: TextOverflow.visible,),
+                trailing: DropdownButtonHideUnderline(
+                  child: ButtonTheme(
+                    alignedDropdown: true, // щоб меню не виходило за рамки кнопки
+                    child: DropdownButton<String>(
+                        value: selectedLanguage,
+                        style: AppTextStyles.form,
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: AppColors.secondaryText,
+                        ),
+                        dropdownColor: AppColors.highlight,
+                        alignment: Alignment.center,
+                        borderRadius:
+                        const BorderRadius.all(Radius.circular(20)),
+                        onChanged: (String? value) {
+                          if (value != null && value != selectedLanguage) {
+                            widget.onLocaleToggle(value);
+                            setState(() {
+                              selectedLanguage = value;
+                            });
+                          }
+                        },
+                        items: languagesItems),
+                  ),
+                ),
               ),
               SettingsTile.switchTile(
                 leading: const Icon(Icons.notifications_rounded),
-                title: Text('Notifications', style: AppTextStyles.setting),
+                title: Text(localizations.notifications, style: AppTextStyles.setting),
                 activeSwitchColor: AppColors.highlight,
                 initialValue: areNotificationsEnabled,
                 onToggle: (bool isEnabled) {
@@ -68,89 +123,82 @@ class _SettingsState extends State<Settings> {
             ],
           ),
           SettingsSection(
-            title: Text('Social', style: AppTextStyles.buttonSecondary),
+            title: Text(localizations.socialSectionCommon, style: AppTextStyles.buttonSecondary),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(FontAwesomeIcons.instagram),
                 title: Text('Instagram', style: AppTextStyles.setting),
                 onPressed: (context) {
-                  Navigator.of(
-                    context,
-                  ).pushNamed('/socialDialog', arguments: 'Instagram');
+                  showChangeSocialInfoDialog(context, 'Instagram');
                 },
               ),
               SettingsTile.navigation(
                 leading: const Icon(FontAwesomeIcons.telegram),
                 title: Text('Telegram', style: AppTextStyles.setting),
                 onPressed: (context) {
-                  Navigator.of(
-                    context,
-                  ).pushNamed('/socialDialog', arguments: 'Telegram');
+                  showChangeSocialInfoDialog(context, 'Telegram');
                 },
               ),
               SettingsTile.navigation(
                 leading: const Icon(FontAwesomeIcons.tiktok),
                 title: Text('TikTok', style: AppTextStyles.setting),
                 onPressed: (context) {
-                  Navigator.of(
-                    context,
-                  ).pushNamed('/socialDialog', arguments: 'TikTok');
+                  showChangeSocialInfoDialog(context, 'TikTok');
                 },
               ),
               SettingsTile.navigation(
                 leading: const Icon(FontAwesomeIcons.facebook),
                 title: Text('Facebook', style: AppTextStyles.setting),
                 onPressed: (context) {
-                  Navigator.of(
-                    context,
-                  ).pushNamed('/socialDialog', arguments: 'Facebook');
+                  showChangeSocialInfoDialog(context, 'Facebook');
                 },
               ),
               SettingsTile.navigation(
                 leading: const Icon(FontAwesomeIcons.reddit),
                 title: Text('Reddit', style: AppTextStyles.setting),
                 onPressed: (context) {
-                  Navigator.of(
-                    context,
-                  ).pushNamed('/socialDialog', arguments: 'Reddit');
+                  showChangeSocialInfoDialog(context, 'Reddit');
                 },
+                // (context) {
+                //   Navigator.of(
+                //     context,
+                //   ).pushNamed('/socialDialog', arguments: 'Reddit');
+                // },
               ),
             ],
           ),
           SettingsSection(
-            title: Text('About', style: AppTextStyles.buttonSecondary),
+            title: Text(localizations.settingsSectionAbout, style: AppTextStyles.buttonSecondary),
             tiles: <SettingsTile>[
               SettingsTile(
                 leading: const Icon(Icons.folder_zip_rounded),
                 title: Text('GitHub', style: AppTextStyles.setting),
                 description: Text(
-                  "GitHub repository for a project",
+                  localizations.githubText,
                   style: AppTextStyles.smallDescription,
                 ),
                 onPressed:
                     (context) async =>
-                        _launchURL("https://github.com/DigiShrimps/Swayzy"),
+                        _launchURL(githubCodeURL),
               ),
               SettingsTile(
                 leading: const Icon(Icons.support_rounded),
-                title: Text('Support', style: AppTextStyles.setting),
+                title: Text(localizations.supportTitle, style: AppTextStyles.setting),
                 description: Text(
-                  "Write us if you have any questions",
+                  localizations.supportText,
                   style: AppTextStyles.smallDescription,
                 ),
-                onPressed: (context) async => _sendingMails(),
+                onPressed: (context) async => _sendingMails(subject, message),
               ),
               SettingsTile(
                 leading: const Icon(Icons.feedback_rounded),
-                title: Text('Feedback', style: AppTextStyles.setting),
+                title: Text(localizations.feedbackTitle, style: AppTextStyles.setting),
                 description: Text(
-                  "Write if you have any suggestions or complaints",
+                  localizations.feedbackText,
                   style: AppTextStyles.smallDescription,
                 ),
                 onPressed:
-                    (context) async => _launchURL(
-                      "https://github.com/DigiShrimps/Swayzy/discussions",
-                    ),
+                    (context) async => _launchURL(githubDiscussionsURL),
               ),
             ],
           ),
@@ -162,19 +210,29 @@ class _SettingsState extends State<Settings> {
         child: Text.rich(
           style: AppTextStyles.body,
           textAlign: TextAlign.center,
-          const TextSpan(
+          TextSpan(
             children: [
-              WidgetSpan(
+              const WidgetSpan(
                 child: Icon(
                   Icons.copyright_rounded,
                   color: AppColors.highlight,
                 ),
               ),
-              TextSpan(text: " Developed by DigiShrimps"),
+              TextSpan(text: localizations.copyright),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  dynamic showChangeSocialInfoDialog(BuildContext context, String socialName) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return ChangeSocialInfoDialog(socialName: socialName,);
+      },
     );
   }
 
@@ -185,10 +243,8 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  _sendingMails() async {
+  Future<void> _sendingMails(String subject, String message) async {
     var mailId = "digishrimps@gmail.com";
-    var subject = "[Swayzy Support] *Topic of question*";
-    var message = "Hello! I have question about the app: ";
     await launchUrl(Uri.parse("mailto:$mailId?subject=$subject&body=$message"));
   }
 }

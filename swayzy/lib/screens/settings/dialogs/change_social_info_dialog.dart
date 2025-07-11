@@ -7,20 +7,11 @@ import '../../../constants/subs_amount_list.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_spaces.dart';
 import '../../../constants/app_text_styles.dart';
+import '../../../global_widgets/custom_exception.dart';
+import '../../../l10n/app_localizations.dart';
 
 final TextEditingController _urlController = TextEditingController();
-void saveSocialData(ChangeSocialInfoDialog widget, context) {
-  // TODO додати на пустий рядок
-  FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .update({
-        '${widget.socialName}URL': _urlController.text,
-        '${widget.socialName}Followers': SubsAmount.dropdownSubsValue,
-      });
-  _urlController.clear();
-  Navigator.pop(context);
-}
+
 class ChangeSocialInfoDialog extends StatefulWidget {
   final String? socialName;
   const ChangeSocialInfoDialog({super.key, required this.socialName});
@@ -32,6 +23,7 @@ class ChangeSocialInfoDialog extends StatefulWidget {
 class _ChangeSocialInfoDialogState extends State<ChangeSocialInfoDialog> {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Dialog(
       insetPadding: const EdgeInsets.all(10),
       alignment: Alignment.center,
@@ -66,7 +58,7 @@ class _ChangeSocialInfoDialogState extends State<ChangeSocialInfoDialog> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text("URL:", style: AppTextStyles.form),
-                        Text("Followers:", style: AppTextStyles.form),
+                        Text(localizations.followersText, style: AppTextStyles.form),
                       ],
                     ),
                   ),
@@ -115,17 +107,17 @@ class _ChangeSocialInfoDialogState extends State<ChangeSocialInfoDialog> {
               children: [
                 TextButton(
                   onPressed: () {
-                    saveSocialData(widget, context);
+                    saveSocialData(widget, context, localizations);
                   },
                   style: AppButtonStyles.primary,
-                  child: Text("Зберегти", style: AppTextStyles.buttonPrimary),
+                  child: Text(localizations.okButton, style: AppTextStyles.buttonPrimary),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   style: AppButtonStyles.delete,
-                  child: Text("Скасувати", style: AppTextStyles.buttonPrimary),
+                  child: Text(localizations.cancelButton, style: AppTextStyles.buttonPrimary),
                 ),
               ],
             ),
@@ -133,5 +125,31 @@ class _ChangeSocialInfoDialogState extends State<ChangeSocialInfoDialog> {
         ),
       ),
     );
+  }
+
+  void saveSocialData(ChangeSocialInfoDialog widget, BuildContext context, AppLocalizations localizations) {
+    try {
+      if (_urlController.text.isNotEmpty) {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({
+          '${widget.socialName}URL': _urlController.text,
+          '${widget.socialName}Followers': SubsAmount.dropdownSubsValue,
+        });
+        _urlController.clear();
+        Navigator.pop(context);
+      } else {
+        throw CustomException(localizations.noUrlError);
+      }
+    } on Exception catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.error,
+          duration: const Duration(seconds: 2),
+          content: Text("$e", style: AppTextStyles.form),
+        ),
+      );
+    }
   }
 }

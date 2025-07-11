@@ -6,6 +6,7 @@ import 'package:swayzy/constants/app_spaces.dart';
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/solana/solana_service.dart';
 import 'models/ad_arguments.dart';
 
@@ -38,6 +39,7 @@ class _AdState extends State<Ad> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final args = widget.arguments;
 
     bool statusCheck (){
@@ -132,7 +134,7 @@ class _AdState extends State<Ad> {
                                 padding: EdgeInsets.all(10),
                                 height: 60,
                                 alignment: Alignment.center,
-                                child: Text("${args.adReviewType}\nreview",
+                                child: Text("${localizations.reviewOption(args.adReviewType)}\nreview",
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),

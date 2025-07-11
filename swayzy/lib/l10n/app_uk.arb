@@ -1,0 +1,131 @@
+{
+    "@@locale": "uk",
+    "@_NAV_BAR": {
+        },
+        "bottomNavBarItem": "",
+
+    "@_PAGE_TITLES": {
+        },
+        "homeTitle": "Головна",
+        "creationTitle": "Створення",
+        "chatTitle": "Чат",
+        "notificationTitle": "Повідомлення",
+        "settingsTitle": "Налаштування",
+
+    "@_HOME_PAGE": {
+        },
+        "@_BUTTONS": {
+            },
+            "searchButton": "Усі",
+            "processButton": "В процесі",
+
+    "@_CREATION_PAGE": {
+        },
+        "@_IMAGE_LABELS": {
+            },
+            "chooseImageLabel": "Оберіть зображення для оголошення:",
+            "addPhotoLabel": "Додати фото",
+            "addPhotoTooltip": "Оберіть фото",
+            "addAnotherPhotoLabel": "Додати інше фото",
+
+        "@_TITLE_LABELS": {
+            },
+            "chooseTitleLabel": "Заголовок:",
+            "hintTitleLabel": "Наприклад: Напій безалкогольний Живчик",
+
+        "@_DESCRIPTION_LABELS": {
+            },
+            "chooseDescriptionLabel": "Опис:",
+            "hintDescriptionLabel": "Опишіть, чого ви хочете від потенційних виконавців, включаючи «де», «як» і «що» вони повинні рекламувати",
+
+        "@_SELECTOR_LABELS": {
+            },
+            "categorySelectorLabel": "Категорія:",
+            "categoryOption": "{key, select, electronics{Електроніка} services{Послуги} vehicles{Транспорт} clothes{Одяг} other{}}",
+            "reviewSelectorLabel": "Тип огляду:",
+            "reviewOption": "{key, select, positive{Позитивний} fair{Чесний} negative{Негативний} other{}}",
+            "socialSelectorLabel": "Соціальна мережа:",
+            "subscribersSelectorLabel": "Підписники:",
+
+        "@_INFLUENCERS_LABELS": {
+            },
+            "chooseInfluencersLabel": "Кількість залучених інфлюенсерів:",
+            "hintInfluencersLabel": "1-100",
+
+        "@_DURATION_LABELS": {
+            },
+            "chooseDurationLabel": "Тривалість:",
+            "hintDurationLabel": "Зберігати протягом",
+
+        "@_PRICE_LABELS": {
+            },
+            "choosePriceLabel": "Ціна:",
+            "hintPriceLabel": "Cedra/інфлюенсер",
+
+        "@_BUTTONS": {
+            },
+            "saveButton": "Зберегти",
+
+    "@_CHAT_PAGE": {
+        },
+        "@_BUTTONS": {
+            },
+            "customerButton": "Замовник",
+            "performerButton": "Виконавець",
+
+    "@_PROFILE_PAGE": {
+        },
+        "@_ERROR_MESSAGE": {
+            },
+            "notEnterToAccount": "Не увійшли в акаунт",
+
+        "@_BUTTONS": {
+            },
+            "exitButton": "Вийти",
+            "deleteButton": "Видалити акаунт",
+
+        "@_SCAFFOLD_MESSAGES": {
+            },
+            "noSocialError": "Соцмережу не підключено",
+
+    "@_SETTINGS_PAGE": {
+        },
+        "@_SECTIONS": {
+            },
+            "settingsSectionCommon": "Загальні",
+            "socialSectionCommon": "Соцмережі",
+            "settingsSectionAbout": "Про програму",
+
+        "@_SUPPORT_EMAIL": {
+            },
+            "supportSubject": "[Swayzy Підтримка] *Текст запитання*",
+            "supportMessage": "Вітаю! Маю питання щодо застосунку: ",
+
+        "@_TILES": {
+            },
+            "languageTitle": "Мова",
+            "languageOption": "Українська",
+            "notifications": "Сповіщення",
+            "githubText": "GitHub-репозиторій проєкту",
+            "supportTitle": "Підтримка",
+            "supportText": "Пишіть якщо виникають запитання",
+            "feedbackTitle": "Зворотний зв'язок",
+            "feedbackText": "Пишіть якщо маєте скарги чи пропозиції",
+            "copyright": " Розроблено DigiShrimps",
+
+    "@_DIALOGS": {
+        },
+        "@_BUTTONS": {
+            },
+            "okButton": "ОК",
+            "cancelButton": "Скасувати",
+
+        "@_CONFIRM_DELETING_ACCOUNT_DIALOG": {
+            },
+            "confirmationText": "Видалення акаунту призведе до видалення профілю, всіх ваших плейлистів, створеної музики тощо.\nВи впевнені?",
+
+        "@_ADD_SOCIAL_DIALOG": {
+            },
+            "followersText": "Підписники:",
+            "noUrlError": "Помилка: URL не введено"
+}

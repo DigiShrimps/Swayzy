@@ -48,3 +48,4 @@ lib/firebase_options.dart
 dotenv
 *.keystore
 lib/constants/private_data.dart
+/desiredFileName.txt

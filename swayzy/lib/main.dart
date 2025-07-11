@@ -1,8 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'constants/app_button_styles.dart';
@@ -11,6 +14,7 @@ import 'constants/app_routes.dart';
 import 'constants/app_text_styles.dart';
 import 'constants/private_data.dart';
 import 'firebase_config.dart';
+import 'l10n/app_localizations.dart';
 import 'screens/chat/chat.dart';
 import 'screens/creation/creation.dart';
 import 'screens/explore/explore.dart';
@@ -28,18 +32,41 @@ void main() async {
     url: PrivateData.supabaseId,
     anonKey: PrivateData.supabaseApi,
   );
-  runApp(const MyApp());
+
+  final prefs = await SharedPreferences.getInstance();
+  final language = prefs.getString('language') ?? "en";
+
+  runApp(MyApp(locale: Locale(language),));
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+void Function(String)? changeLanguageCallback;
+
+class MyApp extends StatefulWidget {
+  final Locale locale;
+  const MyApp({super.key, required this.locale});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class _MyAppState extends State<MyApp> {
+  late Locale _locale;
+
+  void _changeLanguage(String languageCode) async {
+    setState(() {
+      _locale = Locale(languageCode);
+    });
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language', languageCode);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _locale = widget.locale;
+    changeLanguageCallback = _changeLanguage;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +123,24 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/auth',
       onGenerateRoute: AppRoutes.onGenerateRoute,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FirebaseUILocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en'), Locale('uk')],
+      locale: _locale,
     );
   }
+}
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
@@ -112,27 +155,31 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final String navBarItemText = localizations.bottomNavBarItem;
+
     FlutterNativeSplash.remove();
+
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
       body: IndexedStack(index: _selectedIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.explore_outlined, size: 40),
-            label: "",
+            icon: const Icon(Icons.explore_outlined, size: 40),
+            label: navBarItemText,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline_rounded, size: 40),
-            label: "",
+            icon: const Icon(Icons.add_circle_outline_rounded, size: 40),
+            label: navBarItemText,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_outlined, size: 40),
-            label: "",
+            icon: const Icon(Icons.chat_outlined, size: 40),
+            label: navBarItemText,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_outlined, size: 40),
-            label: "",
+            icon: const Icon(Icons.account_circle_outlined, size: 40),
+            label: navBarItemText,
           ),
         ],
         currentIndex: _selectedIndex,
