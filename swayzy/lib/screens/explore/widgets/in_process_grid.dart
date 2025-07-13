@@ -14,7 +14,7 @@ class InProcessGrid extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List data = snapshot.data as List<Map<String, dynamic>>;
-          return GridView.builder(
+          return GridView.builder( // TODO переробити на динамічний грід
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,

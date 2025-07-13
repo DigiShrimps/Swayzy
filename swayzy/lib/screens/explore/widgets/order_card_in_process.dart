@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_colors.dart';
 
 import '../../../constants/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../ad/models/ad_arguments.dart';
 
 class OrderCardInProcess extends StatelessWidget {
@@ -42,6 +43,7 @@ class OrderCardInProcess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed(
@@ -125,7 +127,7 @@ class OrderCardInProcess extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: Text(
-                  orderStatus,
+                  localizations.statusOption(orderStatus),
                   style: AppTextStyles.orderDescription,
                   textAlign: TextAlign.center,
                 ),

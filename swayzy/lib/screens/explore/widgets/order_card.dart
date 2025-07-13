@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_colors.dart';
 
 import '../../../constants/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../ad/models/ad_arguments.dart';
 
 class OrderCard extends StatelessWidget {
@@ -40,6 +41,7 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed(
@@ -73,28 +75,42 @@ class OrderCard extends StatelessWidget {
             children: [
               Expanded(
                 flex: 10,
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey[300],
-                    image:
-                        imageUrl != null
-                            ? DecorationImage(
-                              image: NetworkImage(imageUrl),
-                              fit: BoxFit.fitWidth,
-                            )
-                            : null,
+                child:
+                  // стара структура з кривим відображенням фото і сірим фоном
+                  // Container(
+                  //   height: MediaQuery.of(context).size.height,
+                  //   width: MediaQuery.of(context).size.width,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(8),
+                  //     color: Colors.grey[300],
+                  //     image:
+                  //         imageUrl != null
+                  //             ? DecorationImage(
+                  //               image: NetworkImage(imageUrl),
+                  //               fit: BoxFit.fitWidth,
+                  //             )
+                  //             : null,
+                  //   ),
+                  //   child:
+                  //       imageUrl == null
+                  //           ? const Icon(
+                  //             Icons.image,
+                  //             size: 50,
+                  //             color: Colors.black54,
+                  //           )
+                  //           : null,
+                  // ),
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: SizedBox(
+                    // height: MediaQuery.of(context).size.width - 20,
+                      width: MediaQuery.of(context).size.width,
+                      child:
+                      Image.network(
+                        imageUrl,
+                        fit: BoxFit.scaleDown,
+                      )
                   ),
-                  child:
-                      imageUrl == null
-                          ? const Icon(
-                            Icons.image,
-                            size: 50,
-                            color: Colors.black54,
-                          )
-                          : null,
                 ),
               ),
               const SizedBox(height: 8),
@@ -117,13 +133,13 @@ class OrderCard extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: Center(
-                  child: Text("$price SOL", style: AppTextStyles.orderTitle),
+                  child: Text("$price Cedra", style: AppTextStyles.orderTitle),
                 ),
               ),
               Flexible(
                 flex: 1,
                 child: Center(
-                  child: Text(category, style: AppTextStyles.orderDescription),
+                  child: Text(localizations.categoryOption(category), style: AppTextStyles.orderDescription),
                 ),
               ),
               Flexible(

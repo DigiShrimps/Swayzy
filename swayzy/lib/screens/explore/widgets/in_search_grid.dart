@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/app_text_styles.dart';
-import '../mocks/category.mocks.dart';
+import '../../../global_entities/category/category.mocks.dart';
+import '../../../l10n/app_localizations.dart';
 import 'order_card.dart';
 
 class InSearchGrid extends StatefulWidget {
@@ -18,6 +19,7 @@ class _InSearchGridState extends State<InSearchGrid> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return ListView(
       children: [
         GridView.builder(
@@ -30,11 +32,11 @@ class _InSearchGridState extends State<InSearchGrid> {
           physics: NeverScrollableScrollPhysics(),
           itemCount: 5,
           itemBuilder: (context, index) {
-            final category = orderCategories[index];
+            final category = adCategories[index];
             return InkWell(
               onTap: () {
                 setState(() {
-                  selectedCategory = category.id;
+                  selectedCategory = category.key;
                 });
               },
               borderRadius: BorderRadius.circular(10),
@@ -48,7 +50,7 @@ class _InSearchGridState extends State<InSearchGrid> {
                     height: 36,
                     fit: BoxFit.fitHeight,
                   ),
-                  Text(category.title, style: AppTextStyles.orderCategory),
+                  Text(localizations.categoryOption(category.key), style: AppTextStyles.orderCategory),
                 ],
               ),
             );

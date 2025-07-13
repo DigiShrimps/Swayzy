@@ -258,7 +258,7 @@ class _ProfileState extends State<Profile> {
                                     children: [
                                       SizedBox(width: AppSpacing.small),
                                       Text(
-                                        "Balance:\n$_balance SOL",
+                                        "${localizations.balanceLabel}\n$_balance SOL",
                                         style: AppTextStyles.title,
                                         textAlign: TextAlign.center,
                                       ),

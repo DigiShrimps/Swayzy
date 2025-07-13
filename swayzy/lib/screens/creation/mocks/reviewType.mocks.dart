@@ -1,4 +1,4 @@
-import '../models/reviewType.dart';
+import '../models/review_type.dart';
 
 final List<ReviewType> reviewTypes = [
   ReviewType(key: "positive"),

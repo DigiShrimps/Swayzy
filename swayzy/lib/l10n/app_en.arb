@@ -11,13 +11,42 @@
         "chatTitle": "Chat",
         "notificationTitle": "Notification",
         "settingsTitle": "Settings",
+        "adTitle": "Advertisement",
 
     "@_HOME_PAGE": {
         },
+        "@_IN_PROCESS_CARD": {
+            },
+            "statusOption": "{key, select, inWork{In work} completed{Completed} other{}}",
+
         "@_BUTTONS": {
             },
             "searchButton": "All",
             "processButton": "In process",
+
+    "@_AD_PAGE": {
+        },
+        "@_LABELS": {
+            },
+            "priceLabel": "Price:",
+            "descriptionLabel": "Description:",
+
+        "@_TAGS": {
+            },
+            "reviewTag": "review",
+            "durationTag": "Duration:",
+            "subscribersTag": "subscribers",
+
+        "@_BUTTONS": {
+            },
+            "takeButton": "Take order",
+            "completeButton": "Complete order",
+
+        "@_SCAFFOLD_MESSAGES": {
+            },
+            "orderTaken": "Order accepted",
+            "orderCompleted": "Order completed",
+            "yourOrderError": "You can't take your order",
 
     "@_CREATION_PAGE": {
         },
@@ -41,7 +70,7 @@
         "@_SELECTOR_LABELS": {
             },
             "categorySelectorLabel": "Category:",
-            "categoryOption": "{key, select, electronics{Electronics} services{Services} vehicles{Vehicles} clothes{Clothes} other{}}",
+            "categoryOption": "{key, select, all{All} electronics{Electronics} services{Services} vehicles{Vehicles} clothes{Clothes} other{}}",
             "reviewSelectorLabel": "Review Type:",
             "reviewOption": "{key, select, positive{Positive} fair{Fair} negative{Negative} other{}}",
             "socialSelectorLabel": "Social Network:",
@@ -66,6 +95,10 @@
             },
             "saveButton": "Save",
 
+        "@_SCAFFOLD_MESSAGES": {
+            },
+            "orderCreated": "Order created",
+
     "@_CHAT_PAGE": {
         },
         "@_BUTTONS": {
@@ -75,6 +108,10 @@
 
     "@_PROFILE_PAGE": {
         },
+        "@_LABELS": {
+            },
+            "balanceLabel": "Balance:",
+
         "@_ERROR_MESSAGE": {
             },
             "notEnterToAccount": "Not logged into account",

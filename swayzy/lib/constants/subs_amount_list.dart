@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import '../screens/creation/creation.dart';
 
-class SubsAmount{
+class SubsAmount{ // TODO перемістити в ентітіс?
   static const List<String> subsAmount = <String>[
     "<100",
     "100+",

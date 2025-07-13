@@ -10,9 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:swayzy/constants/app_button_styles.dart';
-import 'package:swayzy/constants/app_font_sizes.dart';
 import 'package:swayzy/constants/app_spaces.dart';
-import 'package:swayzy/screens/creation/mocks/category.mocks.dart';
+import 'package:swayzy/global_entities/category/category.mocks.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../constants/app_colors.dart';
@@ -43,7 +42,6 @@ class Creation extends StatefulWidget {
 }
 
 class _CreationState extends State<Creation> {
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -61,11 +59,14 @@ class _CreationState extends State<Creation> {
 
   List<DropdownEntry> categoryEntries(AppLocalizations loc) {
     return UnmodifiableListView<DropdownEntry>(
-      appCategories.map<DropdownEntry>(
-        (category) => DropdownEntry(
-        value: category.key,
-        label: loc.categoryOption(category.key)),
-      ),
+      adCategories
+          .where((category) => category.key != "all")
+          .map<DropdownEntry>(
+            (category) => DropdownEntry(
+              value: category.key,
+              label: loc.categoryOption(category.key),
+            ),
+          ),
     );
   }
 
@@ -73,8 +74,9 @@ class _CreationState extends State<Creation> {
     return UnmodifiableListView<DropdownEntry>(
       reviewTypes.map<DropdownEntry>(
         (review) => DropdownEntry(
-        value: review.key,
-        label: loc.reviewOption(review.key)),
+          value: review.key,
+          label: loc.reviewOption(review.key),
+        ),
       ),
     );
   }
@@ -103,7 +105,7 @@ class _CreationState extends State<Creation> {
 
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
-  String dropdownCategoryValue = appCategories.first.key;
+  String dropdownCategoryValue = adCategories.first.key;
   String dropdownReviewValue = reviewTypes.first.key;
   String dropdownSocialValue = socialType.first;
   String dropdownSubsValue = SubsAmount.subsAmount.first;
@@ -128,7 +130,11 @@ class _CreationState extends State<Creation> {
               child: Column(
                 spacing: AppSpacing.small,
                 children: [
-                  Text(localizations.chooseImageLabel, style: AppTextStyles.title, textAlign: TextAlign.center,),
+                  Text(
+                    localizations.chooseImageLabel,
+                    style: AppTextStyles.title,
+                    textAlign: TextAlign.center,
+                  ),
                   _image == null
                       ? Container(
                         width: 260,
@@ -141,7 +147,10 @@ class _CreationState extends State<Creation> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(localizations.addPhotoLabel, style: AppTextStyles.body),
+                            Text(
+                              localizations.addPhotoLabel,
+                              style: AppTextStyles.body,
+                            ),
                             SizedBox(height: AppSpacing.small),
                             FloatingActionButton(
                               onPressed: getImageFromGallery,
@@ -181,7 +190,10 @@ class _CreationState extends State<Creation> {
                           ],
                         ),
                       ),
-                  Text(localizations.chooseTitleLabel, style: AppTextStyles.title),
+                  Text(
+                    localizations.chooseTitleLabel,
+                    style: AppTextStyles.title,
+                  ),
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width - 40,
                     child: TextField(
@@ -193,7 +205,10 @@ class _CreationState extends State<Creation> {
                       controller: _titleController,
                     ),
                   ),
-                  Text(localizations.chooseDescriptionLabel, style: AppTextStyles.title),
+                  Text(
+                    localizations.chooseDescriptionLabel,
+                    style: AppTextStyles.title,
+                  ),
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width - 40,
                     child: TextField(
@@ -218,14 +233,19 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text(localizations.categorySelectorLabel, style: AppTextStyles.form),
+                              Text(
+                                localizations.categorySelectorLabel,
+                                style: AppTextStyles.form,
+                              ),
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
                                   key: ValueKey(localizations.localeName),
                                   textStyle: AppTextStyles.body,
-                                  initialSelection: dropdownCategoryValue,
-                                  dropdownMenuEntries: categoryEntries(localizations),
+                                  initialSelection: adCategories[1].key,
+                                  dropdownMenuEntries: categoryEntries(
+                                    localizations,
+                                  ),
                                   onSelected: (String? value) {
                                     setState(() {
                                       dropdownCategoryValue = value!;
@@ -241,14 +261,21 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text(localizations.reviewSelectorLabel, style: AppTextStyles.form),
+                              Text(
+                                localizations.reviewSelectorLabel,
+                                style: AppTextStyles.form,
+                              ),
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
-                                  key: ValueKey(localizations.localeName), // використано для динамічного перекладу при зміні мови
+                                  key: ValueKey(
+                                    localizations.localeName,
+                                  ), // використано для динамічного перекладу при зміні мови
                                   textStyle: AppTextStyles.body,
                                   initialSelection: dropdownReviewValue,
-                                  dropdownMenuEntries: reviewTypesEntries(localizations),
+                                  dropdownMenuEntries: reviewTypesEntries(
+                                    localizations,
+                                  ),
                                   onSelected: (String? value) {
                                     setState(() {
                                       dropdownReviewValue = value!;
@@ -299,7 +326,10 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text(localizations.subscribersSelectorLabel, style: AppTextStyles.form),
+                              Text(
+                                localizations.subscribersSelectorLabel,
+                                style: AppTextStyles.form,
+                              ),
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
@@ -330,7 +360,9 @@ class _CreationState extends State<Creation> {
                       keyboardType: TextInputType.number,
                       maxLength: 3,
                       style: AppTextStyles.body,
-                      decoration: InputDecoration(hintText: localizations.hintInfluencersLabel),
+                      decoration: InputDecoration(
+                        hintText: localizations.hintInfluencersLabel,
+                      ),
                       controller: _performersController,
                     ),
                   ),
@@ -346,7 +378,10 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text(localizations.chooseDurationLabel, style: AppTextStyles.form),
+                              Text(
+                                localizations.chooseDurationLabel,
+                                style: AppTextStyles.form,
+                              ),
                               SizedBox(
                                 child: TextField(
                                   maxLength: 10,
@@ -366,7 +401,10 @@ class _CreationState extends State<Creation> {
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              Text(localizations.choosePriceLabel, style: AppTextStyles.form),
+                              Text(
+                                localizations.choosePriceLabel,
+                                style: AppTextStyles.form,
+                              ),
                               SizedBox(
                                 child: TextField(
                                   keyboardType: TextInputType.number,
@@ -385,11 +423,14 @@ class _CreationState extends State<Creation> {
                     ),
                   ),
                   TextButton.icon(
-                    label: Text(localizations.saveButton, style: AppTextStyles.title),
+                    label: Text(
+                      localizations.saveButton,
+                      style: AppTextStyles.title,
+                    ),
                     icon: Icon(Icons.save_rounded),
                     style: AppButtonStyles.primary,
                     onPressed: () {
-                      saveAd(context);
+                      saveAd(context, localizations);
                     },
                   ),
                   SizedBox(width: AppSpacing.small),
@@ -402,7 +443,7 @@ class _CreationState extends State<Creation> {
     );
   }
 
-  void saveAd(BuildContext context) {
+  void saveAd(BuildContext context, AppLocalizations loc) {
     var user = FirebaseAuth.instance.currentUser!;
 
     String title = _titleController.text;
@@ -440,7 +481,7 @@ class _CreationState extends State<Creation> {
       SnackBar(
         backgroundColor: AppColors.tokenSuccess,
         duration: Duration(seconds: 2),
-        content: Text("Order created", style: AppTextStyles.form),
+        content: Text(loc.orderCreated, style: AppTextStyles.form),
       ),
     );
   }

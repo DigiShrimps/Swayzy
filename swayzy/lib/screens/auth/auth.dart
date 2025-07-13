@@ -56,7 +56,7 @@ class _AuthState extends State<Auth> {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          "WELCOME TO YOUR INFLUENCER ADVENTURE!", // TODO спитати чи треба тут змінювати чи лишити як лозунг
+                          "WELCOME TO YOUR INFLUENCER ADVENTURE!",
                           style: AppTextStyles.title,
                           textAlign: TextAlign.center,
                         ),

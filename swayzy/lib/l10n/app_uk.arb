@@ -11,13 +11,42 @@
         "chatTitle": "Чат",
         "notificationTitle": "Повідомлення",
         "settingsTitle": "Налаштування",
+        "adTitle": "Оголошення",
 
     "@_HOME_PAGE": {
         },
+        "@_IN_PROCESS_CARD": {
+            },
+            "statusOption": "{key, select, inWork{В процесі} completed{Завершено} other{}}",
+
         "@_BUTTONS": {
             },
             "searchButton": "Усі",
             "processButton": "В процесі",
+
+    "@_AD_PAGE": {
+        },
+        "@_LABELS": {
+            },
+            "priceLabel": "Ціна:",
+            "descriptionLabel": "Опис:",
+
+        "@_TAGS": {
+            },
+            "reviewTag": "огляд",
+            "durationTag": "Тривалість:",
+            "subscribersTag": "підписників",
+
+        "@_BUTTONS": {
+            },
+            "takeButton": "Прийняти замовлення",
+            "completeButton": "Завершити замовлення",
+
+        "@_SCAFFOLD_MESSAGES": {
+            },
+            "orderTaken": "Замовлення прийнято",
+            "orderCompleted": "Замовлення завершено",
+            "yourOrderError": "Ви не можете прийняти своє замовлення",
 
     "@_CREATION_PAGE": {
         },
@@ -41,7 +70,7 @@
         "@_SELECTOR_LABELS": {
             },
             "categorySelectorLabel": "Категорія:",
-            "categoryOption": "{key, select, electronics{Електроніка} services{Послуги} vehicles{Транспорт} clothes{Одяг} other{}}",
+            "categoryOption": "{key, select, all{Все} electronics{Електроніка} services{Послуги} vehicles{Транспорт} clothes{Одяг} other{}}",
             "reviewSelectorLabel": "Тип огляду:",
             "reviewOption": "{key, select, positive{Позитивний} fair{Чесний} negative{Негативний} other{}}",
             "socialSelectorLabel": "Соціальна мережа:",
@@ -66,6 +95,10 @@
             },
             "saveButton": "Зберегти",
 
+        "@_SCAFFOLD_MESSAGES": {
+            },
+            "orderCreated": "Оголошення створено",
+
     "@_CHAT_PAGE": {
         },
         "@_BUTTONS": {
@@ -75,6 +108,10 @@
 
     "@_PROFILE_PAGE": {
         },
+        "@_LABELS": {
+            },
+            "balanceLabel": "Баланс:",
+
         "@_ERROR_MESSAGE": {
             },
             "notEnterToAccount": "Не увійшли в акаунт",

@@ -43,7 +43,7 @@ class _AdState extends State<Ad> {
     final args = widget.arguments;
 
     bool statusCheck (){
-      if(args.userAdStatus == "Completed") {
+      if(args.userAdStatus == "completed") {
         return true;
       } else {
         return false;
@@ -51,7 +51,7 @@ class _AdState extends State<Ad> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text("Advertisement"),
+        title: Text(localizations.adTitle),
         titleTextStyle: AppTextStyles.title,
         backgroundColor: AppColors.secondaryBackground,
         centerTitle: true,
@@ -64,19 +64,32 @@ class _AdState extends State<Ad> {
               spacing: AppSpacing.medium,
               children: [
                 SizedBox(height: 0),
-                Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey[300],
-                      image:
-                      args.adImageUrl != null
-                          ? DecorationImage(image: NetworkImage(args.adImageUrl), fit: BoxFit.contain)
-                          : null,
-                    ),
-                    child: args.adImageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
+                // Стара структура з сірим фоном за картинкою
+                // Center(
+                //   child: Container(
+                //     height: MediaQuery.of(context).size.height * 0.3,
+                //     width: MediaQuery.of(context).size.width * 0.95,
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(8),
+                //       color: Colors.grey[300],
+                //       image:
+                //       args.adImageUrl != null
+                //           ? DecorationImage(image: NetworkImage(args.adImageUrl), fit: BoxFit.contain)
+                //           : null,
+                //     ),
+                //     child: args.adImageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
+                //   ),
+                // ),
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: SizedBox(
+                   // height: MediaQuery.of(context).size.width - 20,
+                    width: MediaQuery.of(context).size.width - 20,
+                    child:
+                    Image.network(
+                      args.adImageUrl,
+                      fit: BoxFit.scaleDown,
+                    )
                   ),
                 ),
                 Padding(
@@ -96,7 +109,7 @@ class _AdState extends State<Ad> {
                       ),
                       SizedBox(height: AppSpacing.small),
                       Text(
-                        "Price: ${args.adPrice.toString()} SOL",
+                        "${localizations.priceLabel} ${args.adPrice.toString()} Cedra",
                         style: AppTextStyles.buttonPrimary,
                         textAlign: TextAlign.center,
                       ),
@@ -118,7 +131,8 @@ class _AdState extends State<Ad> {
                                 padding: EdgeInsets.all(10),
                                 height: 60,
                                 alignment: Alignment.center,
-                                child: Text(args.adCategory,
+                                child: Text(
+                                  localizations.categoryOption(args.adCategory),
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -134,7 +148,7 @@ class _AdState extends State<Ad> {
                                 padding: EdgeInsets.all(10),
                                 height: 60,
                                 alignment: Alignment.center,
-                                child: Text("${localizations.reviewOption(args.adReviewType)}\nreview",
+                                child: Text("${localizations.reviewOption(args.adReviewType)}\n${localizations.reviewTag}",
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -148,7 +162,7 @@ class _AdState extends State<Ad> {
                                     color: AppColors.accent,
                                 ),
                                 padding: EdgeInsets.all(10),
-                                child: Text("Duration:\n${args.adDuration}",
+                                child: Text("${localizations.durationTag}\n${args.adDuration}",
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -191,7 +205,7 @@ class _AdState extends State<Ad> {
                                   color: AppColors.accent,
                                 ),
                                 padding: EdgeInsets.all(10),
-                                child: Text("${args.adSubscribers}\nsubscribers",
+                                child: Text("${args.adSubscribers}\n${localizations.subscribersTag}",
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),
@@ -202,7 +216,7 @@ class _AdState extends State<Ad> {
                       ),
                       SizedBox(height: AppSpacing.medium),
                       Text(
-                        "Description:",
+                        localizations.descriptionLabel,
                         style: AppTextStyles.buttonPrimary,
                         textAlign: TextAlign.start,
                       ),
@@ -240,8 +254,8 @@ class _AdState extends State<Ad> {
                             : ElevatedButton(
                           style: AppButtonStyles.primary,
                           onPressed: () async {
-                            if (args.processId != null && args.processId != "Completed") {
-                              await updateStatus(args.processId, "Completed");
+                            if (args.processId != null && args.processId != "completed") {
+                              await updateStatus(args.processId, "completed");
                               var querySender = await FirebaseFirestore.instance
                                   .collection('users')
                                   .where('userId', isEqualTo: args.adOwnerId)
@@ -258,12 +272,12 @@ class _AdState extends State<Ad> {
                                 SnackBar(
                                   backgroundColor: AppColors.tokenSuccess,
                                   duration: Duration(seconds: 2),
-                                  content: Text("Complete!", style: AppTextStyles.form),
+                                  content: Text(localizations.orderCompleted, style: AppTextStyles.form),
                                 ),
                               );
                             }
                           },
-                          child: Text("Complete"),
+                          child: Text(localizations.completeButton),
                         ),
                       )
                           : Center(
@@ -271,13 +285,13 @@ class _AdState extends State<Ad> {
                           style: AppButtonStyles.primary,
                           onPressed: () {
                             if (args.adOwnerId != user.uid) {
-                              createAdInProcess(args.adOwnerId, args.adId, user.uid, "In Work");
+                              createAdInProcess(args.adOwnerId, args.adId, user.uid, "inWork");
                               Navigator.of(context).pop();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   backgroundColor: AppColors.tokenSuccess,
                                   duration: Duration(seconds: 2),
-                                  content: Text("Order taken!", style: AppTextStyles.form),
+                                  content: Text(localizations.orderTaken, style: AppTextStyles.form),
                                 ),
                               );
                             } else {
@@ -285,12 +299,12 @@ class _AdState extends State<Ad> {
                                 SnackBar(
                                   backgroundColor: AppColors.error,
                                   duration: Duration(seconds: 2),
-                                  content: Text("You can't take your order", style: AppTextStyles.form),
+                                  content: Text(localizations.yourOrderError, style: AppTextStyles.form),
                                 ),
                               );
                             }
                           },
-                          child: Text("Take order"),
+                          child: Text(localizations.takeButton),
                         ),
                       ),
                       SizedBox(height: AppSpacing.medium),

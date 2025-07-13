@@ -27,10 +27,56 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTitle => 'Settings';
 
   @override
+  String get adTitle => 'Advertisement';
+
+  @override
+  String statusOption(String key) {
+    String _temp0 = intl.Intl.selectLogic(
+      key,
+      {
+        'inWork': 'In work',
+        'completed': 'Completed',
+        'other': '',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get searchButton => 'All';
 
   @override
   String get processButton => 'In process';
+
+  @override
+  String get priceLabel => 'Price:';
+
+  @override
+  String get descriptionLabel => 'Description:';
+
+  @override
+  String get reviewTag => 'review';
+
+  @override
+  String get durationTag => 'Duration:';
+
+  @override
+  String get subscribersTag => 'subscribers';
+
+  @override
+  String get takeButton => 'Take order';
+
+  @override
+  String get completeButton => 'Complete order';
+
+  @override
+  String get orderTaken => 'Order accepted';
+
+  @override
+  String get orderCompleted => 'Order completed';
+
+  @override
+  String get yourOrderError => 'You can\'t take your order';
 
   @override
   String get chooseImageLabel => 'Choose an image for ad:';
@@ -64,6 +110,7 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       key,
       {
+        'all': 'All',
         'electronics': 'Electronics',
         'services': 'Services',
         'vehicles': 'Vehicles',
@@ -119,10 +166,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveButton => 'Save';
 
   @override
+  String get orderCreated => 'Order created';
+
+  @override
   String get customerButton => 'Customer';
 
   @override
   String get performerButton => 'Performer';
+
+  @override
+  String get balanceLabel => 'Balance:';
 
   @override
   String get notEnterToAccount => 'Not logged into account';

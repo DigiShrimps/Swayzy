@@ -27,10 +27,56 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsTitle => 'Налаштування';
 
   @override
+  String get adTitle => 'Оголошення';
+
+  @override
+  String statusOption(String key) {
+    String _temp0 = intl.Intl.selectLogic(
+      key,
+      {
+        'inWork': 'В процесі',
+        'completed': 'Завершено',
+        'other': '',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get searchButton => 'Усі';
 
   @override
   String get processButton => 'В процесі';
+
+  @override
+  String get priceLabel => 'Ціна:';
+
+  @override
+  String get descriptionLabel => 'Опис:';
+
+  @override
+  String get reviewTag => 'огляд';
+
+  @override
+  String get durationTag => 'Тривалість:';
+
+  @override
+  String get subscribersTag => 'підписників';
+
+  @override
+  String get takeButton => 'Прийняти замовлення';
+
+  @override
+  String get completeButton => 'Завершити замовлення';
+
+  @override
+  String get orderTaken => 'Замовлення прийнято';
+
+  @override
+  String get orderCompleted => 'Замовлення завершено';
+
+  @override
+  String get yourOrderError => 'Ви не можете прийняти своє замовлення';
 
   @override
   String get chooseImageLabel => 'Оберіть зображення для оголошення:';
@@ -64,6 +110,7 @@ class AppLocalizationsUk extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       key,
       {
+        'all': 'Все',
         'electronics': 'Електроніка',
         'services': 'Послуги',
         'vehicles': 'Транспорт',
@@ -119,10 +166,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get saveButton => 'Зберегти';
 
   @override
+  String get orderCreated => 'Оголошення створено';
+
+  @override
   String get customerButton => 'Замовник';
 
   @override
   String get performerButton => 'Виконавець';
+
+  @override
+  String get balanceLabel => 'Баланс:';
 
   @override
   String get notEnterToAccount => 'Не увійшли в акаунт';

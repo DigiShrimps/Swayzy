@@ -131,6 +131,18 @@ abstract class AppLocalizations {
   /// **'Налаштування'**
   String get settingsTitle;
 
+  /// No description provided for @adTitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Оголошення'**
+  String get adTitle;
+
+  /// No description provided for @statusOption.
+  ///
+  /// In uk, this message translates to:
+  /// **'{key, select, inWork{В процесі} completed{Завершено} other{}}'**
+  String statusOption(String key);
+
   /// No description provided for @searchButton.
   ///
   /// In uk, this message translates to:
@@ -142,6 +154,66 @@ abstract class AppLocalizations {
   /// In uk, this message translates to:
   /// **'В процесі'**
   String get processButton;
+
+  /// No description provided for @priceLabel.
+  ///
+  /// In uk, this message translates to:
+  /// **'Ціна:'**
+  String get priceLabel;
+
+  /// No description provided for @descriptionLabel.
+  ///
+  /// In uk, this message translates to:
+  /// **'Опис:'**
+  String get descriptionLabel;
+
+  /// No description provided for @reviewTag.
+  ///
+  /// In uk, this message translates to:
+  /// **'огляд'**
+  String get reviewTag;
+
+  /// No description provided for @durationTag.
+  ///
+  /// In uk, this message translates to:
+  /// **'Тривалість:'**
+  String get durationTag;
+
+  /// No description provided for @subscribersTag.
+  ///
+  /// In uk, this message translates to:
+  /// **'підписників'**
+  String get subscribersTag;
+
+  /// No description provided for @takeButton.
+  ///
+  /// In uk, this message translates to:
+  /// **'Прийняти замовлення'**
+  String get takeButton;
+
+  /// No description provided for @completeButton.
+  ///
+  /// In uk, this message translates to:
+  /// **'Завершити замовлення'**
+  String get completeButton;
+
+  /// No description provided for @orderTaken.
+  ///
+  /// In uk, this message translates to:
+  /// **'Замовлення прийнято'**
+  String get orderTaken;
+
+  /// No description provided for @orderCompleted.
+  ///
+  /// In uk, this message translates to:
+  /// **'Замовлення завершено'**
+  String get orderCompleted;
+
+  /// No description provided for @yourOrderError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Ви не можете прийняти своє замовлення'**
+  String get yourOrderError;
 
   /// No description provided for @chooseImageLabel.
   ///
@@ -200,7 +272,7 @@ abstract class AppLocalizations {
   /// No description provided for @categoryOption.
   ///
   /// In uk, this message translates to:
-  /// **'{key, select, electronics{Електроніка} services{Послуги} vehicles{Транспорт} clothes{Одяг} other{}}'**
+  /// **'{key, select, all{Все} electronics{Електроніка} services{Послуги} vehicles{Транспорт} clothes{Одяг} other{}}'**
   String categoryOption(String key);
 
   /// No description provided for @reviewSelectorLabel.
@@ -269,6 +341,12 @@ abstract class AppLocalizations {
   /// **'Зберегти'**
   String get saveButton;
 
+  /// No description provided for @orderCreated.
+  ///
+  /// In uk, this message translates to:
+  /// **'Оголошення створено'**
+  String get orderCreated;
+
   /// No description provided for @customerButton.
   ///
   /// In uk, this message translates to:
@@ -280,6 +358,12 @@ abstract class AppLocalizations {
   /// In uk, this message translates to:
   /// **'Виконавець'**
   String get performerButton;
+
+  /// No description provided for @balanceLabel.
+  ///
+  /// In uk, this message translates to:
+  /// **'Баланс:'**
+  String get balanceLabel;
 
   /// No description provided for @notEnterToAccount.
   ///
