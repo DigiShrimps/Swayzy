@@ -1,31 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:swayzy/screens/explore/widgets/in_process_grid.dart';
-import 'package:swayzy/screens/explore/widgets/in_search_grid.dart';
+import 'package:swayzy/screens/home/widgets/in_process_grid.dart';
+import 'package:swayzy/screens/home/widgets/in_search_grid.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../global_widgets/custom_app_bar.dart';
 import '../../l10n/app_localizations.dart';
 
-class Explore extends StatefulWidget {
-  const Explore({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<Explore> createState() => _ExploreState();
+  State<Home> createState() => _HomeState();
 }
 
 enum ViewMode { inSearch, inProcess }
 
-class _ExploreState extends State<Explore> {
+class _HomeState extends State<Home> {
   ViewMode currentMode = ViewMode.inSearch;
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
-  var user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final String titleText = localizations.homeTitle;
+    var user = FirebaseAuth.instance.currentUser;
+    String userId = '';
+
+    if (user != null) {
+      userId = user.uid;
+    } else {
+      CircularProgressIndicator();
+    }
 
     return Scaffold(
       appBar: CustomAppBar(title: titleText),
@@ -72,7 +79,7 @@ class _ExploreState extends State<Explore> {
               child:
                   currentMode == ViewMode.inSearch
                       ? InSearchGrid(ordersFuture: getOrderData())
-                      : InProcessGrid(ordersFuture: getAdsForUser(user.uid)),
+                      : InProcessGrid(ordersFuture: getAdsForUser(userId)),
             ),
           ),
         ],

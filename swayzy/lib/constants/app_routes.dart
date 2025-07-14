@@ -6,7 +6,7 @@ import '../screens/ad/models/ad_arguments.dart';
 import '../screens/auth/auth.dart';
 import '../screens/chat/chat.dart';
 import '../screens/creation/creation.dart';
-import '../screens/explore/explore.dart';
+import '../screens/home/home.dart';
 import '../screens/notifications/notifications.dart';
 import '../screens/profile/profile.dart';
 import '../screens/settings/dialogs/change_social_info_dialog.dart';
@@ -48,7 +48,7 @@ class AppRoutes {
       case creation:
         return MaterialPageRoute(builder: (_) => const Creation());
       case explore:
-        return MaterialPageRoute(builder: (_) => const Explore());
+        return MaterialPageRoute(builder: (_) => const Home());
       case notifications:
         return MaterialPageRoute(builder: (_) => Notifications());
       case profile:
