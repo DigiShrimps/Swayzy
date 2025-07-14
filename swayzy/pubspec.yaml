@@ -45,6 +45,7 @@ dependencies:
   uuid: ^4.5.1
   shared_preferences: ^2.3.4
   flutter_translate: ^4.1.0
+  animated_toggle_switch: ^0.8.5
 
 dev_dependencies:
   flutter_test:
