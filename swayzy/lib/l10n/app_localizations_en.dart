@@ -154,19 +154,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseDurationLabel => 'Duration:';
 
   @override
-  String get hintDurationLabel => 'Post save time';
+  String get hintDurationLabel => 'Don\'t delete within';
+
+  @override
+  String get exampleDurationLabel => 'Number in days';
 
   @override
   String get choosePriceLabel => 'Price:';
 
   @override
-  String get hintPriceLabel => 'Cedra/influencer';
+  String get hintPriceLabel => 'Fee for execution';
+
+  @override
+  String get examplePriceLabel => 'Cedra/influencer';
 
   @override
   String get saveButton => 'Save';
 
   @override
   String get orderCreated => 'Order created';
+
+  @override
+  String get noImageError => 'Error: add an image for the ad';
+
+  @override
+  String get noTitleError => 'Error: add a title for the ad';
+
+  @override
+  String get noDescriptionError => 'Error: add a description for the ad';
+
+  @override
+  String get noCategoryError => 'Error: select a category from the list';
+
+  @override
+  String get noReviewError => 'Error: select a review type from the list';
+
+  @override
+  String get noSocialError => 'Error: select a social network from the list';
+
+  @override
+  String get noSubscribersError => 'Error: select a follower count from the list';
+
+  @override
+  String get noPerformersError => 'Error: enter the number of performers';
+
+  @override
+  String get zeroPerformersError => 'Error: the number of performers must be greater than 0';
+
+  @override
+  String get noDurationError => 'Error: enter the number of days to keep the post';
+
+  @override
+  String get zeroDurationError => 'Error: the duration must be greater than 0';
+
+  @override
+  String get noPriceError => 'Error: enter a price for the ad';
+
+  @override
+  String get zeroPriceError => 'Error: the price must be greater than 0';
 
   @override
   String get customerButton => 'Customer';
@@ -187,7 +232,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteButton => 'Delete account';
 
   @override
-  String get noSocialError => 'Social isn\'t connected';
+  String get noConnectedSocialError => 'Social isn\'t connected';
 
   @override
   String get settingsSectionCommon => 'Common';

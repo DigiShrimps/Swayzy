@@ -389,7 +389,7 @@ class _ProfileState extends State<Profile> {
       SnackBar(
         backgroundColor: AppColors.error,
         duration: Duration(seconds: 2),
-        content: Text(localizations.noSocialError, style: AppTextStyles.form),
+        content: Text(localizations.noConnectedSocialError, style: AppTextStyles.form),
       ),
     );
   }

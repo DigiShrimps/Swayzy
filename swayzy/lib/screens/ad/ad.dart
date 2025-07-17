@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_spaces.dart';
+import 'package:swayzy/l10n/localizations_extension.dart';
 
 import '../../constants/app_button_styles.dart';
 import '../../constants/app_colors.dart';
@@ -64,22 +65,6 @@ class _AdState extends State<Ad> {
               spacing: AppSpacing.medium,
               children: [
                 SizedBox(height: 0),
-                // Стара структура з сірим фоном за картинкою
-                // Center(
-                //   child: Container(
-                //     height: MediaQuery.of(context).size.height * 0.3,
-                //     width: MediaQuery.of(context).size.width * 0.95,
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(8),
-                //       color: Colors.grey[300],
-                //       image:
-                //       args.adImageUrl != null
-                //           ? DecorationImage(image: NetworkImage(args.adImageUrl), fit: BoxFit.contain)
-                //           : null,
-                //     ),
-                //     child: args.adImageUrl == null ? const Icon(Icons.image, size: 50, color: Colors.black54) : null,
-                //   ),
-                // ),
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   child: SizedBox(
@@ -162,7 +147,7 @@ class _AdState extends State<Ad> {
                                     color: AppColors.accent,
                                 ),
                                 padding: EdgeInsets.all(10),
-                                child: Text("${localizations.durationTag}\n${args.adDuration}",
+                                child: Text("${localizations.durationTag}\n${args.adDuration} ${localizations.dayLabel(args.adDuration)}",
                                   style: AppTextStyles.orderCategoryWhite,
                                   textAlign: TextAlign.center,
                                 ),

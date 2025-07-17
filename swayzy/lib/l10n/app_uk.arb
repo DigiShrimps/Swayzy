@@ -84,12 +84,14 @@
         "@_DURATION_LABELS": {
             },
             "chooseDurationLabel": "Тривалість:",
-            "hintDurationLabel": "Зберігати протягом",
+            "hintDurationLabel": "Не видаляти протягом",
+            "exampleDurationLabel": "Число в днях",
 
         "@_PRICE_LABELS": {
             },
             "choosePriceLabel": "Ціна:",
-            "hintPriceLabel": "Cedra/інфлюенсер",
+            "hintPriceLabel": "Плата за виконання",
+            "examplePriceLabel": "Cedra/інфлюенсер",
 
         "@_BUTTONS": {
             },
@@ -98,6 +100,19 @@
         "@_SCAFFOLD_MESSAGES": {
             },
             "orderCreated": "Оголошення створено",
+            "noImageError": "Помилка: додайте зображення для оголошення",
+            "noTitleError": "Помилка: додайте назву оголошення",
+            "noDescriptionError": "Помилка: додайте опис для оголошення",
+            "noCategoryError": "Помилка: оберіть категорію зі списку",
+            "noReviewError": "Помилка: оберіть тип огляду зі списку",
+            "noSocialError": "Помилка: оберіть соціальну мережу зі списку",
+            "noSubscribersError": "Помилка: оберіть кількість підписників зі списку",
+            "noPerformersError": "Помилка: введіть кількість виконавців",
+            "zeroPerformersError": "Помилка: кількість виконавців повинна бути більшою за 0",
+            "noDurationError": "Помилка: введіть кількість днів збереження допису",
+            "zeroDurationError": "Помилка: тривалість повинна бути більшою за 0",
+            "noPriceError": "Помилка: введіть ціну за оголошення",
+            "zeroPriceError": "Помилка: ціна повинна бути більшою за 0",
 
     "@_CHAT_PAGE": {
         },
@@ -123,7 +138,7 @@
 
         "@_SCAFFOLD_MESSAGES": {
             },
-            "noSocialError": "Соцмережу не підключено",
+            "noConnectedSocialError": "Соцмережу не підключено",
 
     "@_SETTINGS_PAGE": {
         },
