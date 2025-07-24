@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:swayzy/constants/app_colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../constants/app_spaces.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../ad/models/ad_arguments.dart';
 
-class OrderCard extends StatelessWidget {
+class OrderCardInProcess extends StatelessWidget {
   final String ownerName;
   final dynamic imageUrl;
   final double price;
@@ -19,9 +21,10 @@ class OrderCard extends StatelessWidget {
   final String social;
   final String subscribers;
   final String ownerId;
-  final String adId;
+  final String orderStatus;
+  final String processId;
 
-  const OrderCard({
+  const OrderCardInProcess({
     super.key,
     required this.ownerName,
     required this.imageUrl,
@@ -33,10 +36,11 @@ class OrderCard extends StatelessWidget {
     required this.ownerEmail,
     required this.description,
     required this.reviewType,
+    required this.ownerId,
     required this.social,
     required this.subscribers,
-    required this.ownerId,
-    required this.adId,
+    required this.orderStatus,
+    required this.processId,
   });
 
   @override
@@ -60,7 +64,9 @@ class OrderCard extends StatelessWidget {
             adSocial: social,
             adSubscribers: subscribers,
             adImageUrl: imageUrl,
-            adId: adId,
+            adId: null,
+            processId: processId,
+            userAdStatus: orderStatus
           ),
         );
       },
@@ -72,56 +78,45 @@ class OrderCard extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                flex: 10,
-                child:
-                  // стара структура з кривим відображенням фото і сірим фоном
-                  // Container(
-                  //   height: MediaQuery.of(context).size.height,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(8),
-                  //     color: Colors.grey[300],
-                  //     image:
-                  //         imageUrl != null
-                  //             ? DecorationImage(
-                  //               image: NetworkImage(imageUrl),
-                  //               fit: BoxFit.fitWidth,
-                  //             )
-                  //             : null,
-                  //   ),
-                  //   child:
-                  //       imageUrl == null
-                  //           ? const Icon(
-                  //             Icons.image,
-                  //             size: 50,
-                  //             color: Colors.black54,
-                  //           )
-                  //           : null,
-                  // ),
-                ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: SizedBox(
-                    // height: MediaQuery.of(context).size.width - 20,
+              Flexible(
+                  flex: 3,
+                  fit: FlexFit.loose,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      child:
-                      Image.network(
+                      child: CachedNetworkImage(
+                        imageUrl:
                         imageUrl,
-                        fit: BoxFit.scaleDown,
-                      )
-                  ),
-                ),
+                        fit: BoxFit.fitWidth,
+                        placeholder: (context, url) => const SizedBox(
+                            height: 200,
+                            child: CircularProgressIndicator(
+                              padding:
+                              EdgeInsets.all(AppSpacing.small),
+                            )
+                        ),
+                        errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                      ),
+                    ),
+                  )
               ),
               const SizedBox(height: 8),
               Flexible(
                 flex: 1,
                 child: Center(
-                  child: Text(ownerName, style: AppTextStyles.orderDescription),
+                  child: Text(
+                    ownerName,
+                    style: AppTextStyles.orderDescription,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               Flexible(
-                flex: 3,
+                flex: 1,
                 child: Center(
                   child: Text(
                     title,
@@ -132,14 +127,10 @@ class OrderCard extends StatelessWidget {
               ),
               Flexible(
                 flex: 1,
-                child: Center(
-                  child: Text("$price Cedra", style: AppTextStyles.orderTitle),
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: Center(
-                  child: Text(localizations.categoryOption(category), style: AppTextStyles.orderDescription),
+                child: Text(
+                  localizations.statusOption(orderStatus),
+                  style: AppTextStyles.orderDescription,
+                  textAlign: TextAlign.center,
                 ),
               ),
               Flexible(
@@ -148,11 +139,10 @@ class OrderCard extends StatelessWidget {
                   child: Text(
                     createdAt,
                     style: AppTextStyles.orderDescription,
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
             ],
           ),
         ),

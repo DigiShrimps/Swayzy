@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'order_card_in_process.dart';
 
@@ -14,16 +15,13 @@ class InProcessGrid extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List data = snapshot.data as List<Map<String, dynamic>>;
-          return GridView.builder( // TODO переробити на динамічний грід
+          return MasonryGridView.count(
             shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 5.0,
-              mainAxisSpacing: 5.0,
-              mainAxisExtent: 400,
-              //childAspectRatio: MediaQuery.of(context).size.width < 370 ? 0.7 : 1.0,
-            ),
+            crossAxisCount: 2,
+            crossAxisSpacing: 5.0,
+            mainAxisSpacing: 20.0,
             itemCount: data.length,
+            scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               return OrderCardInProcess(
                 ownerName: data[index]["ownerName"],

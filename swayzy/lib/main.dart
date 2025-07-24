@@ -7,6 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:swayzy/screens/home/home.dart';
 
 import 'constants/app_button_styles.dart';
 import 'constants/app_colors.dart';
@@ -17,7 +18,6 @@ import 'firebase_config.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/chat/chat.dart';
 import 'screens/creation/creation.dart';
-import 'screens/explore/explore.dart';
 import 'screens/profile/profile.dart';
 
 void main() async {
@@ -147,7 +147,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const Explore(),
+    const Home(),
     const Creation(),
     const Chat(),
     const Profile(),

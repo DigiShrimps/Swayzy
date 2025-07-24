@@ -37,11 +37,12 @@ class _ProfileState extends State<Profile> {
   String? _facebookURL;
   String? _redditFollowers;
   String? _redditURL;
+  User? user;
 
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
   @override
-  void setState(fn){
-    if(mounted){
+  void setState(fn) {
+    if (mounted) {
       super.setState(fn);
     }
   } // fix for Unhandled Exception: setState() called after dispose()
@@ -49,307 +50,288 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final user = FirebaseAuth.instance.currentUser;
 
     return SafeArea(
       child: Scaffold(
-        body:
-            user == null
-                ? const Center(child: Text('Not logged in')) // TODO видалити, юзлесс
-                : RefreshIndicator(
-                  onRefresh: () async {
-                    setState(() {
-                      _readSocial();
-                      _getBalance();
-                    });
-                  },
-                  child: SingleChildScrollView(
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: -10,
-                          right: 10,
-                          child: IconButton(
-                            icon: const Icon(Icons.settings_rounded),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              _readSocial();
+              _getBalance();
+            });
+          },
+          child: SingleChildScrollView(
+            child: Stack(
+              children: [
+                Positioned(
+                  top: -10,
+                  right: 10,
+                  child: IconButton(
+                    icon: const Icon(Icons.settings_rounded),
+                    color: AppColors.highlight,
+                    iconSize: 40,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/settings');
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: -10,
+                  left: 10,
+                  child: IconButton(
+                    icon: const Icon(Icons.notifications_rounded),
+                    color: AppColors.highlight,
+                    iconSize: 40,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/notifications');
+                    },
+                  ),
+                ),
+                Center(
+                  child: Column(
+                    spacing: AppSpacing.small,
+                    children: [
+                      SizedBox(height: AppSpacing.small),
+                      user != null
+                          ? _buildUserAvatar(user!)
+                          : CircularProgressIndicator(),
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.sizeOf(context).width,
+                        child: const EditableUserDisplayName(),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: MediaQuery.sizeOf(context).width,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
                             color: AppColors.highlight,
-                            iconSize: 40,
-                            onPressed: () {
-                              Navigator.of(context).pushNamed('/settings');
-                            },
+                            width: 2,
                           ),
+                          color: AppColors.secondaryBackground,
                         ),
-                        Positioned(
-                          top: -10,
-                          left: 10,
-                          child: IconButton(
-                            icon: const Icon(Icons.notifications_rounded),
+                        child: Wrap(
+                          spacing: AppSpacing.small,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.center,
+                          runSpacing: AppSpacing.small,
+                          children: [
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.instagram),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if (_instagramURL != null &&
+                                        _instagramURL!.isNotEmpty) {
+                                      _launchURL(_instagramURL!);
+                                    } else {
+                                      showErrorSnackbar(context, localizations);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_instagramFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.telegram),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if (_telegramURL != null &&
+                                        _telegramURL!.isNotEmpty) {
+                                      _launchURL(_telegramURL!);
+                                    } else {
+                                      showErrorSnackbar(context, localizations);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_telegramFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.tiktok),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if (_tiktokURL != null &&
+                                        _tiktokURL!.isNotEmpty) {
+                                      _launchURL(_tiktokURL!);
+                                    } else {
+                                      showErrorSnackbar(context, localizations);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_tiktokFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.facebook),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if (_facebookURL != null &&
+                                        _facebookURL!.isNotEmpty) {
+                                      _launchURL(_facebookURL!);
+                                    } else {
+                                      showErrorSnackbar(context, localizations);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_facebookFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.reddit),
+                                  iconSize: 50,
+                                  color: AppColors.highlight,
+                                  onPressed: () {
+                                    if (_redditURL != null &&
+                                        _redditURL!.isNotEmpty) {
+                                      _launchURL(_redditURL!);
+                                    } else {
+                                      showErrorSnackbar(context, localizations);
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "$_redditFollowers",
+                                  style: AppTextStyles.body,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
                             color: AppColors.highlight,
-                            iconSize: 40,
-                            onPressed: () {
-                              Navigator.of(
-                                context,
-                              ).pushNamed('/notifications');
-                            },
+                            width: 2,
                           ),
+                          color: AppColors.secondaryBackground,
                         ),
-                        Center(
+                        child: SizedBox(
+                          // ця фігня буде перероблюватись
+                          width: double.infinity,
                           child: Column(
                             spacing: AppSpacing.small,
                             children: [
-                              SizedBox(height: AppSpacing.small),
-                              _buildUserAvatar(user),
+                              SizedBox(width: AppSpacing.small),
+                              Text(
+                                "${localizations.balanceLabel}\n$_balance SOL",
+                                style: AppTextStyles.title,
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(width: AppSpacing.small),
                               Container(
                                 alignment: Alignment.center,
-                                width: MediaQuery.sizeOf(context).width,
-                                child: const EditableUserDisplayName(),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 20),
-                                width: MediaQuery.sizeOf(context).width,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    color: AppColors.highlight,
-                                    width: 2,
-                                  ),
-                                  color: AppColors.secondaryBackground,
-                                ),
-                                child: Wrap(
-                                  spacing: AppSpacing.small,
-                                  crossAxisAlignment:
-                                      WrapCrossAlignment.center,
-                                  alignment: WrapAlignment.center,
-                                  runSpacing: AppSpacing.small,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(
-                                            FontAwesomeIcons.instagram,
-                                          ),
-                                          iconSize: 50,
-                                          color: AppColors.highlight,
-                                          onPressed: () {
-                                            if (_instagramURL != null &&
-                                                _instagramURL!.isNotEmpty) {
-                                              _launchURL(_instagramURL!);
-                                            } else {
-                                              showErrorSnackbar(context, localizations);
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "$_instagramFollowers",
-                                          style: AppTextStyles.body,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(
-                                            FontAwesomeIcons.telegram,
-                                          ),
-                                          iconSize: 50,
-                                          color: AppColors.highlight,
-                                          onPressed: () {
-                                            if (_telegramURL != null &&
-                                                _telegramURL!.isNotEmpty) {
-                                              _launchURL(_telegramURL!);
-                                            } else {
-                                              showErrorSnackbar(context, localizations);
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "$_telegramFollowers",
-                                          style: AppTextStyles.body,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(FontAwesomeIcons.tiktok),
-                                          iconSize: 50,
-                                          color: AppColors.highlight,
-                                          onPressed: () {
-                                            if (_tiktokURL != null &&
-                                                _tiktokURL!.isNotEmpty) {
-                                              _launchURL(_tiktokURL!);
-                                            } else {
-                                              showErrorSnackbar(context, localizations);
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "$_tiktokFollowers",
-                                          style: AppTextStyles.body,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(
-                                            FontAwesomeIcons.facebook,
-                                          ),
-                                          iconSize: 50,
-                                          color: AppColors.highlight,
-                                          onPressed: () {
-                                            if (_facebookURL != null &&
-                                                _facebookURL!.isNotEmpty) {
-                                              _launchURL(_facebookURL!);
-                                            } else {
-                                              showErrorSnackbar(context, localizations);
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "$_facebookFollowers",
-                                          style: AppTextStyles.body,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(FontAwesomeIcons.reddit),
-                                          iconSize: 50,
-                                          color: AppColors.highlight,
-                                          onPressed: () {
-                                            if (_redditURL != null &&
-                                                _redditURL!.isNotEmpty) {
-                                              _launchURL(_redditURL!);
-                                            } else {
-                                              showErrorSnackbar(context, localizations);
-                                            }
-                                          },
-                                        ),
-                                        Text(
-                                          "$_redditFollowers",
-                                          style: AppTextStyles.body,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                width: MediaQuery.sizeOf(context).width - 100,
+                                margin: EdgeInsets.symmetric(horizontal: 10),
+                                child: SelectableText(
+                                  "$_publicKey",
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 20),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    color: AppColors.highlight,
-                                    width: 2,
-                                  ),
-                                  color: AppColors.secondaryBackground,
-                                ),
-                                child: SizedBox( // ця фігня буде перероблюватись
-                                  width: double.infinity,
-                                  child: Column(
-                                    spacing: AppSpacing.small,
-                                    children: [
-                                      SizedBox(width: AppSpacing.small),
-                                      Text(
-                                        "${localizations.balanceLabel}\n$_balance SOL",
-                                        style: AppTextStyles.title,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      SizedBox(width: AppSpacing.small),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        width:
-                                            MediaQuery.sizeOf(context).width -
-                                            100,
-                                        margin: EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                        ),
-                                        child: SelectableText(
-                                          "$_publicKey",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Clipboard.setData(
-                                            ClipboardData(text: "$_publicKey"),
-                                          );
-                                        },
-                                        child: Text("Copy address"),
-                                      ),
-                                      SizedBox(width: AppSpacing.small),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              GridView.builder(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      mainAxisSpacing: 15.0,
-                                      crossAxisSpacing: 8.0,
-                                      mainAxisExtent: 180,
-                                      childAspectRatio: 0.7,
-                                    ),
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: appBadges.length,
-                                padding: const EdgeInsets.all(20),
-                                itemBuilder: (context, index) {
-                                  final badge = appBadges[index];
-                                  return Container(
-                                    padding: const EdgeInsets.all(8),
-                                    color: AppColors.secondaryBackground,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          badge.pathToImage,
-                                          fit: BoxFit.fitHeight,
-                                          filterQuality: FilterQuality.high,
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          badge.title,
-                                          style: AppTextStyles.form,
-                                        ),
-                                      ],
-                                    ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: "$_publicKey"),
                                   );
                                 },
+                                child: Text("Copy address"),
                               ),
-                              ElevatedButton.icon(
-                                style: AppButtonStyles.primary,
-                                label: Text(localizations.exitButton),
-                                icon: const Icon(Icons.logout_rounded),
-                                onPressed: () async {
-                                  await signOutUser(context);
-                                },
-                              ),
-                              ElevatedButton.icon(
-                                style: AppButtonStyles.delete,
-                                label: Text(localizations.deleteButton),
-                                icon: const Icon(Icons.delete_rounded),
-                                onPressed: () async {
-                                  showConfirmDeletingDialog(context);
-                                },
-                              ),
-                              SizedBox(width: AppSpacing.medium),
+                              SizedBox(width: AppSpacing.small),
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 15.0,
+                          crossAxisSpacing: 8.0,
+                          mainAxisExtent: 180,
+                          childAspectRatio: 0.7,
+                        ),
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: appBadges.length,
+                        padding: const EdgeInsets.all(20),
+                        itemBuilder: (context, index) {
+                          final badge = appBadges[index];
+                          return Container(
+                            padding: const EdgeInsets.all(8),
+                            color: AppColors.secondaryBackground,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  badge.pathToImage,
+                                  fit: BoxFit.fitHeight,
+                                  filterQuality: FilterQuality.high,
+                                ),
+                                SizedBox(height: 10),
+                                Text(badge.title, style: AppTextStyles.form),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      ElevatedButton.icon(
+                        style: AppButtonStyles.primary,
+                        label: Text(localizations.exitButton),
+                        icon: const Icon(Icons.logout_rounded),
+                        onPressed: () async {
+                          await signOutUser(context);
+                        },
+                      ),
+                      ElevatedButton.icon(
+                        style: AppButtonStyles.delete,
+                        label: Text(localizations.deleteButton),
+                        icon: const Icon(Icons.delete_rounded),
+                        onPressed: () async {
+                          showConfirmDeletingDialog(context);
+                        },
+                      ),
+                      SizedBox(width: AppSpacing.medium),
+                    ],
                   ),
                 ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -365,10 +347,7 @@ class _ProfileState extends State<Profile> {
 
     final highResUrl = _getHighResUserImage(photoUrl);
 
-    return CircleAvatar(
-      radius: 100,
-      backgroundImage: NetworkImage(highResUrl),
-    );
+    return CircleAvatar(radius: 100, backgroundImage: NetworkImage(highResUrl));
   }
 
   String _getHighResUserImage(String photoUrl) {
@@ -398,7 +377,10 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    _readPk();
+    user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _readPk(user!);
+    }
     _readSocial();
   }
 
@@ -443,11 +425,11 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  void _readPk() async {
+  void _readPk(User user) async {
     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .doc(user.uid)
             .get();
     final mnemonic = docSnapshot.data()?['mnemonic'];
     final keypair = await Ed25519HDKeyPair.fromMnemonic(mnemonic);
@@ -458,22 +440,26 @@ class _ProfileState extends State<Profile> {
   }
 
   void _readSocial() async {
-    DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .get();
-    setState(() {
-      _instagramFollowers = docSnapshot.data()?['InstagramFollowers'] ?? "N/A";
-      _instagramURL = docSnapshot.data()?['InstagramURL'];
-      _telegramFollowers = docSnapshot.data()?['TelegramFollowers'] ?? "N/A";
-      _telegramURL = docSnapshot.data()?['TelegramURL'];
-      _tiktokFollowers = docSnapshot.data()?['TiktokFollowers'] ?? "N/A";
-      _tiktokURL = docSnapshot.data()?['TiktokURL'];
-      _facebookFollowers = docSnapshot.data()?['FacebookFollowers'] ?? "N/A";
-      _facebookURL = docSnapshot.data()?['FacebookURL'];
-      _redditFollowers = docSnapshot.data()?['RedditFollowers'] ?? "N/A";
-      _redditURL = docSnapshot.data()?['RedditURL'];
-    });
+    user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .get();
+      setState(() {
+        _instagramFollowers =
+            docSnapshot.data()?['InstagramFollowers'] ?? "N/A";
+        _instagramURL = docSnapshot.data()?['InstagramURL'];
+        _telegramFollowers = docSnapshot.data()?['TelegramFollowers'] ?? "N/A";
+        _telegramURL = docSnapshot.data()?['TelegramURL'];
+        _tiktokFollowers = docSnapshot.data()?['TiktokFollowers'] ?? "N/A";
+        _tiktokURL = docSnapshot.data()?['TiktokURL'];
+        _facebookFollowers = docSnapshot.data()?['FacebookFollowers'] ?? "N/A";
+        _facebookURL = docSnapshot.data()?['FacebookURL'];
+        _redditFollowers = docSnapshot.data()?['RedditFollowers'] ?? "N/A";
+        _redditURL = docSnapshot.data()?['RedditURL'];
+      });
+    }
   }
 }

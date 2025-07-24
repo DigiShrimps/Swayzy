@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../constants/app_text_styles.dart';
 import '../../../global_entities/category/category.mocks.dart';
@@ -61,17 +62,14 @@ class _InSearchGridState extends State<InSearchGrid> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List data = snapshot.data as List<Map<String, dynamic>>;
-              return GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5.0,
-                  mainAxisSpacing: 5.0,
-                  mainAxisExtent: 400,
-                  //childAspectRatio: MediaQuery.of(context).size.width < 370 ? 0.7 : 1.0,
-                ),
-                physics: NeverScrollableScrollPhysics(),
+              return MasonryGridView.count(
                 itemCount: data.length,
+                crossAxisCount: 2,
+                crossAxisSpacing: 5.0,
+                mainAxisSpacing: 20.0,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return OrderCard(
                     ownerName: data[index]["ownerName"],
