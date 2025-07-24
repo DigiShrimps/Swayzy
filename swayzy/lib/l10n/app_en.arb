@@ -84,12 +84,14 @@
         "@_DURATION_LABELS": {
             },
             "chooseDurationLabel": "Duration:",
-            "hintDurationLabel": "Post save time",
+            "hintDurationLabel": "Don't delete within",
+            "exampleDurationLabel": "Number in days",
 
         "@_PRICE_LABELS": {
             },
             "choosePriceLabel": "Price:",
-            "hintPriceLabel": "Cedra/influencer",
+            "hintPriceLabel": "Fee for execution",
+            "examplePriceLabel": "Cedra/influencer",
 
         "@_BUTTONS": {
             },
@@ -98,6 +100,19 @@
         "@_SCAFFOLD_MESSAGES": {
             },
             "orderCreated": "Order created",
+            "noImageError": "Error: add an image for the ad",
+            "noTitleError": "Error: add a title for the ad",
+            "noDescriptionError": "Error: add a description for the ad",
+            "noCategoryError": "Error: select a category from the list",
+            "noReviewError": "Error: select a review type from the list",
+            "noSocialError": "Error: select a social network from the list",
+            "noSubscribersError": "Error: select a follower count from the list",
+            "noPerformersError": "Error: enter the number of performers",
+            "zeroPerformersError": "Error: the number of performers must be greater than 0",
+            "noDurationError": "Error: enter the number of days to keep the post",
+            "zeroDurationError": "Error: the duration must be greater than 0",
+            "noPriceError": "Error: enter a price for the ad",
+            "zeroPriceError": "Error: the price must be greater than 0",
 
     "@_CHAT_PAGE": {
         },
@@ -123,7 +138,7 @@
 
         "@_SCAFFOLD_MESSAGES": {
             },
-            "noSocialError": "Social isn't connected",
+            "noConnectedSocialError": "Social isn't connected",
 
     "@_SETTINGS_PAGE": {
         },

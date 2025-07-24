@@ -14,7 +14,7 @@ class OrderCardInProcess extends StatelessWidget {
   final String title;
   final String createdAt;
   final String category;
-  final String duration;
+  final int duration;
   final String ownerEmail;
   final String description;
   final String reviewType;

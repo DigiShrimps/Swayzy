@@ -8,7 +8,7 @@ class AdArguments {
   final String adOwnerName;
   final String adOwnerEmail;
   final double adPrice;
-  final String adDuration;
+  final int adDuration;
   final String adSocial;
   final String adSubscribers;
   final dynamic adId;

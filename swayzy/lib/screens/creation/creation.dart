@@ -10,16 +10,20 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:swayzy/constants/app_button_styles.dart';
+import 'package:swayzy/constants/app_font_sizes.dart';
 import 'package:swayzy/constants/app_spaces.dart';
 import 'package:swayzy/global_entities/category/category.mocks.dart';
+import 'package:swayzy/screens/creation/mocks/duration_time.mocks.dart';
+import 'package:swayzy/screens/creation/models/duration_time.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/subs_amount_list.dart';
+import '../../global_widgets/custom_exception.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/supabase/supabase_storage_service.dart';
-import 'mocks/reviewType.mocks.dart';
+import 'mocks/review_type.mocks.dart';
 
 late String description;
 late XFile image;
@@ -47,15 +51,6 @@ class _CreationState extends State<Creation> {
     super.didChangeDependencies();
     setState(() {});
   }
-
-  // static final List<String> categoryTitles =
-  //     appCategories.map((c) => c.title).toList();
-  // static final List<DropdownEntry> categoryEntries =
-  //   UnmodifiableListView<DropdownEntry>(
-  //     categoryTitles.map<DropdownEntry>(
-  //       (String title) => DropdownEntry(value: title, label: title),
-  //     ),
-  //   );
 
   List<DropdownEntry> categoryEntries(AppLocalizations loc) {
     return UnmodifiableListView<DropdownEntry>(
@@ -105,10 +100,16 @@ class _CreationState extends State<Creation> {
 
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
-  String dropdownCategoryValue = adCategories.first.key;
-  String dropdownReviewValue = reviewTypes.first.key;
-  String dropdownSocialValue = socialType.first;
-  String dropdownSubsValue = SubsAmount.subsAmount.first;
+  // String dropdownCategoryValue = adCategories[1].key;
+  // String dropdownReviewValue = reviewTypes.first.key;
+  // String dropdownSocialValue = socialType.first;
+  // String dropdownSubsValue = SubsAmount.subsAmount.first;
+  // String? selectedDurationKey;
+  String? dropdownCategoryValue;
+  String? dropdownReviewValue;
+  String? dropdownSocialValue;
+  String? dropdownSubsValue;
+  String? selectedDurationKey;
 
   @override
   Widget build(BuildContext context) {
@@ -240,9 +241,12 @@ class _CreationState extends State<Creation> {
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
-                                  key: ValueKey(localizations.localeName),
+                                  key: dropdownKey(
+                                    dropdownCategoryValue,
+                                    localizations,
+                                  ),
                                   textStyle: AppTextStyles.body,
-                                  initialSelection: adCategories[1].key,
+                                  initialSelection: dropdownCategoryValue,
                                   dropdownMenuEntries: categoryEntries(
                                     localizations,
                                   ),
@@ -268,9 +272,10 @@ class _CreationState extends State<Creation> {
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
-                                  key: ValueKey(
-                                    localizations.localeName,
-                                  ), // використано для динамічного перекладу при зміні мови
+                                  key: dropdownKey(
+                                    dropdownReviewValue,
+                                    localizations,
+                                  ),
                                   textStyle: AppTextStyles.body,
                                   initialSelection: dropdownReviewValue,
                                   dropdownMenuEntries: reviewTypesEntries(
@@ -308,8 +313,12 @@ class _CreationState extends State<Creation> {
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
+                                  key: dropdownKey(
+                                    dropdownSocialValue,
+                                    localizations,
+                                  ),
                                   textStyle: AppTextStyles.body,
-                                  initialSelection: socialType.first,
+                                  initialSelection: dropdownSocialValue,
                                   dropdownMenuEntries: socialEntries,
                                   onSelected: (String? value) {
                                     setState(() {
@@ -333,8 +342,12 @@ class _CreationState extends State<Creation> {
                               SizedBox(
                                 child: DropdownMenu<String>(
                                   expandedInsets: null,
+                                  key: dropdownKey(
+                                    dropdownSubsValue,
+                                    localizations,
+                                  ),
                                   textStyle: AppTextStyles.body,
-                                  initialSelection: SubsAmount.subsAmount.first,
+                                  initialSelection: dropdownSubsValue,
                                   dropdownMenuEntries: SubsAmount.subsEntries,
                                   onSelected: (String? value) {
                                     setState(() {
@@ -372,6 +385,8 @@ class _CreationState extends State<Creation> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: AppSpacing.small,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         Flexible(
                           flex: 1,
@@ -383,15 +398,67 @@ class _CreationState extends State<Creation> {
                                 style: AppTextStyles.form,
                               ),
                               SizedBox(
-                                child: TextField(
-                                  maxLength: 10,
-                                  style: AppTextStyles.body,
-                                  decoration: InputDecoration(
-                                    hintText: localizations.hintDurationLabel,
-                                    //  hintStyle: TextStyle(fontSize: AppFontSizes.small) якщо на телефоні не буде влазити
-                                  ),
+                                child: TextFormField(
                                   controller: _durationController,
+                                  keyboardType: TextInputType.number,
+                                  maxLength: 4,
+                                  decoration: InputDecoration(
+                                    labelText: localizations.hintDurationLabel,
+                                    labelStyle: TextStyle(
+                                      fontSize: AppFontSizes.body,
+                                      color: Colors.grey[750],
+                                    ),
+                                    floatingLabelStyle:
+                                        AppTextStyles.orderTitle,
+                                    hintText:
+                                        localizations.exampleDurationLabel,
+                                    border: OutlineInputBorder(),
+                                  ),
                                 ),
+                                // оцю фігню поки не чіпайте, воно пригодиться
+                                // Autocomplete<DurationTime>(
+                                //   key: ValueKey(selectedDurationKey),
+                                //   optionsBuilder: (TextEditingValue textEditingValue,) {
+                                //     if (textEditingValue.text.isEmpty) {
+                                //       return const Iterable<DurationTime>.empty();
+                                //     }
+                                //     return durationTimes.where((DurationTime option) {
+                                //       final localized = localizations.durationOption(option.key);
+                                //       return localized.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                                //     });
+                                //   },
+                                //   displayStringForOption: (DurationTime option) => localizations.durationOption(option.key),
+                                //   onSelected: (DurationTime selection) {
+                                //     setState(() {
+                                //       selectedDurationKey = selection.key;
+                                //       _durationController.text = localizations.durationOption(selection.key);
+                                //     });
+                                //   },
+                                //   fieldViewBuilder: (
+                                //       context,
+                                //       _,
+                                //       focusNode,
+                                //       onFieldSubmitted,
+                                //       ) {
+                                //     return TextFormField(
+                                //       controller: _durationController,
+                                //       focusNode: focusNode,
+                                //       decoration: InputDecoration(
+                                //         labelText:
+                                //             localizations.hintDurationLabel,
+                                //         labelStyle: TextStyle(
+                                //           fontSize: AppFontSizes.body,
+                                //           color: Colors.grey[750],
+                                //         ),
+                                //         floatingLabelStyle:
+                                //             AppTextStyles.orderTitle,
+                                //         hintText:
+                                //             localizations.exampleDurationLabel,
+                                //         border: OutlineInputBorder(),
+                                //       ),
+                                //     );
+                                //   },
+                                // ),
                               ),
                             ],
                           ),
@@ -411,7 +478,15 @@ class _CreationState extends State<Creation> {
                                   maxLength: 4,
                                   style: AppTextStyles.body,
                                   decoration: InputDecoration(
-                                    hintText: localizations.hintPriceLabel,
+                                    labelText: localizations.hintPriceLabel,
+                                    labelStyle: TextStyle(
+                                      fontSize: AppFontSizes.body,
+                                      color: Colors.grey[750],
+                                    ),
+                                    floatingLabelStyle:
+                                    AppTextStyles.orderTitle,
+                                    hintText: localizations.examplePriceLabel,
+                                    border: OutlineInputBorder(),
                                   ),
                                   controller: _priceController,
                                 ),
@@ -443,47 +518,103 @@ class _CreationState extends State<Creation> {
     );
   }
 
-  void saveAd(BuildContext context, AppLocalizations loc) {
+  Future<void> saveAd(BuildContext context, AppLocalizations loc) async {
     var user = FirebaseAuth.instance.currentUser!;
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    String title = _titleController.text;
-    String description = _descriptionController.text;
-    String duration = _durationController.text;
+    try {
+      String title = _titleController.text;
+      if (title.isEmpty) {
+        throw CustomException(loc.noTitleError);
+      }
+      String description = _descriptionController.text;
+      if (description.isEmpty) {
+        throw CustomException(loc.noDescriptionError);
+      }
 
-    String amountOfSubscribers = dropdownSubsValue;
-    String social = dropdownSocialValue;
-    String reviewType = dropdownReviewValue;
-    String category = dropdownCategoryValue;
+      String? category = dropdownCategoryValue;
+      if (category == null) {
+        throw CustomException(loc.noCategoryError);
+      }
+      String? reviewType = dropdownReviewValue;
+      if (reviewType == null) {
+        throw CustomException(loc.noReviewError);
+      }
+      String? social = dropdownSocialValue;
+      if (social == null) {
+        throw CustomException(loc.noSocialError);
+      }
+      String? amountOfSubscribers = dropdownSubsValue;
+      if (amountOfSubscribers == null) {
+        throw CustomException(loc.noSubscribersError);
+      }
 
-    double price = double.parse(_priceController.text);
-    int amountOfPerformers = int.parse(_performersController.text);
+      int? amountOfPerformers = int.tryParse(_performersController.text);
+      if (amountOfPerformers == null) {
+        throw CustomException(loc.noPerformersError);
+      }
+      if (amountOfPerformers == 0) {
+        throw CustomException(loc.zeroPerformersError);
+      }
+      int? duration = int.tryParse(_durationController.text);
+      if (duration == null) {
+        throw CustomException(loc.noDurationError);
+      }
+      if (duration == 0) {
+        throw CustomException(loc.zeroDurationError);
+      }
+      double? price = double.tryParse(_priceController.text);
+      if (price == null) {
+        throw CustomException(loc.noPriceError);
+      }
+      if (price == 0) {
+        throw CustomException(loc.zeroPriceError);
+      }
 
-    createAd(
-      title,
-      category,
-      reviewType,
-      description,
-      user.uid,
-      user.displayName!,
-      user.email!,
-      price,
-      duration,
-      amountOfPerformers,
-      amountOfSubscribers,
-      social,
-    );
+      await createAd(
+        title,
+        category,
+        reviewType,
+        description,
+        user.uid,
+        user.displayName!,
+        user.email!,
+        price,
+        duration,
+        amountOfPerformers,
+        amountOfSubscribers,
+        social,
+        loc,
+      );
 
-    for (var controller in controllers) {
-      controller.clear();
+      for (var controller in controllers) {
+        controller.clear();
+      }
+
+      setState(() {
+        dropdownCategoryValue = null;
+        dropdownReviewValue = null;
+        dropdownSocialValue = null;
+        dropdownSubsValue = null;
+        _image = null;
+      });
+
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.tokenSuccess,
+          duration: Duration(seconds: 2),
+          content: Text(loc.orderCreated, style: AppTextStyles.form),
+        ),
+      );
+    } on Exception catch (e) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.error,
+          duration: const Duration(seconds: 2),
+          content: Text("$e", style: AppTextStyles.form),
+        ),
+      );
     }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: AppColors.tokenSuccess,
-        duration: Duration(seconds: 2),
-        content: Text(loc.orderCreated, style: AppTextStyles.form),
-      ),
-    );
   }
 
   Future<void> createAd(
@@ -495,34 +626,42 @@ class _CreationState extends State<Creation> {
     String ownerName,
     String ownerEmail,
     double price,
-    String duration,
+    int duration,
     int amountOfPerformers,
     String amountOfSubscribers,
     String social,
+    AppLocalizations loc,
   ) async {
-    final imageUrl = await uploadImageToStorage(_image!);
-    int timeNow = DateTime.now().millisecondsSinceEpoch;
-    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeNow);
-    var dateFormatter = DateFormat('dd-MM-yyyy HH:mm');
+    try {
+      if (_image == null) {
+        throw CustomException(loc.noImageError);
+      }
+      final imageUrl = await uploadImageToStorage(_image!);
+      int timeNow = DateTime.now().millisecondsSinceEpoch;
+      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeNow);
+      var dateFormatter = DateFormat('dd-MM-yyyy HH:mm');
 
-    final adData = {
-      'title': title,
-      'category': category,
-      'reviewType': review,
-      'description': description,
-      'ownerId': ownerId,
-      'ownerName': ownerName,
-      'ownerEmail': ownerEmail,
-      'price': price,
-      'duration': duration,
-      'amountOfPerformers': amountOfPerformers,
-      'amountOfSubscribers': amountOfSubscribers,
-      'social': social,
-      'imageUrl': imageUrl,
-      'createdAt': dateFormatter.format(dateTime),
-    };
+      final adData = {
+        'title': title,
+        'category': category,
+        'reviewType': review,
+        'description': description,
+        'ownerId': ownerId,
+        'ownerName': ownerName,
+        'ownerEmail': ownerEmail,
+        'price': price,
+        'duration': duration,
+        'amountOfPerformers': amountOfPerformers,
+        'amountOfSubscribers': amountOfSubscribers,
+        'social': social,
+        'imageUrl': imageUrl,
+        'createdAt': dateFormatter.format(dateTime),
+      };
 
-    await FirebaseFirestore.instance.collection('ads').add(adData);
+      await FirebaseFirestore.instance.collection('ads').add(adData);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future getImageFromGallery() async {
@@ -547,5 +686,9 @@ class _CreationState extends State<Creation> {
     );
 
     return publicUrl;
+  }
+
+  Key dropdownKey(String? value, AppLocalizations loc) {
+    return ValueKey('${loc.localeName}_$value');
   }
 }

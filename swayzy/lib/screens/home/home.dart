@@ -20,19 +20,22 @@ class _HomeState extends State<Home> {
   var user = FirebaseAuth.instance.currentUser!;
   final PageController _pageController = PageController();
   int _currentPageIndex = 0;
+  late Future<List<Map<String, dynamic>>> _ordersFuture;
+  late Future<List<Map<String, dynamic>>> _adsFuture;
+  String _userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _userId = user.uid;
+    _ordersFuture = getOrderData();
+    _adsFuture = getAdsForUser(_userId);
+  }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final String titleText = localizations.homeTitle;
-    var user = FirebaseAuth.instance.currentUser;
-    String userId = '';
-
-    if (user != null) {
-      userId = user.uid;
-    } else {
-      CircularProgressIndicator();
-    }
 
     return Scaffold(
       appBar: CustomAppBar(title: titleText),
@@ -65,15 +68,15 @@ class _HomeState extends State<Home> {
               children: [
                 RefreshIndicator(
                   onRefresh: () async {
-                    setState(() {});
+                    setState(() {_ordersFuture = getOrderData();});
                   },
-                  child: InSearchGrid(ordersFuture: getOrderData()),
+                  child: InSearchGrid(ordersFuture: _ordersFuture),
                 ),
                 RefreshIndicator(
                   onRefresh: () async {
-                    setState(() {});
+                    setState(() {_adsFuture = getAdsForUser(_userId);});
                   },
-                  child: InProcessGrid(ordersFuture: getAdsForUser(user.uid)),
+                  child: InProcessGrid(ordersFuture: _adsFuture),
                 ),
               ],
             ),
@@ -106,7 +109,7 @@ class _HomeState extends State<Home> {
 
   Future<List<Map<String, dynamic>>> getOrderData() async {
     QuerySnapshot querySnapshot =
-        await firestoreInstance.collection('ads').orderBy('createdAt', descending: true).get();
+    await firestoreInstance.collection('ads').orderBy('createdAt', descending: true).get();
     return querySnapshot.docs.map((doc) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       data['id'] = doc.id;
