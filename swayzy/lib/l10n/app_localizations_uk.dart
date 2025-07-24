@@ -154,19 +154,64 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chooseDurationLabel => 'Тривалість:';
 
   @override
-  String get hintDurationLabel => 'Зберігати протягом';
+  String get hintDurationLabel => 'Не видаляти протягом';
+
+  @override
+  String get exampleDurationLabel => 'Число в днях';
 
   @override
   String get choosePriceLabel => 'Ціна:';
 
   @override
-  String get hintPriceLabel => 'Cedra/інфлюенсер';
+  String get hintPriceLabel => 'Плата за виконання';
+
+  @override
+  String get examplePriceLabel => 'Cedra/інфлюенсер';
 
   @override
   String get saveButton => 'Зберегти';
 
   @override
   String get orderCreated => 'Оголошення створено';
+
+  @override
+  String get noImageError => 'Помилка: додайте зображення для оголошення';
+
+  @override
+  String get noTitleError => 'Помилка: додайте назву оголошення';
+
+  @override
+  String get noDescriptionError => 'Помилка: додайте опис для оголошення';
+
+  @override
+  String get noCategoryError => 'Помилка: оберіть категорію зі списку';
+
+  @override
+  String get noReviewError => 'Помилка: оберіть тип огляду зі списку';
+
+  @override
+  String get noSocialError => 'Помилка: оберіть соціальну мережу зі списку';
+
+  @override
+  String get noSubscribersError => 'Помилка: оберіть кількість підписників зі списку';
+
+  @override
+  String get noPerformersError => 'Помилка: введіть кількість виконавців';
+
+  @override
+  String get zeroPerformersError => 'Помилка: кількість виконавців повинна бути більшою за 0';
+
+  @override
+  String get noDurationError => 'Помилка: введіть кількість днів збереження допису';
+
+  @override
+  String get zeroDurationError => 'Помилка: тривалість повинна бути більшою за 0';
+
+  @override
+  String get noPriceError => 'Помилка: введіть ціну за оголошення';
+
+  @override
+  String get zeroPriceError => 'Помилка: ціна повинна бути більшою за 0';
 
   @override
   String get customerButton => 'Замовник';
@@ -187,7 +232,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get deleteButton => 'Видалити акаунт';
 
   @override
-  String get noSocialError => 'Соцмережу не підключено';
+  String get noConnectedSocialError => 'Соцмережу не підключено';
 
   @override
   String get settingsSectionCommon => 'Загальні';

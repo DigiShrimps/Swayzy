@@ -320,8 +320,14 @@ abstract class AppLocalizations {
   /// No description provided for @hintDurationLabel.
   ///
   /// In uk, this message translates to:
-  /// **'Зберігати протягом'**
+  /// **'Не видаляти протягом'**
   String get hintDurationLabel;
+
+  /// No description provided for @exampleDurationLabel.
+  ///
+  /// In uk, this message translates to:
+  /// **'Число в днях'**
+  String get exampleDurationLabel;
 
   /// No description provided for @choosePriceLabel.
   ///
@@ -332,8 +338,14 @@ abstract class AppLocalizations {
   /// No description provided for @hintPriceLabel.
   ///
   /// In uk, this message translates to:
-  /// **'Cedra/інфлюенсер'**
+  /// **'Плата за виконання'**
   String get hintPriceLabel;
+
+  /// No description provided for @examplePriceLabel.
+  ///
+  /// In uk, this message translates to:
+  /// **'Cedra/інфлюенсер'**
+  String get examplePriceLabel;
 
   /// No description provided for @saveButton.
   ///
@@ -346,6 +358,84 @@ abstract class AppLocalizations {
   /// In uk, this message translates to:
   /// **'Оголошення створено'**
   String get orderCreated;
+
+  /// No description provided for @noImageError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: додайте зображення для оголошення'**
+  String get noImageError;
+
+  /// No description provided for @noTitleError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: додайте назву оголошення'**
+  String get noTitleError;
+
+  /// No description provided for @noDescriptionError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: додайте опис для оголошення'**
+  String get noDescriptionError;
+
+  /// No description provided for @noCategoryError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: оберіть категорію зі списку'**
+  String get noCategoryError;
+
+  /// No description provided for @noReviewError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: оберіть тип огляду зі списку'**
+  String get noReviewError;
+
+  /// No description provided for @noSocialError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: оберіть соціальну мережу зі списку'**
+  String get noSocialError;
+
+  /// No description provided for @noSubscribersError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: оберіть кількість підписників зі списку'**
+  String get noSubscribersError;
+
+  /// No description provided for @noPerformersError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: введіть кількість виконавців'**
+  String get noPerformersError;
+
+  /// No description provided for @zeroPerformersError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: кількість виконавців повинна бути більшою за 0'**
+  String get zeroPerformersError;
+
+  /// No description provided for @noDurationError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: введіть кількість днів збереження допису'**
+  String get noDurationError;
+
+  /// No description provided for @zeroDurationError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: тривалість повинна бути більшою за 0'**
+  String get zeroDurationError;
+
+  /// No description provided for @noPriceError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: введіть ціну за оголошення'**
+  String get noPriceError;
+
+  /// No description provided for @zeroPriceError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка: ціна повинна бути більшою за 0'**
+  String get zeroPriceError;
 
   /// No description provided for @customerButton.
   ///
@@ -383,11 +473,11 @@ abstract class AppLocalizations {
   /// **'Видалити акаунт'**
   String get deleteButton;
 
-  /// No description provided for @noSocialError.
+  /// No description provided for @noConnectedSocialError.
   ///
   /// In uk, this message translates to:
   /// **'Соцмережу не підключено'**
-  String get noSocialError;
+  String get noConnectedSocialError;
 
   /// No description provided for @settingsSectionCommon.
   ///
