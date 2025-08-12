@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:swayzy/screens/home/widgets/in_process_grid.dart';
 import 'package:swayzy/screens/home/widgets/in_search_grid.dart';
 
-import '../../constants/app_button_styles.dart';
+import '../../global_widgets/animated_button.dart';
 import '../../global_widgets/custom_app_bar.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -15,71 +15,70 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-enum ViewMode { inSearch, inProcess }
-
 class _HomeState extends State<Home> {
-  ViewMode currentMode = ViewMode.inSearch;
   final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+  var user = FirebaseAuth.instance.currentUser!;
+  final PageController _pageController = PageController();
+  int _currentPageIndex = 0;
+  late Future<List<Map<String, dynamic>>> _ordersFuture;
+  late Future<List<Map<String, dynamic>>> _adsFuture;
+  String _userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _userId = user.uid;
+    _ordersFuture = getOrderData();
+    _adsFuture = getAdsForUser(_userId);
+  }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final String titleText = localizations.homeTitle;
-    var user = FirebaseAuth.instance.currentUser;
-    String userId = '';
-
-    if (user != null) {
-      userId = user.uid;
-    } else {
-      CircularProgressIndicator();
-    }
 
     return Scaffold(
       appBar: CustomAppBar(title: titleText),
       body: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      currentMode = ViewMode.inSearch;
-                    });
-                  },
-                  style:
-                      currentMode == ViewMode.inSearch
-                          ? AppButtonStyles.selectedButton
-                          : AppButtonStyles.unselectedButton,
-                  child: Text(localizations.searchButton),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      currentMode = ViewMode.inProcess;
-                    });
-                  },
-                  style:
-                      currentMode == ViewMode.inProcess
-                          ? AppButtonStyles.selectedButton
-                          : AppButtonStyles.unselectedButton,
-                  child: Text(localizations.processButton),
-                ),
-              ),
-            ],
+          AnimatedButtons<int>(
+            firstLabel: localizations.searchButton,
+            secondLabel: localizations.processButton,
+            currentMode: _currentPageIndex,
+            leftMode: 0,
+            rightMode: 1,
+            onChanged: (index) {
+              setState(() => _currentPageIndex = index);
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            },
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                setState(() {});
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPageIndex = index;
+                });
               },
-              child:
-                  currentMode == ViewMode.inSearch
-                      ? InSearchGrid(ordersFuture: getOrderData())
-                      : InProcessGrid(ordersFuture: getAdsForUser(userId)),
+              children: [
+                RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {_ordersFuture = getOrderData();});
+                  },
+                  child: InSearchGrid(ordersFuture: _ordersFuture),
+                ),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {_adsFuture = getAdsForUser(_userId);});
+                  },
+                  child: InProcessGrid(ordersFuture: _adsFuture),
+                ),
+              ],
             ),
           ),
         ],
@@ -88,12 +87,9 @@ class _HomeState extends State<Home> {
   }
 
   Future<List<Map<String, dynamic>>> getAdsForUser(String userId) async {
-    CollectionReference inProcessRef = FirebaseFirestore.instance.collection(
-      'inProcess',
-    );
+    CollectionReference inProcessRef = FirebaseFirestore.instance.collection('inProcess');
     CollectionReference adsRef = FirebaseFirestore.instance.collection('ads');
-    QuerySnapshot inProcessSnapshot =
-        await inProcessRef.where('userId', isEqualTo: userId).get();
+    QuerySnapshot inProcessSnapshot = await inProcessRef.where('userId', isEqualTo: userId).get();
     List<Map<String, dynamic>> adsData = [];
     for (var doc in inProcessSnapshot.docs) {
       String inProcessId = doc.id;
@@ -113,10 +109,7 @@ class _HomeState extends State<Home> {
 
   Future<List<Map<String, dynamic>>> getOrderData() async {
     QuerySnapshot querySnapshot =
-        await firestoreInstance
-            .collection('ads')
-            .orderBy('createdAt', descending: true)
-            .get();
+    await firestoreInstance.collection('ads').orderBy('createdAt', descending: true).get();
     return querySnapshot.docs.map((doc) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       data['id'] = doc.id;
